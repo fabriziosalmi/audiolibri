@@ -1,81 +1,95 @@
-/* Audiolibri.org custom CSS */
-
-/* override styles */
-
-.btn-fsl {
+.btn-fsl
+{
 	font-size:large;
-	padding: 14px;
-  background-color: red;
-}
-.header {
-	    background-color:#010101;
-}
-.audiolibri-cat {
-	color: #ffffff;
-}
-.navbar {
-    color: #fff;
-    background-color: #010101;
-}
-.navbar .navbar-nav>li>a {
-    font-size: 20px;
-}
-.navbar .navbar-brand p {
-  font-size: 23px;
-	font-weight: 400;
+	padding:14px;
+	background-color:red
 }
 
-.page-header.header-small .container {
-    padding-bottom: 36px;
-}
-.vc_separator h4 {
-    font-size: large;
-    background-color: #8a8a8a;
-    color: transparent;
-    text-shadow: 2px 2px 3px rgba(255,255,255,0.5);
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
+.header
+{
+	background-color:#010101
 }
 
-.vc_btn3-container.vc_btn3-center .vc_btn3-block.vc_btn3-size-md {
-    font-size: large;
-    height: 52px;
-    font-weight: bolder;
-    color: #6d6d6d;
-    color: rgba(86, 86, 86, 0.78);
-    /* background-color: #d8d8d8; */
-    letter-spacing: .1em;
-    text-shadow: -1px -1px 1px rgba(111, 111, 111, 0.3), 2px 2px 1px rgba(187, 187, 187, 0.36);
+.audiolibri-cat
+{
+	color:#fff
 }
 
-.copyright.pull-right {
-    display: none;
+.navbar
+{
+	color:#fff;
+	background-color:#010101
 }
 
-.copyright {
-    float: none!important;
-    width: 100%;
-    padding: 10px 0;
-    text-align: center;
-    display: none;
+.navbar .navbar-nav>li>a
+{
+	font-size:20px
 }
 
-.carousel h1.hestia-title, .carousel h2.title {
-    font-size: 42px;
+.navbar .navbar-brand p
+{
+	font-size:23px;
+	font-weight:400
 }
 
-.author {
-display: none;
+.page-header.header-small .container
+{
+	padding-bottom:36px
 }
 
-.carousel .buttons a {
-    padding: 17px 35px;
-    font-size: 18px;
-    font-weight: bolder;
+.vc_separator h4
+{
+	font-size:large;
+	background-color:#8a8a8a;
+	color:transparent;
+	text-shadow:2px 2px 3px rgba(255,255,255,0.5);
+	-webkit-background-clip:text;
+	-moz-background-clip:text
 }
 
-/* dirty stuff */
+.vc_btn3-container.vc_btn3-center .vc_btn3-block.vc_btn3-size-md
+{
+	font-size:large;
+	height:52px;
+	font-weight:bolder;
+	color:#6d6d6d;
+	color:rgba(86,86,86,0.78);
+	letter-spacing:.1em;
+	text-shadow:-1px -1px 1px rgba(111,111,111,0.3),2px 2px 1px rgba(187,187,187,0.36)
+}
 
-.color_white {
-color: white;
+.copyright.pull-right
+{
+	display:none
+}
+
+.copyright
+{
+	float:none!important;
+	width:100%;
+	padding:10px 0;
+	text-align:center;
+	display:none
+}
+
+.carousel h1.hestia-title,.carousel h2.title
+{
+	font-size:42px
+}
+
+.author
+{
+	display:none
+}
+
+.carousel .buttons a
+{
+	padding:17px 35px;
+	font-size:18px;
+	font-weight:bolder
+}
+
+.color_white
+{
+	color:#fff
 }
