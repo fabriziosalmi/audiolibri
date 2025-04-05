@@ -186,29 +186,679 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
         }
+        
+        // Generate and display genre navigation list
+        generateGenreNavigation(books);
     }
 
-    // Set up event listeners
-    document.getElementById('search-button').addEventListener('click', performSearch);
-    
-    // Set up search with Enter key
-    document.getElementById('search').addEventListener('keyup', (event) => {
-        if (event.key === 'Enter') {
-            performSearch();
-        }
-    });
-    
-    // Listen for system theme changes
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-        prefersDarkMode = e.matches;
-        themeLabel.textContent = prefersDarkMode ? 'Team chiaro' : 'Tema scuro';
-    });
+    // Function to generate genre navigation
+    function generateGenreNavigation(books) {
+        // Count the number of books in each genre
+        const genreCounts = books.reduce((acc, book) => {
+            if (book.genre) {
+                acc[book.genre] = (acc[book.genre] || 0) + 1;
+            }
+            return acc;
+        }, {});
 
-    // Initialize changelog if enabled
-    if (config.enableChangelog) {
-        initializeChangelog();
-    } else {
-        document.getElementById('changelog-card').classList.add('hidden');
+        // Filter genres with at least 10 items
+        const filteredGenres = Object.keys(genreCounts).filter(genre => genreCounts[genre] >= 10);
+
+        // First, create or check for the genre navigation container
+        let genreNavContainer = document.getElementById('genre-navigation');
+        if (!genreNavContainer) {
+            // Create the container if it doesn't exist
+            const searchContainer = document.querySelector('.search-container');
+            genreNavContainer = document.createElement('div');
+            genreNavContainer.id = 'genre-navigation';
+            genreNavContainer.className = 'genre-navigation fade-in';
+
+            // Insert after the search container
+            if (searchContainer && searchContainer.parentNode) {
+                searchContainer.parentNode.insertBefore(genreNavContainer, searchContainer.nextSibling);
+            } else {
+                // Fallback to inserting before the current audiobook element
+                const currentAudiobook = document.getElementById('current-audiobook');
+                if (currentAudiobook && currentAudiobook.parentNode) {
+                    currentAudiobook.parentNode.insertBefore(genreNavContainer, currentAudiobook);
+                }
+            }
+        }
+
+        // Clear existing content
+        genreNavContainer.innerHTML = '';
+        
+        if (filteredGenres.length === 0) {
+            genreNavContainer.style.display = 'none';
+            return;
+        }
+
+        // Add title and list container
+        genreNavContainer.innerHTML = `
+            <h3 class="genre-title">Esplora per genere</h3>
+            <div class="genre-list" role="list" aria-label="Generi disponibili">
+            </div>
+        `;
+        
+        const genreList = genreNavContainer.querySelector('.genre-list');
+
+        // Generate navigation for filtered genres
+        filteredGenres.forEach(genre => {
+            const genrePill = document.createElement('button');
+            genrePill.className = 'genre-pill';
+            genrePill.dataset.genre = genre;
+            genrePill.setAttribute('role', 'listitem');
+            genrePill.innerHTML = `
+                <span class="genre-name">${genre}</span>
+                <span class="genre-count" aria-label="${genreCounts[genre]} audiolibri">${genreCounts[genre]}</span>
+            `;
+            
+            // Add click event listener
+            genrePill.addEventListener('click', function() {
+                showGenreView(genre);
+            });
+            
+            genreList.appendChild(genrePill);
+        });
+        
+        // Add CSS styles for genre navigation
+        addGenreNavigationStyles();
+    }
+
+    // Add CSS styles for genre navigation
+    function addGenreNavigationStyles() {
+        // Check if styles are already added
+        if (document.getElementById('genre-nav-styles')) return;
+        
+        const styleElement = document.createElement('style');
+        styleElement.id = 'genre-nav-styles';
+        styleElement.textContent = `
+            .genre-navigation {
+                margin: 20px 0;
+                padding: 1.5rem;
+                background: var(--card-background);
+                border-radius: 16px;
+                box-shadow: var(--card-shadow);
+                border: 1px solid var(--border-color);
+                transition: all 0.3s ease;
+            }
+            
+            .genre-title {
+                font-size: 1.25rem;
+                margin-bottom: 1.25rem;
+                color: var(--header-color);
+                font-weight: 600;
+                position: relative;
+                padding-bottom: 0.75rem;
+            }
+            
+            .genre-title::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 50px;
+                height: 3px;
+                background: var(--primary-color);
+                border-radius: 3px;
+            }
+            
+            .genre-list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+                align-items: center;
+            }
+            
+            .genre-pill {
+                display: flex;
+                align-items: center;
+                padding: 10px 16px;
+                border-radius: 12px;
+                background: rgba(var(--primary-rgb), 0.1);
+                border: 1px solid rgba(var(--primary-rgb), 0.2);
+                color: var(--primary-color);
+                font-size: 0.95rem;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.25s ease;
+                white-space: nowrap;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .genre-pill:hover {
+                background: rgba(var(--primary-rgb), 0.15);
+                transform: translateY(-3px);
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            }
+            
+            .genre-pill:active {
+                transform: translateY(-1px);
+            }
+            
+            .genre-count {
+                margin-left: 8px;
+                background: rgba(var(--primary-rgb), 0.2);
+                border-radius: 12px;
+                padding: 3px 10px;
+                font-size: 0.8rem;
+                font-weight: 600;
+            }
+            
+            .genre-pill.selected {
+                background: var(--primary-color);
+                color: white;
+                border-color: var(--primary-color);
+                box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
+            }
+            
+            .genre-pill.selected .genre-count {
+                background: rgba(255, 255, 255, 0.25);
+                color: white;
+            }
+            
+            /* Genre View Styles */
+            .genre-view {
+                padding: 1.5rem;
+            }
+            
+            .genre-view-header {
+                display: flex;
+                align-items: center;
+                margin-bottom: 1.5rem;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+            
+            .genre-view-title {
+                font-size: 1.5rem;
+                color: white;
+                margin: 0;
+                text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            }
+            
+            .genre-count-large {
+                margin-left: auto;
+                background: rgba(255,255,255,0.2);
+                color: white;
+                padding: 5px 12px;
+                border-radius: 999px;
+                font-size: 0.9rem;
+            }
+            
+            .back-button {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 8px 16px;
+                background: rgba(0,0,0,0.4);
+                border-radius: 999px;
+                color: white;
+                border: 1px solid rgba(255,255,255,0.2);
+                font-size: 0.9rem;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+            
+            .back-button:hover {
+                background: rgba(0,0,0,0.6);
+                box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+            }
+            
+            .back-icon::before {
+                content: "←";
+                margin-right: 4px;
+            }
+            
+            .audiobooks-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 20px;
+            }
+            
+            .book-card {
+                background: var(--card-background);
+                border-radius: 12px;
+                overflow: hidden;
+                cursor: pointer;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                box-shadow: var(--card-shadow);
+                border: 1px solid var(--border-color);
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .book-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 12px 20px rgba(0,0,0,0.15);
+            }
+            
+            .book-card-cover {
+                height: 160px;
+                background-size: cover;
+                background-position: center;
+                position: relative;
+            }
+            
+            .card-badge {
+                position: absolute;
+                padding: 4px 10px;
+                border-radius: 999px;
+                font-size: 0.7rem;
+                font-weight: 600;
+                color: white;
+            }
+            
+            .audio-badge {
+                top: 10px;
+                left: 10px;
+                background: var(--accent-color);
+            }
+            
+            .duration-badge {
+                bottom: 10px;
+                right: 10px;
+                background: rgba(0,0,0,0.7);
+            }
+            
+            .book-card-details {
+                padding: 15px;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .book-card-title {
+                margin: 0 0 8px 0;
+                font-size: 0.95rem;
+                color: var(--text-color);
+                line-height: 1.3;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+            
+            .book-card-author {
+                margin: 0;
+                font-size: 0.85rem;
+                color: var(--secondary-text);
+                font-weight: 500;
+            }
+            
+            @media (max-width: 768px) {
+                .genre-navigation {
+                    padding: 1.25rem;
+                }
+                
+                .genre-pill {
+                    padding: 8px 14px;
+                    font-size: 0.85rem;
+                }
+                
+                .audiobooks-grid {
+                    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                    gap: 15px;
+                }
+                
+                .genre-view {
+                    padding: 1rem;
+                }
+                
+                .genre-view-header {
+                    margin-bottom: 1rem;
+                }
+                
+                .genre-view-title {
+                    font-size: 1.25rem;
+                }
+            }
+        `;
+        
+        document.head.appendChild(styleElement);
+    }
+    
+    // Count how many books are in a specific genre
+    function countBooksInGenre(books, genre) {
+        return books.filter(book => 
+            (book.categories && book.categories.includes(genre)) ||
+            book.genre === genre
+        ).length;
+    }
+    
+    // Display the genre view showing all books in a selected genre
+    function showGenreView(genre) {
+        // Clear previous selected state
+        document.querySelectorAll('.genre-pill').forEach(pill => {
+            pill.classList.remove('selected');
+        });
+        
+        // Add selected state to current genre pill
+        const selectedPill = document.querySelector(`.genre-pill[data-genre="${genre}"]`);
+        if (selectedPill) {
+            selectedPill.classList.add('selected');
+        }
+        
+        // Filter books by the selected genre
+        const filteredBooks = audiobooks.filter(book => 
+            (book.categories && book.categories.includes(genre)) ||
+            book.genre === genre
+        );
+        
+        // Show loading state
+        document.getElementById('current-audiobook').innerHTML = `
+            <div class="loading-container slide-up">
+                <div class="loading-spinner"></div>
+                <p>Loading "${genre}" audiobooks...</p>
+                <small>Preparing your filtered collection</small>
+            </div>
+        `;
+        
+        // Clear previous player interval if exists
+        if (updateInterval) clearInterval(updateInterval);
+        
+        setTimeout(() => {
+            if (filteredBooks.length > 0) {
+                // Select the first book from the filtered collection
+                if (currentBook) {
+                    previousBooks.push(currentBook);
+                }
+                currentBook = filteredBooks[0];
+                
+                // Display the book with a special header showing the genre and navigation
+                displayBookWithGenreNav(currentBook, genre, filteredBooks);
+            } else {
+                document.getElementById('current-audiobook').innerHTML = `
+                    <div class="no-results fade-in">
+                        <i class="search-icon"></i>
+                        <h3>No audiobooks found</h3>
+                        <p>We couldn't find any audiobooks in the "${genre}" category</p>
+                        <button class="back-button" id="empty-back-button">Back to main view</button>
+                    </div>`;
+                
+                document.getElementById('empty-back-button').addEventListener('click', () => {
+                    displayBook(currentBook);
+                });
+            }
+        }, 500);
+    }
+
+    // New function to display book with genre navigation
+    function displayBookWithGenreNav(book, genre, genreBooks) {
+        const bookCard = document.getElementById('current-audiobook');
+        
+        // Set background image with a gradient overlay
+        bookCard.style.backgroundImage = `url('${book.coverImage}')`;
+        
+        // Check if audio file is available
+        const audioAvailable = book.audioUrl ? true : false;
+        const audioStatus = audioAvailable ? 
+            `<span class="audio-status available"><i class="audio-icon"></i>Audio available</span>` : 
+            ``;
+        
+        // Create trimmed description (max 300 characters)
+        const trimmedDescription = book.description.length > 300 
+            ? book.description.substring(0, 300) + '...' 
+            : book.description;
+        
+        // Create channel link with icon
+        const channelHtml = book.channelUrl 
+            ? `<a href="${book.channelUrl}" target="_blank" rel="noopener" class="channel-link">
+                <img src="https://www.youtube.com/s/desktop/7c155e84/img/favicon_144x144.png" alt="YouTube" class="channel-icon">
+                ${book.channel || 'YouTube Channel'}
+              </a>` 
+            : `${book.channel || ''}`;
+            
+        // Format upload date if available
+        const uploadDate = book.uploadDate ? 
+            formatUploadDate(book.uploadDate) : '';
+            
+        // Create category tags
+        let categoriesHtml = '';
+        if (book.categories && book.categories.length > 0) {
+            categoriesHtml = `
+            <div class="book-categories">
+                ${book.categories.map(category => 
+                    `<span class="category-tag">${category}</span>`
+                ).join('')}
+            </div>`;
+        }
+        
+        // Format duration as a styled element
+        const durationHtml = `<span class="duration-badge"><i class="time-icon"></i>${book.formattedDuration}</span>`;
+        
+        // Create genre navigation header
+        const genreNavHeader = `
+        <div class="genre-nav-header fade-in">
+            <div class="genre-nav-breadcrumbs">
+                <button class="back-button" id="back-to-main">
+                    <i class="back-icon"></i> Back
+                </button>
+                <div class="genre-nav-title">
+                    <span class="genre-label">Genre:</span> 
+                    <strong>${genre}</strong>
+                    <span class="genre-count-large">${genreBooks.length} audiobooks</span>
+                </div>
+            </div>
+            <div class="genre-nav-buttons">
+                <button id="prev-genre-book" class="nav-button" ${genreBooks.indexOf(book) <= 0 ? 'disabled' : ''}>
+                    <span class="nav-icon prev-icon"></span> Previous
+                </button>
+                <button id="next-genre-book" class="nav-button" ${genreBooks.indexOf(book) >= genreBooks.length - 1 ? 'disabled' : ''}>
+                    Next <span class="nav-icon next-icon"></span>
+                </button>
+            </div>
+        </div>
+        `;
+        
+        // Improved layout with better player interface and genre navigation
+        bookCard.innerHTML = `
+            <div class="card-overlay">
+                ${genreNavHeader}
+                <div class="media-container slide-up">
+                    <div id="youtube-player"></div>
+                    <audio id="audio-player" controls></audio>
+                    <div class="player-controls">
+                        <div class="controls-row">
+                            <button id="rewind-button" class="control-button" aria-label="Rewind 10 seconds">
+                                <i class="rewind-icon"></i>
+                            </button>
+                            <button id="play-pause" class="control-button large" aria-label="Play/Pause">
+                                <i class="play-icon"></i>
+                            </button>
+                            <button id="forward-button" class="control-button" aria-label="Forward 10 seconds">
+                                <i class="forward-icon"></i>
+                            </button>
+                        </div>
+                        <div class="progress-container" id="progress-container">
+                            <div class="progress-bar" id="progress-bar"></div>
+                            <div class="progress-handle" id="progress-handle"></div>
+                        </div>
+                        <div class="time-display">
+                            <span id="current-time">0:00</span>
+                            <span id="total-time">${formatTimeDisplay(book.duration)}</span>
+                        </div>
+                        <div class="volume-control">
+                            <i class="volume-icon"></i>
+                            <input type="range" id="volume-slider" min="0" max="100" value="100" aria-label="Volume control">
+                        </div>
+                    </div>
+                </div>
+                <div class="book-details fade-in">
+                    <div class="book-text-content">
+                        <h2>${book.title}</h2>
+                        <h3>${book.author}</h3>
+                        ${categoriesHtml}
+                        <p>${trimmedDescription}</p>
+                        <div class="meta-inline">
+                            ${audioStatus}
+                            <div class="meta-item"><i class="channel-icon-small"></i>Canale ${channelHtml}</div>
+                            <div class="meta-item"><i class="duration-icon"></i>Durata ${durationHtml}</div>
+                            ${uploadDate ? `<div class="meta-item">Pubblicato il ${uploadDate}</div>` : ''}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Add CSS styles for genre navigation header
+        addGenreNavHeaderStyles();
+        
+        // Set up audio player if audio is available
+        const audioPlayer = document.getElementById('audio-player');
+        if (audioAvailable) {
+            audioPlayer.src = book.audioUrl;
+            audioPlayer.style.display = 'block';
+        } else {
+            audioPlayer.style.display = 'none';
+        }
+        
+        // Set up player controls
+        setupPlayerControls(book);
+        
+        // Set up YouTube player if video ID is available
+        if (book.videoId) {
+            document.getElementById('youtube-player').innerHTML = '';
+            loadYouTubeVideo(book.videoId);
+        } else {
+            document.getElementById('youtube-player').innerHTML = '';
+        }
+        
+        // Add navigation event listeners
+        document.getElementById('back-to-main').addEventListener('click', () => {
+            // Clear selected genre pill
+            document.querySelectorAll('.genre-pill').forEach(pill => {
+                pill.classList.remove('selected');
+            });
+            
+            // Return to previous state before genre browsing
+            if (previousBooks.length > 0) {
+                currentBook = previousBooks.pop();
+            }
+            displayBook(currentBook);
+        });
+        
+        const currentIndex = genreBooks.indexOf(book);
+        
+        // Previous book button
+        const prevButton = document.getElementById('prev-genre-book');
+        if (prevButton) {
+            if (currentIndex > 0) {
+                prevButton.addEventListener('click', () => {
+                    currentBook = genreBooks[currentIndex - 1];
+                    displayBookWithGenreNav(currentBook, genre, genreBooks);
+                });
+            }
+        }
+        
+        // Next book button
+        const nextButton = document.getElementById('next-genre-book');
+        if (nextButton) {
+            if (currentIndex < genreBooks.length - 1) {
+                nextButton.addEventListener('click', () => {
+                    currentBook = genreBooks[currentIndex + 1];
+                    displayBookWithGenreNav(currentBook, genre, genreBooks);
+                });
+            }
+        }
+    }
+
+    // Add style for genre navigation header
+    function addGenreNavHeaderStyles() {
+        if (document.getElementById('genre-nav-header-styles')) return;
+        
+        const styleElement = document.createElement('style');
+        styleElement.id = 'genre-nav-header-styles';
+        styleElement.textContent = `
+            .genre-nav-header {
+                margin-bottom: 1.5rem;
+                padding-bottom: 1rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            }
+            
+            .genre-nav-breadcrumbs {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 12px;
+                margin-bottom: 1rem;
+            }
+            
+            .genre-nav-title {
+                color: white;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+            
+            .genre-label {
+                opacity: 0.8;
+            }
+            
+            .genre-nav-buttons {
+                display: flex;
+                gap: 10px;
+            }
+            
+            .nav-button {
+                padding: 8px 14px;
+                background: rgba(255, 255, 255, 0.15);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                color: white;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 0.9rem;
+                transition: all 0.2s ease;
+            }
+            
+            .nav-button:hover:not([disabled]) {
+                background: rgba(255, 255, 255, 0.25);
+                transform: translateY(-2px);
+            }
+            
+            .nav-button[disabled] {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+            
+            .nav-icon {
+                font-size: 0.8rem;
+            }
+            
+            .prev-icon::before {
+                content: "←";
+            }
+            
+            .next-icon::before {
+                content: "→";
+            }
+            
+            @media (max-width: 768px) {
+                .genre-nav-breadcrumbs,
+                .genre-nav-buttons {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    width: 100%;
+                }
+                
+                .genre-nav-buttons {
+                    flex-direction: row;
+                }
+                
+                .nav-button {
+                    flex: 1;
+                    justify-content: center;
+                }
+            }
+        `;
+        
+        document.head.appendChild(styleElement);
     }
     
     function resetPlayerState() {
@@ -653,9 +1303,9 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('retry-changelog')?.addEventListener('click', () => {
                 document.getElementById('changelog-content').innerHTML = `
                     <div class="loading-spinner small"></div>
-                    <p>Riprovo a caricare gli aggiornamenti...</p>
+                    <p>Caricamento aggiornamenti...</p>
                 `;
-                setTimeout(() => fetchChangelog(), 500);
+                fetchChangelog();
             });
         });
     }
@@ -738,17 +1388,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     <li>
                         <span class="change-icon">•</span>
                         <span class="change-content">${item}</span>
-                    </li>`;
+                    </li>
+                `;
             } else if (item && typeof item === 'object') {
-                // Handle different types of changes (feature, fix, improvement, etc.)
                 const type = item.type || 'other';
-                const typeClass = `change-type-${type.toLowerCase()}`;
-                const typeIcon = getChangeTypeIcon(type);
-                
+                const content = item.text || item.content || '';
                 html += `
-                    <li class="${typeClass}">
-                        ${typeIcon}
-                        <span class="change-content">${item.text || item.description || ''}</span>
+                    <li class="change-type-${type.toLowerCase()}">
+                        ${getChangeTypeIcon(type)}
+                        <span class="change-content">${content}</span>
                     </li>
                 `;
             }
@@ -757,7 +1405,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         return html;
     }
-    
+
     // Helper function to get appropriate icon for change types
     function getChangeTypeIcon(type) {
         const lowerType = type.toLowerCase();
@@ -785,5 +1433,10 @@ document.addEventListener('DOMContentLoaded', () => {
             default:
                 return '<span class="change-icon">•</span>';
         }
+    }
+
+    // Initialize changelog if enabled in config
+    if (config.enableChangelog) {
+        initializeChangelog();
     }
 });
