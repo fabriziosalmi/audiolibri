@@ -303,7 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="meta-inline">
                             ${audioStatus}
                             <div class="meta-item"><i class="channel-icon-small"></i>Canale ${channelHtml}</div>
-                            <div class="meta-item"><i class="duration-icon"></i>Darata ${durationHtml}</div>
+                            <div class="meta-item"><i class="duration-icon"></i>Durata ${durationHtml}</div>
                             ${uploadDate ? `<div class="meta-item">Pubblicato il ${uploadDate}</div>` : ''}
                         </div>
                     </div>
