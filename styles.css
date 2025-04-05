@@ -761,9 +761,10 @@ footer {
 
 .footer-content {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap; /* Aggiunto per migliorare il comportamento responsive */
 }
 
 #theme-toggle {
@@ -871,6 +872,14 @@ footer {
     
     .audio-wave {
         height: 16px;
+    }
+    
+    .footer-content {
+        gap: 12px;
+    }
+    
+    #theme-toggle, .source-code-link {
+        width: auto; /* Sovrascrive il width 100% per i bottoni sui dispositivi mobili */
     }
 }
 
@@ -1021,4 +1030,36 @@ footer {
 
 .hidden {
     display: none;
+}
+
+.footer-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap; /* Aggiunto per migliorare il comportamento responsive */
+}
+
+.source-code-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    color: inherit;
+    background: rgba(252, 134, 134, 0);
+    border: 1px solid var(--border-color); /* Aggiunto per renderlo consistente con theme-toggle */
+    padding: 0.1rem 1rem;
+    border-radius: 30px;
+    font-size: 0.875rem; /* Uniformato con il theme-toggle */
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.source-code-link:hover {
+    background: var(--hover-overlay); /* Uniformato con il theme-toggle */
+    transform: translateY(-1px);
+}
+
+.source-icon {
+    font-size: 1.1rem;
 }
