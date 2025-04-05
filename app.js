@@ -302,9 +302,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         <p>${trimmedDescription}</p>
                         <div class="meta-inline">
                             ${audioStatus}
-                            <div class="meta-item"><i class="channel-icon-small"></i>Channel: ${channelHtml}</div>
-                            <div class="meta-item"><i class="duration-icon"></i>Duration: ${durationHtml}</div>
-                            ${uploadDate ? `<div class="meta-item">Published: ${uploadDate}</div>` : ''}
+                            <div class="meta-item"><i class="channel-icon-small"></i>Canale ${channelHtml}</div>
+                            <div class="meta-item"><i class="duration-icon"></i>Darata ${durationHtml}</div>
+                            ${uploadDate ? `<div class="meta-item">Pubblicato il ${uploadDate}</div>` : ''}
                         </div>
                     </div>
                 </div>
