@@ -1,0 +1,51 @@
+{
+  "name": "Audiolibri.org - Audiolibri Italiani Gratuiti",
+  "short_name": "Audiolibri",
+  "description": "La più grande collezione di audiolibri italiani gratuiti",
+  "icons": [
+    {
+      "src": "/icons/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "start_url": "/index.html",
+  "display": "standalone",
+  "theme_color": "#5bbad5",
+  "background_color": "#ffffff",
+  "orientation": "portrait",
+  "categories": ["books", "education", "entertainment"],
+  "lang": "it-IT",
+  "dir": "ltr",
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "screenshots": [
+    {
+      "src": "/images/screenshot1.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Cerca Audiolibri",
+      "short_name": "Cerca",
+      "description": "Cerca nella collezione di audiolibri",
+      "url": "/?action=search",
+      "icons": [{ "src": "/icons/icon-search-96x96.png", "sizes": "96x96" }]
+    }
+  ]
+}
