@@ -37,7 +37,7 @@ Contributions to improve the platform are welcome. Please feel free to:
 - Contribute to code improvements
 
 ## License
-This project is available under [LICENSE]. Content rights belong to their respective owners.
+This project is available under Creative Commons 1.0 License. Content rights belong to their respective owners.
 
 ## Acknowledgments
 Thanks to all the narrators and creators who make literary works accessible in audio format.
