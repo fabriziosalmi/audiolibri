@@ -1,5 +1,5 @@
 ---
-name: Aggiungi i miei audiolibri
+name: Aggiungi nuovi audiolibri
 about: Usa questo form per far aggiungere nuovi audiolibri
 title: Nuovi audiolibri da aggiungere
 labels: ''
