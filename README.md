@@ -3,6 +3,10 @@
 ## Overview
 Audiolibri.org is a curated platform that aggregates and organizes audiobooks in Italian. This project serves as a discovery engine for audiobook content, making it easy for users to find and access literary works in audio format.
 
+## [https://audiolibri.org](https://audiolibri.org)
+
+![screenshot](https://github.com/fabriziosalmi/audiolibri/blob/main/screenshot.png?raw=true)
+
 ## Features
 - **Extensive Library**: Collection of audiobooks from various sources and narrators
 - **Categorized Content**: Browse by author, genre, narrator, or popularity
