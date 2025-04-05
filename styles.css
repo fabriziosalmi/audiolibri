@@ -617,6 +617,7 @@ button:disabled:hover {
     display: flex;
     align-items: center;
     margin-bottom: 0.5rem;
+    color: #c4c4c4;
 }
 
 .duration-badge {
