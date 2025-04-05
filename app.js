@@ -40,6 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
             document.documentElement.style.setProperty('--secondary-text', '#64748b');
             document.documentElement.style.setProperty('--placeholder-bg', '#f8fafc');
             document.documentElement.style.setProperty('--search-border', '#cbd5e1');
+            document.documentElement.style.setProperty('--primary-rgb', '74, 108, 247');
+            document.documentElement.style.setProperty('--accent-rgb', '16, 185, 129');
+            document.documentElement.style.setProperty('--card-background-rgb', '255, 255, 255');
             prefersDarkMode = false;
         } else {
             document.documentElement.style.setProperty('--background-color', '#000000');
@@ -51,13 +54,16 @@ document.addEventListener('DOMContentLoaded', () => {
             document.documentElement.style.setProperty('--secondary-text', '#a0a0a0');
             document.documentElement.style.setProperty('--placeholder-bg', '#1e1e1e');
             document.documentElement.style.setProperty('--search-border', '#333333');
+            document.documentElement.style.setProperty('--primary-rgb', '252, 134, 134');
+            document.documentElement.style.setProperty('--accent-rgb', '3, 218, 198');
+            document.documentElement.style.setProperty('--card-background-rgb', '18, 18, 18');
             prefersDarkMode = true;
         }
-        themeLabel.textContent = prefersDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+        themeLabel.textContent = prefersDarkMode ? 'Tema chiaro' : 'Tema scuro';
     }
     
     // Initialize theme toggle text
-    themeLabel.textContent = prefersDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+    themeLabel.textContent = prefersDarkMode ? 'Tema chiaro' : 'Tema scuro';
     
     // Load the audiobook data from augmented.json
     fetch('augmented.json')
@@ -84,6 +90,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
             }).filter(book => book.title !== 'Unknown Title' && book.videoId); // Filter out entries without titles and video IDs
             
+            // Calculate and display library statistics
+            updateLibraryStats(audiobooks);
+            
             if (audiobooks.length > 0) {
                 // Small delay to show the loading state
                 setTimeout(() => loadRandomBook(), 500);
@@ -105,7 +114,67 @@ document.addEventListener('DOMContentLoaded', () => {
                     <small>Please check your connection and try again later.</small>
                 </div>`;
         });
-    
+        
+    // Function to calculate and display library stats
+    function updateLibraryStats(books) {
+        // Calculate statistics
+        const totalBooks = books.length;
+        
+        // Get unique channels
+        const uniqueChannels = new Set();
+        books.forEach(book => {
+            if (book.channel) {
+                uniqueChannels.add(book.channel);
+            }
+        });
+        const totalChannels = uniqueChannels.size;
+        
+        // Get unique authors
+        const uniqueAuthors = new Set();
+        books.forEach(book => {
+            if (book.author && book.author !== 'Unknown Author') {
+                uniqueAuthors.add(book.author);
+            }
+        });
+        const totalAuthors = uniqueAuthors.size;
+        
+        // Calculate total duration of all books
+        let totalDurationInSeconds = 0;
+        books.forEach(book => {
+            if (book.duration) {
+                totalDurationInSeconds += book.duration;
+            }
+        });
+        
+        // Convert to days, hours, minutes
+        const totalDays = Math.floor(totalDurationInSeconds / 86400);
+        const totalHours = Math.floor((totalDurationInSeconds % 86400) / 3600);
+        const totalFormattedDuration = `${totalDays} giorni, ${totalHours} ore`;
+        
+        // Update UI
+        const libraryStatsContainer = document.getElementById('library-stats');
+        if (libraryStatsContainer) {
+            libraryStatsContainer.innerHTML = `
+                <div class="stat-item">
+                    <div class="stat-value">${totalBooks.toLocaleString()}</div>
+                    <div class="stat-label">Audiolibri</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${totalAuthors.toLocaleString()}</div>
+                    <div class="stat-label">Autori</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${totalChannels.toLocaleString()}</div>
+                    <div class="stat-label">Canali</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${totalFormattedDuration}</div>
+                    <div class="stat-label">Durata complessiva</div>
+                </div>
+            `;
+        }
+    }
+
     // Set up event listeners
     document.getElementById('search-button').addEventListener('click', performSearch);
     document.getElementById('random-button').addEventListener('click', loadRandomBook);
@@ -121,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Listen for system theme changes
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
         prefersDarkMode = e.matches;
-        themeLabel.textContent = prefersDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+        themeLabel.textContent = prefersDarkMode ? 'Team chiaro' : 'Tema scuro';
     });
     
     function loadRandomBook() {
@@ -525,7 +594,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function formatDuration(seconds) {
-        if (!seconds) return "Unknown duration";
+        if (!seconds) return "Durata sconosciuta";
         
         const hours = Math.floor(seconds / 3600);
         const minutes = Math.floor((seconds % 3600) / 60);

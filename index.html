@@ -6,6 +6,21 @@
     <title>Audiolibri.org</title>
     <meta name="description" content="Discover and enjoy a vast collection of audiobooks for free. Audiolibri.org offers a modern, easy-to-use platform for audiobook lovers.">
     <link rel="stylesheet" href="styles.css">
+    <!-- Add CSS variables for RGB values -->
+    <style>
+        :root {
+            --primary-rgb: 74, 108, 247;
+            --accent-rgb: 16, 185, 129;
+            --card-background-rgb: 255, 255, 255;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary-rgb: 252, 134, 134;
+                --accent-rgb: 3, 218, 198;
+                --card-background-rgb: 18, 18, 18;
+            }
+        }
+    </style>
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎧</text></svg>">
     <!-- Add Google Fonts -->
@@ -18,7 +33,42 @@
 <body>
     <div class="container">
         <header>
-            <h1>Audiolibri.org</h1>
+            <div class="site-title-container">
+                <h1>🎧 Audiolibri.org</h1>
+                <p class="site-tagline">Esplora la più grande collezione di audiolibri italiani gratuiti</p>
+                <div class="audio-wave">
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                </div>
+            </div>
+            
+            <div class="library-stats-container fade-in">
+                <div id="library-stats" class="stats-grid">
+                    <!-- Stats will be populated by JavaScript -->
+                    <div class="stat-item">
+                        <div class="stat-value">...</div>
+                        <div class="stat-label">Audiolibri</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">...</div>
+                        <div class="stat-label">Autori</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">...</div>
+                        <div class="stat-label">Canali</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">...</div>
+                        <div class="stat-label">Durata</div>
+                    </div>
+                </div>
+            </div>
+            
             <div class="header-content">
                 <div class="search-container">
                     <input type="text" id="search" placeholder="Cerca per titolo, autore o audiolettore" aria-label="Search audiobooks">
@@ -27,20 +77,6 @@
                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
                         </svg>
                         Cerca
-                    </button>
-                </div>
-                <div class="navigation-container">
-                    <button id="previous-button" disabled aria-label="Go to previous book">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-                        </svg>
-                        
-                    </button>
-                    <button id="random-button" aria-label="Discover random audiobook">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                            <path d="M18 4l-4 4h3c0 3.31-2.69 6-6 6-1.01 0-1.97-.25-2.8-.7l-1.46 1.46C7.97 15.54 9.43 16 11 16c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46C15.03 4.46 13.57 4 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z"/>
-                        </svg>
-                        Scopri
                     </button>
                 </div>
             </div>
