@@ -696,11 +696,48 @@ document.addEventListener('DOMContentLoaded', () => {
             return '';
         }
         
-        let html = '<ul class="changelog-items">';
+        // Add a style tag for the changelog items
+        const styleTag = `
+        <style>
+            .changelog-items {
+                padding-left: 0;
+                list-style-type: none;
+                margin-top: 10px;
+            }
+            .changelog-items li {
+                margin-bottom: 6px;
+                display: flex;
+                align-items: flex-start;
+            }
+            .change-icon {
+                display: inline-block;
+                width: 22px;
+                text-align: center;
+                margin-right: 10px;
+            }
+            .change-content {
+                font-size: 0.9em;
+                line-height: 1.4;
+                flex: 1;
+                padding-top: 2px;
+            }
+            .change-type-feature .change-content {
+                color: var(--accent-color, #10b981);
+            }
+            .change-type-fix .change-content {
+                color: var(--fix-color, #f59e0b);
+            }
+        </style>`;
+        
+        let html = styleTag + '<ul class="changelog-items">';
         changes.forEach(item => {
             // Check if item is a string or has a type property
             if (typeof item === 'string') {
-                html += `<li>${item}</li>`;
+                html += `
+                    <li>
+                        <span class="change-icon">•</span>
+                        <span class="change-content">${item}</span>
+                    </li>`;
             } else if (item && typeof item === 'object') {
                 // Handle different types of changes (feature, fix, improvement, etc.)
                 const type = item.type || 'other';
@@ -710,7 +747,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 html += `
                     <li class="${typeClass}">
                         ${typeIcon}
-                        <span>${item.text || item.description || ''}</span>
+                        <span class="change-content">${item.text || item.description || ''}</span>
                     </li>
                 `;
             }
@@ -726,26 +763,26 @@ document.addEventListener('DOMContentLoaded', () => {
         switch (lowerType) {
             case 'feature':
             case 'new':
-                return '<span class="change-icon feature">✨</span>';
+                return '<span class="change-icon">✨</span>';
             case 'fix':
             case 'bugfix':
-                return '<span class="change-icon fix">🐛</span>';
+                return '<span class="change-icon">🐛</span>';
             case 'improvement':
             case 'enhance':
-                return '<span class="change-icon improvement">⚡️</span>';
+                return '<span class="change-icon">⚡️</span>';
             case 'security':
-                return '<span class="change-icon security">🔒</span>';
+                return '<span class="change-icon">🔒</span>';
             case 'deprecate':
             case 'deprecated':
-                return '<span class="change-icon deprecated">⚠️</span>';
+                return '<span class="change-icon">⚠️</span>';
             case 'remove':
             case 'removed':
-                return '<span class="change-icon removed">🗑️</span>';
+                return '<span class="change-icon">🗑️</span>';
             case 'docs':
             case 'documentation':
-                return '<span class="change-icon docs">📝</span>';
+                return '<span class="change-icon">📝</span>';
             default:
-                return '<span class="change-icon other">•</span>';
+                return '<span class="change-icon">•</span>';
         }
     }
 });

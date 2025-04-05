@@ -3,12 +3,13 @@
   "entries": [
     {
       "date": "2025-04-05",
-      "title": "Rilascio del nuovo motore",
+      "title": "Rilascio del nuovo sito",
       "description": "Motore e interfaccia completamente riprogettati per offrire un'esperienza migliore.",
       "changes": [
         "Alcuni contenuti testuali potrebbero essere aggiornati per una maggiore accuratezza",
-        "Nuovi contenuti possono essere aggiunti in qualunque momento"
-      ]
+        "Nuovi contenuti possono essere aggiunti in qualunque momento",
+        "I testi vengono tradotti continuamente dalle lingue originali alla lingua Italiana"
+     ]
     }
   ]
 }
