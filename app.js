@@ -36,6 +36,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeLabel = document.getElementById('theme-label');
     themeToggle.addEventListener('click', toggleTheme);
     
+    // Set up search functionality
+    const searchInput = document.getElementById('search');
+    const searchButton = document.getElementById('search-button');
+    
+    // Add event listeners for search
+    searchButton.addEventListener('click', performSearch);
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            performSearch();
+        }
+    });
+    
     function toggleTheme() {
         if (prefersDarkMode) {
             document.documentElement.style.setProperty('--background-color', '#f5f7fa');
@@ -1145,6 +1157,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         
+        // Clear any selected genre pills
+        document.querySelectorAll('.genre-pill').forEach(pill => {
+            pill.classList.remove('selected');
+        });
+        
         // Show loading state while searching
         document.getElementById('current-audiobook').innerHTML = `
             <div class="loading-container slide-up">
@@ -1179,7 +1196,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         <i class="search-icon"></i>
                         <h3>No matching audiobooks found</h3>
                         <p>We couldn't find any audiobooks matching "${searchTerm}"</p>
+                        <button class="back-button" id="search-back-button">Back to main view</button>
                     </div>`;
+                    
+                // Add event listener for the back button
+                document.getElementById('search-back-button').addEventListener('click', () => {
+                    if (previousBooks.length > 0) {
+                        currentBook = previousBooks.pop();
+                    }
+                    displayBook(currentBook);
+                });
             }
         }, 500);
     }
