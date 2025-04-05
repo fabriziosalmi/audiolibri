@@ -2,6 +2,13 @@
 let player;
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Configuration options
+    const config = {
+        enableChangelog: true,  // Set to false to disable the changelog feature
+        changelogPath: 'changelog.json',
+        maxChangelogEntries: 3
+    };
+
     let audiobooks = [];
     let currentBook = null;
     let previousBooks = []; // Keep track of book history
@@ -95,7 +102,12 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (audiobooks.length > 0) {
                 // Small delay to show the loading state
-                setTimeout(() => loadRandomBook(), 500);
+                setTimeout(() => {
+                    // Select a random book as the initial book
+                    const randomIndex = Math.floor(Math.random() * audiobooks.length);
+                    currentBook = audiobooks[randomIndex];
+                    displayBook(currentBook);
+                }, 500);
             } else {
                 document.getElementById('current-audiobook').innerHTML = 
                     `<div class="error-message">
@@ -177,8 +189,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Set up event listeners
     document.getElementById('search-button').addEventListener('click', performSearch);
-    document.getElementById('random-button').addEventListener('click', loadRandomBook);
-    document.getElementById('previous-button').addEventListener('click', loadPreviousBook);
     
     // Set up search with Enter key
     document.getElementById('search').addEventListener('keyup', (event) => {
@@ -192,62 +202,12 @@ document.addEventListener('DOMContentLoaded', () => {
         prefersDarkMode = e.matches;
         themeLabel.textContent = prefersDarkMode ? 'Team chiaro' : 'Tema scuro';
     });
-    
-    function loadRandomBook() {
-        if (audiobooks.length === 0) return;
-        
-        // Show loading state while getting the next book
-        document.getElementById('current-audiobook').innerHTML = `
-            <div class="loading-container slide-up">
-                <div class="loading-spinner"></div>
-                <p>Preparing your audiobook...</p>
-            </div>
-        `;
-        
-        if (currentBook) {
-            previousBooks.push(currentBook); // Save current book before loading a new one
-        }
-        
-        // Reset player state
-        resetPlayerState();
-        
-        // Clear previous interval if exists
-        if (updateInterval) clearInterval(updateInterval);
-        
-        const randomIndex = Math.floor(Math.random() * audiobooks.length);
-        currentBook = audiobooks[randomIndex];
-        
-        // Short delay to show the loading animation
-        setTimeout(() => {
-            displayBook(currentBook);
-            document.getElementById('previous-button').disabled = previousBooks.length === 0;
-        }, 300);
-    }
-    
-    function loadPreviousBook() {
-        if (previousBooks.length === 0) return;
-        
-        // Show loading state
-        document.getElementById('current-audiobook').innerHTML = `
-            <div class="loading-container slide-up">
-                <div class="loading-spinner"></div>
-                <p>Loading previous audiobook...</p>
-            </div>
-        `;
-        
-        // Reset player state
-        resetPlayerState();
-        
-        // Clear previous interval
-        if (updateInterval) clearInterval(updateInterval);
-        
-        currentBook = previousBooks.pop();
-        
-        // Short delay to show loading animation
-        setTimeout(() => {
-            displayBook(currentBook);
-            document.getElementById('previous-button').disabled = previousBooks.length === 0;
-        }, 300);
+
+    // Initialize changelog if enabled
+    if (config.enableChangelog) {
+        initializeChangelog();
+    } else {
+        document.getElementById('changelog-card').classList.add('hidden');
     }
     
     function resetPlayerState() {
@@ -531,7 +491,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function performSearch() {
         const searchTerm = document.getElementById('search').value.toLowerCase();
         if (!searchTerm) {
-            loadRandomBook();
             return;
         }
         
@@ -563,18 +522,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 currentBook = results[0];
                 displayBook(currentBook);
-                document.getElementById('previous-button').disabled = previousBooks.length === 0;
             } else {
                 document.getElementById('current-audiobook').innerHTML = `
                     <div class="no-results fade-in">
                         <i class="search-icon"></i>
                         <h3>No matching audiobooks found</h3>
                         <p>We couldn't find any audiobooks matching "${searchTerm}"</p>
-                        <button id="try-random" class="control-button">Try a random book instead</button>
                     </div>`;
-                
-                // Add event listener for the "try random" button
-                document.getElementById('try-random').addEventListener('click', loadRandomBook);
             }
         }, 500);
     }
@@ -629,5 +583,169 @@ document.addEventListener('DOMContentLoaded', () => {
         const match = url.match(regExp);
         
         return (match && match[2].length === 11) ? match[2] : null;
+    }
+
+    // Changelog functionality
+    function initializeChangelog() {
+        const changelogCard = document.getElementById('changelog-card');
+        const changelogToggle = document.getElementById('changelog-toggle');
+        const changelogContent = document.getElementById('changelog-content');
+        
+        // Check if user preference for collapsing is stored
+        const isCollapsed = localStorage.getItem('changelogCollapsed') === 'true';
+        if (isCollapsed) {
+            changelogCard.classList.add('collapsed');
+            changelogToggle.querySelector('.collapse-icon').textContent = '+';
+        }
+        
+        // Toggle changelog visibility
+        changelogToggle.addEventListener('click', () => {
+            changelogCard.classList.toggle('collapsed');
+            const isNowCollapsed = changelogCard.classList.contains('collapsed');
+            localStorage.setItem('changelogCollapsed', isNowCollapsed);
+            changelogToggle.querySelector('.collapse-icon').textContent = isNowCollapsed ? '+' : '−';
+        });
+        
+        // Load changelog data
+        document.getElementById('changelog-content').innerHTML = `
+            <div class="loading-spinner small"></div>
+            <p>Caricamento aggiornamenti...</p>
+        `;
+        
+        // Try loading the changelog data
+        fetchChangelog();
+    }
+
+    function fetchChangelog() {
+        // Set a timeout for the fetch
+        const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Timeout')), 8000)
+        );
+        
+        // Fetch with timeout handling
+        Promise.race([
+            fetch(config.changelogPath),
+            timeoutPromise
+        ])
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (!data || !data.entries || !Array.isArray(data.entries)) {
+                throw new Error('Invalid data format');
+            }
+            displayChangelog(data);
+        })
+        .catch(error => {
+            console.error('Error loading changelog:', error);
+            document.getElementById('changelog-content').innerHTML = `
+                <div class="error-message small">
+                    <p>Impossibile caricare gli aggiornamenti: ${error.message || 'Unknown error'}</p>
+                    <button id="retry-changelog" class="control-button small">Riprova</button>
+                </div>
+            `;
+            
+            // Add retry button functionality
+            document.getElementById('retry-changelog')?.addEventListener('click', () => {
+                document.getElementById('changelog-content').innerHTML = `
+                    <div class="loading-spinner small"></div>
+                    <p>Riprovo a caricare gli aggiornamenti...</p>
+                `;
+                setTimeout(() => fetchChangelog(), 500);
+            });
+        });
+    }
+
+    function displayChangelog(data) {
+        const changelogContent = document.getElementById('changelog-content');
+        const entries = data.entries.slice(0, config.maxChangelogEntries); // Limit number of entries
+        
+        if (!entries || entries.length === 0) {
+            changelogContent.innerHTML = '<p>Nessun aggiornamento disponibile.</p>';
+            return;
+        }
+        
+        let html = '';
+        entries.forEach(entry => {
+            const date = new Date(entry.date);
+            const formattedDate = date.toLocaleDateString('it-IT', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            html += `
+                <div class="changelog-entry">
+                    <div class="changelog-date">${formattedDate}</div>
+                    <h3 class="changelog-title">${entry.title}</h3>
+                    <p class="changelog-description">${entry.description || ''}</p>
+                    ${renderChangelogItems(entry.changes)}
+                </div>
+            `;
+        });
+        
+        changelogContent.innerHTML = html;
+    }
+    
+    // Add the missing renderChangelogItems function
+    function renderChangelogItems(changes) {
+        if (!changes || !Array.isArray(changes) || changes.length === 0) {
+            return '';
+        }
+        
+        let html = '<ul class="changelog-items">';
+        changes.forEach(item => {
+            // Check if item is a string or has a type property
+            if (typeof item === 'string') {
+                html += `<li>${item}</li>`;
+            } else if (item && typeof item === 'object') {
+                // Handle different types of changes (feature, fix, improvement, etc.)
+                const type = item.type || 'other';
+                const typeClass = `change-type-${type.toLowerCase()}`;
+                const typeIcon = getChangeTypeIcon(type);
+                
+                html += `
+                    <li class="${typeClass}">
+                        ${typeIcon}
+                        <span>${item.text || item.description || ''}</span>
+                    </li>
+                `;
+            }
+        });
+        html += '</ul>';
+        
+        return html;
+    }
+    
+    // Helper function to get appropriate icon for change types
+    function getChangeTypeIcon(type) {
+        const lowerType = type.toLowerCase();
+        switch (lowerType) {
+            case 'feature':
+            case 'new':
+                return '<span class="change-icon feature">✨</span>';
+            case 'fix':
+            case 'bugfix':
+                return '<span class="change-icon fix">🐛</span>';
+            case 'improvement':
+            case 'enhance':
+                return '<span class="change-icon improvement">⚡️</span>';
+            case 'security':
+                return '<span class="change-icon security">🔒</span>';
+            case 'deprecate':
+            case 'deprecated':
+                return '<span class="change-icon deprecated">⚠️</span>';
+            case 'remove':
+            case 'removed':
+                return '<span class="change-icon removed">🗑️</span>';
+            case 'docs':
+            case 'documentation':
+                return '<span class="change-icon docs">📝</span>';
+            default:
+                return '<span class="change-icon other">•</span>';
+        }
     }
 });

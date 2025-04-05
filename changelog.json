@@ -1,0 +1,36 @@
+{
+  "version": "1.0.0",
+  "entries": [
+    {
+      "date": "2023-11-20",
+      "title": "Rilascio dell'interfaccia migliorata",
+      "description": "Abbiamo completamente riprogettato l'interfaccia utente per offrire un'esperienza migliore.",
+      "changes": [
+        "Nuova intestazione con statistiche della libreria",
+        "Tema scuro migliorato con colori più contrastanti",
+        "Controlli del player audio più intuitivi",
+        "Migliorata la visualizzazione su dispositivi mobili"
+      ]
+    },
+    {
+      "date": "2023-11-10",
+      "title": "Aggiunto supporto per categorie",
+      "description": "Ora è possibile vedere e filtrare gli audiolibri per categoria.",
+      "changes": [
+        "Visualizzazione delle categorie nei dettagli del libro",
+        "Ricerca migliorata che include le categorie",
+        "Corretto bug nella riproduzione audio"
+      ]
+    },
+    {
+      "date": "2023-10-28",
+      "title": "Prima versione pubblica",
+      "description": "Lancio della prima versione pubblica di Audiolibri.org",
+      "changes": [
+        "Implementazione del player YouTube integrato",
+        "Funzionalità di ricerca per titolo e autore",
+        "Sistema di navigazione nella libreria"
+      ]
+    }
+  ]
+}
