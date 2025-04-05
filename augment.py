@@ -104,21 +104,22 @@ rate_limiter = RateLimiter(CONFIG['rate_limit'])
 def get_augmented_info(book_id, book_data):
     """Query the local LLM to get augmented information about the book."""
     prompt = f"""
-You are a literary expert. Please analyze this audiobook information and provide:
-1. The real book title (without narrator info, just the book title)
-2. The real author's name (just the author's name, standardized)
-3. A brief synopsis of the work (2-3 sentences maximum)
+Sei un esperto letterario. Analizza queste informazioni sull'audiolibro e fornisci:
+1. Il vero titolo del libro (senza informazioni sul narratore, solo il titolo del libro)
+2. Il nome reale dell'autore (solo il nome dell'autore, standardizzato)
+3. Una breve sinossi dell'opera (massimo 2-3 frasi)
+4. Il genere letterario dell'opera (scegli solo uno tra: romanzo, racconto, poesia, saggio, biografia, fantascienza, fantasy, giallo, horror, avventura, storico, drammatico, filosofico, favola, fiaba)
 
-Information:
-- Title: {book_data['title']}
-- Channel: {book_data['channel']}
-- Description: {book_data['description']}
-- Tags: {', '.join(book_data['tags'][:10])}
-- Duration: {book_data['duration']} seconds
+Informazioni:
+- Titolo: {book_data['title']}
+- Canale: {book_data['channel']}
+- Descrizione: {book_data['description']}
+- Tag: {', '.join(book_data['tags'][:10])}
+- Durata: {book_data['duration']} secondi
 
-Format your response as a JSON object with these fields: 
-{{"real_title": "Actual Book Title", "real_author": "Author Name", "real_synopsis": "Brief synopsis of the work."}}
-Do not include any other text in your response.
+Formatta la tua risposta come un oggetto JSON con questi campi:
+{{"real_title": "Titolo effettivo del libro", "real_author": "Nome dell'autore", "real_synopsis": "Breve sinossi dell'opera.", "real_genre": "Genere letterario"}}
+Non includere altro testo nella tua risposta.
 """
 
     headers = {
@@ -128,7 +129,7 @@ Do not include any other text in your response.
     data = {
         "model": "qwen2.5-coder-3b-instruct-mlx",  # Using the model from the example
         "messages": [
-            {"role": "system", "content": "You are a helpful assistant that specializes in books and literature."},
+            {"role": "system", "content": "Sei un assistente specializzato in libri e letteratura che risponde sempre in italiano."},
             {"role": "user", "content": prompt}
         ],
         "temperature": 0.2,  # Lower temperature for more consistent results
@@ -156,7 +157,7 @@ Do not include any other text in your response.
             
             augmented_info = json.loads(content)
             # Ensure all expected keys are present
-            required_keys = ["real_title", "real_author", "real_synopsis"]
+            required_keys = ["real_title", "real_author", "real_synopsis", "real_genre"]
             for key in required_keys:
                 if key not in augmented_info:
                     augmented_info[key] = ""
@@ -166,7 +167,8 @@ Do not include any other text in your response.
             return {
                 "real_title": "",
                 "real_author": "",
-                "real_synopsis": "Failed to generate synopsis",
+                "real_synopsis": "Impossibile generare sinossi",
+                "real_genre": "",
                 "raw_response": content  # Save the raw response for debugging
             }
     except Exception as e:
@@ -174,7 +176,8 @@ Do not include any other text in your response.
         return {
             "real_title": "",
             "real_author": "",
-            "real_synopsis": f"Error: {str(e)}",
+            "real_synopsis": f"Errore: {str(e)}",
+            "real_genre": "",
         }
 
 def display_stats(audiobooks):
