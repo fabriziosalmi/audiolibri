@@ -247,7 +247,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Add title and list container
         genreNavContainer.innerHTML = `
-            <h3 class="genre-title">Esplora per genere</h3>
             <div class="genre-list" role="list" aria-label="Generi disponibili">
             </div>
         `;
@@ -288,10 +287,10 @@ document.addEventListener('DOMContentLoaded', () => {
             .genre-navigation {
                 margin: 20px 0;
                 padding: 1.5rem;
-                background: var(--card-background);
+                background: #12121200;
                 border-radius: 16px;
-                box-shadow: var(--card-shadow);
-                border: 1px solid var(--border-color);
+                box-shadow: none;
+                border: 0px solid var(--border-color);
                 transition: all 0.3s ease;
             }
             
@@ -330,8 +329,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 background: rgba(var(--primary-rgb), 0.1);
                 border: 1px solid rgba(var(--primary-rgb), 0.2);
                 color: var(--primary-color);
-                font-size: 0.95rem;
-                font-weight: 500;
+                font-size: 1rem;
+                font-weight: lighter;
                 cursor: pointer;
                 transition: all 0.25s ease;
                 white-space: nowrap;
