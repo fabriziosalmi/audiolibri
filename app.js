@@ -83,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     title: book.real_title || book.title || 'Unknown Title',
                     author: book.real_author || 'Unknown Author',
                     description: book.real_synopsis || book.description || 'No description available.',
+                    genre: book.real_genre || '',  // Add the genre from augmented data
                     coverImage: book.thumbnail || 'https://via.placeholder.com/400x225?text=No+Cover+Available',
                     audioUrl: book.audio_file || '',
                     duration: book.duration || 0,
@@ -91,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     channel: book.channel || '',
                     channelUrl: book.channel_url || '',
                     videoId: extractVideoId(book.url || ''),
-                    categories: book.categories || [],
+                    categories: book.real_genre ? [book.real_genre] : (book.categories || []),  // Use genre as category if available
                     tags: book.tags || [],
                     uploadDate: book.upload_date || ''
                 };
