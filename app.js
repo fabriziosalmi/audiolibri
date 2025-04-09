@@ -224,101 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Filter genres with at least 10 items
         const filteredGenres = Object.keys(genreCounts).filter(genre => genreCounts[genre] >= 10);
 
-        if (filteredGenres.length === 0) {
-            return;
-        }
-        
-        // Add mobile-specific CSS for genre navigation
-        if (!document.getElementById('mobile-genre-styles')) {
-            const mobileStyles = document.createElement('style');
-            mobileStyles.id = 'mobile-genre-styles';
-            mobileStyles.textContent = `
-                @media (max-width: 768px) {
-                    .mobile-genre-nav {
-                        width: 100%;
-                        overflow-x: auto;
-                        white-space: nowrap;
-                        padding: 15px 15px;
-                        -webkit-overflow-scrolling: touch;
-                        scrollbar-width: none;
-                        margin: 10px 0;
-                        display: flex;
-                        flex-wrap: nowrap;
-                    }
-                    
-                    .mobile-genre-nav::-webkit-scrollbar {
-                        display: none;
-                    }
-                    
-                    .mobile-genre-nav .genre-list {
-                        display: flex;
-                        flex-wrap: nowrap;
-                        gap: 10px;
-                        padding-bottom: 5px;
-                        margin-bottom: 0;
-                    }
-                    
-                    .mobile-genre-nav .genre-pill {
-                        flex: 0 0 auto;
-                        border: none !important;
-                        box-shadow: 0 3px 8px rgba(var(--primary-rgb), 0.15) !important;
-                        white-space: nowrap;
-                        padding: 8px 14px;
-                        font-size: 0.85rem;
-                    }
-                    
-                    /* Hide desktop navigation on mobile */
-                    .genre-navigation:not(.mobile-genre-nav) {
-                        display: none;
-                    }
-                }
-            `;
-            document.head.appendChild(mobileStyles);
-        }
-
-        // First, create the mobile navigation
-        let mobileCategoriesContainer = document.getElementById('mobile-categories-container');
-        if (!mobileCategoriesContainer) {
-            mobileCategoriesContainer = document.createElement('div');
-            mobileCategoriesContainer.id = 'mobile-categories-container';
-            mobileCategoriesContainer.className = 'mobile-genre-nav';
-            
-            // Insert after header
-            const header = document.querySelector('header');
-            if (header && header.parentNode) {
-                header.parentNode.insertBefore(mobileCategoriesContainer, header.nextSibling);
-            }
-        }
-        
-        // Clear and populate mobile navigation
-        mobileCategoriesContainer.innerHTML = '';
-        
-        const mobileGenreList = document.createElement('div');
-        mobileGenreList.className = 'genre-list';
-        mobileGenreList.setAttribute('role', 'list');
-        
-        // Generate pills for mobile
-        filteredGenres.forEach(genre => {
-            const genrePill = document.createElement('button');
-            genrePill.className = 'genre-pill';
-            genrePill.dataset.genre = genre;
-            genrePill.setAttribute('role', 'listitem');
-            genrePill.innerHTML = `
-                <span class="genre-name">${capitalizeCategory(genre)}</span>
-                <span class="genre-count" aria-label="${genreCounts[genre]} audiolibri">${genreCounts[genre]}</span>
-            `;
-            
-            // Add click event listener
-            genrePill.addEventListener('click', function() {
-                showGenreView(genre);
-            });
-            
-            mobileGenreList.appendChild(genrePill);
-        });
-        
-        mobileCategoriesContainer.appendChild(mobileGenreList);
-        
-        // Now handle the regular desktop navigation
+        // First, create or check for the genre navigation container
         let genreNavContainer = document.getElementById('genre-navigation');
         if (!genreNavContainer) {
             // Create the container if it doesn't exist
@@ -342,43 +248,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Clear existing content
         genreNavContainer.innerHTML = '';
         
-        // Now, handle the mobile-specific navigation
-        const mobileContainer = document.getElementById('mobile-categories-container');
-        if (mobileContainer) {
-            const mobileNav = document.createElement('div');
-            mobileNav.id = 'mobile-genre-navigation';
-            mobileNav.className = 'genre-navigation mobile-nav';
-            
-            const mobileGenreList = document.createElement('div');
-            mobileGenreList.className = 'genre-list';
-            mobileGenreList.setAttribute('role', 'list');
-            mobileGenreList.setAttribute('aria-label', 'Generi disponibili');
-            
-            mobileNav.appendChild(mobileGenreList);
-            mobileContainer.innerHTML = '';
-            mobileContainer.appendChild(mobileNav);
-            
-            // Generate navigation for the mobile view
-            filteredGenres.forEach(genre => {
-                const genrePill = document.createElement('button');
-                genrePill.className = 'genre-pill';
-                genrePill.dataset.genre = genre;
-                genrePill.setAttribute('role', 'listitem');
-                genrePill.innerHTML = `
-                    <span class="genre-name">${capitalizeCategory(genre)}</span>
-                    <span class="genre-count" aria-label="${genreCounts[genre]} audiolibri">${genreCounts[genre]}</span>
-                `;
-                
-                // Add click event listener
-                genrePill.addEventListener('click', function() {
-                    showGenreView(genre);
-                });
-                
-                mobileGenreList.appendChild(genrePill);
-            });
+        if (filteredGenres.length === 0) {
+            genreNavContainer.style.display = 'none';
+            return;
         }
 
-        // Add title and list container for desktop
+        // Add title and list container
         genreNavContainer.innerHTML = `
             <div class="genre-list" role="list" aria-label="Generi disponibili">
             </div>
@@ -386,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const genreList = genreNavContainer.querySelector('.genre-list');
 
-        // Generate navigation for filtered genres (desktop)
+        // Generate navigation for filtered genres
         filteredGenres.forEach(genre => {
             const genrePill = document.createElement('button');
             genrePill.className = 'genre-pill';
@@ -407,21 +282,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Add CSS styles for genre navigation
         addGenreNavigationStyles();
-        
-        // Add mobile navigation stylesheet
-        addMobileNavigationStyles();
-    }
-    
-    // Add mobile navigation styles
-    function addMobileNavigationStyles() {
-        if (document.getElementById('mobile-nav-styles')) return;
-        
-        // Load the mobile CSS file
-        const link = document.createElement('link');
-        link.id = 'mobile-nav-styles';
-        link.rel = 'stylesheet';
-        link.href = 'mobile-navigation.css';
-        document.head.appendChild(link);
     }
 
     // Add CSS styles for genre navigation
