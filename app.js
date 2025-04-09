@@ -290,6 +290,56 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Add title and list container for desktop
         genreNavContainer.innerHTML = `
+            <div class="genre-list" role="list" aria-label="Generi disponibili">
+            </div>
+        `;
+        
+        const genreList = genreNavContainer.querySelector('.genre-list');
+
+        // Generate navigation for filtered genres (desktop)
+        filteredGenres.forEach(genre => {
+            const genrePill = document.createElement('button');
+            genrePill.className = 'genre-pill';
+            genrePill.dataset.genre = genre;
+            genrePill.setAttribute('role', 'listitem');
+            genrePill.innerHTML = `
+                <span class="genre-name">${capitalizeCategory(genre)}</span>
+                <span class="genre-count" aria-label="${genreCounts[genre]} audiolibri">${genreCounts[genre]}</span>
+            `;
+            
+            // Add click event listener
+            genrePill.addEventListener('click', function() {
+                showGenreView(genre);
+            });
+            
+            genreList.appendChild(genrePill);
+        });
+        
+        // Add CSS styles for genre navigation
+        addGenreNavigationStyles();
+        
+        // Add mobile navigation stylesheet
+        addMobileNavigationStyles();
+    }
+    
+    // Add mobile navigation styles
+    function addMobileNavigationStyles() {
+        if (document.getElementById('mobile-nav-styles')) return;
+        
+        // Load the mobile CSS file
+        const link = document.createElement('link');
+        link.id = 'mobile-nav-styles';
+        link.rel = 'stylesheet';
+        link.href = 'mobile-navigation.css';
+        document.head.appendChild(link);
+    }
+
+    // Add CSS styles for genre navigation
+    function addGenreNavigationStyles() {
+        // Check if styles are already added
+        if (document.getElementById('genre-nav-styles')) return;
+        
+        const styleElement = document.createElement('style');
         styleElement.id = 'genre-nav-styles';
         styleElement.textContent = `
             .genre-navigation {
