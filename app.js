@@ -203,6 +203,14 @@ document.addEventListener('DOMContentLoaded', () => {
         generateGenreNavigation(books);
     }
 
+    // Helper function to uppercase categories/genres
+    function capitalizeCategory(category) {
+        if (!category) return '';
+        
+        // Simply return the category in uppercase
+        return category.toUpperCase();
+    }
+
     // Function to generate genre navigation
     function generateGenreNavigation(books) {
         // Count the number of books in each genre
@@ -260,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
             genrePill.dataset.genre = genre;
             genrePill.setAttribute('role', 'listitem');
             genrePill.innerHTML = `
-                <span class="genre-name">${genre}</span>
+                <span class="genre-name">${capitalizeCategory(genre)}</span>
                 <span class="genre-count" aria-label="${genreCounts[genre]} audiolibri">${genreCounts[genre]}</span>
             `;
             
@@ -532,6 +540,31 @@ document.addEventListener('DOMContentLoaded', () => {
         document.head.appendChild(styleElement);
     }
     
+    // Add specific styles for genre pills to remove borders
+    function updateGenrePillStyles() {
+        // Check if the styles already exist
+        if (document.getElementById('genre-pill-border-fix')) return;
+        
+        const styleElement = document.createElement('style');
+        styleElement.id = 'genre-pill-border-fix';
+        styleElement.textContent = `
+            .genre-pill {
+                border: none !important;
+                box-shadow: 0 3px 8px rgba(var(--primary-rgb), 0.15);
+            }
+            
+            .genre-pill:hover {
+                box-shadow: 0 5px 12px rgba(var(--primary-rgb), 0.25);
+            }
+            
+            .genre-pill.selected {
+                box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.4);
+            }
+        `;
+        
+        document.head.appendChild(styleElement);
+    }
+    
     // Count how many books are in a specific genre
     function countBooksInGenre(books, genre) {
         return books.filter(book => 
@@ -563,7 +596,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('current-audiobook').innerHTML = `
             <div class="loading-container slide-up">
                 <div class="loading-spinner"></div>
-                <p>Loading "${genre}" audiobooks...</p>
+                <p>Loading "${capitalizeCategory(genre)}" audiobooks...</p>
                 <small>Preparing your filtered collection</small>
             </div>
         `;
@@ -579,8 +612,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 currentBook = filteredBooks[0];
                 
-                // Display the book with a special header showing the genre and navigation
-                displayBookWithGenreNav(currentBook, genre, filteredBooks);
+                // Display the regular book view first
+                displayBook(currentBook);
+                
+                // Then display genre books grid in a separate card
+                displayGenreBooksGrid(genre, filteredBooks);
             } else {
                 document.getElementById('current-audiobook').innerHTML = `
                     <div class="no-results fade-in">
@@ -597,281 +633,367 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 500);
     }
 
-    // New function to display book with genre navigation
-    function displayBookWithGenreNav(book, genre, genreBooks) {
-        const bookCard = document.getElementById('current-audiobook');
-        
-        // Set background image with a gradient overlay
-        bookCard.style.backgroundImage = `url('${book.coverImage}')`;
-        
-        // Check if audio file is available
-        const audioAvailable = book.audioUrl ? true : false;
-        const audioStatus = audioAvailable ? 
-            `<span class="audio-status available"><i class="audio-icon"></i>Audio available</span>` : 
-            ``;
-        
-        // Create trimmed description (max 300 characters)
-        const trimmedDescription = book.description.length > 300 
-            ? book.description.substring(0, 300) + '...' 
-            : book.description;
-        
-        // Create channel link with icon
-        const channelHtml = book.channelUrl 
-            ? `<a href="${book.channelUrl}" target="_blank" rel="noopener" class="channel-link">
-                <img src="https://www.youtube.com/s/desktop/7c155e84/img/favicon_144x144.png" alt="YouTube" class="channel-icon">
-                ${book.channel || 'YouTube Channel'}
-              </a>` 
-            : `${book.channel || ''}`;
-            
-        // Format upload date if available
-        const uploadDate = book.uploadDate ? 
-            formatUploadDate(book.uploadDate) : '';
-            
-        // Create category tags
-        let categoriesHtml = '';
-        if (book.categories && book.categories.length > 0) {
-            categoriesHtml = `
-            <div class="book-categories">
-                ${book.categories.map(category => 
-                    `<span class="category-tag">${category}</span>`
-                ).join('')}
-            </div>`;
+    // New function to display genre books in a grid view card
+    function displayGenreBooksGrid(genre, genreBooks) {
+        // Remove any existing genre grid card first
+        const existingCard = document.getElementById('genre-books-grid-card');
+        if (existingCard) {
+            existingCard.remove();
         }
         
-        // Format duration as a styled element
-        const durationHtml = `<span class="duration-badge"><i class="time-icon"></i>${book.formattedDuration}</span>`;
+        // Create a new card for the genre books grid
+        const genreGridCard = document.createElement('div');
+        genreGridCard.id = 'genre-books-grid-card';
+        genreGridCard.className = 'genre-books-grid-card fade-in';
         
-        // Create genre navigation header
-        const genreNavHeader = `
-        <div class="genre-nav-header fade-in">
-            <div class="genre-nav-breadcrumbs">
-                <button class="back-button" id="back-to-main">
-                    <i class="back-icon"></i> Back
-                </button>
-                <div class="genre-nav-title">
-                    <span class="genre-label">Genre:</span> 
-                    <strong>${genre}</strong>
-                    <span class="genre-count-large">${genreBooks.length} audiobooks</span>
-                </div>
-            </div>
-            <div class="genre-nav-buttons">
-                <button id="prev-genre-book" class="nav-button" ${genreBooks.indexOf(book) <= 0 ? 'disabled' : ''}>
-                    <span class="nav-icon prev-icon"></span> Previous
-                </button>
-                <button id="next-genre-book" class="nav-button" ${genreBooks.indexOf(book) >= genreBooks.length - 1 ? 'disabled' : ''}>
-                    Next <span class="nav-icon next-icon"></span>
-                </button>
-            </div>
-        </div>
-        `;
-        
-        // Improved layout with better player interface and genre navigation
-        bookCard.innerHTML = `
-            <div class="card-overlay">
-                ${genreNavHeader}
-                <div class="media-container slide-up">
-                    <div id="youtube-player"></div>
-                    <audio id="audio-player" controls></audio>
-                    <div class="player-controls">
-                        <div class="controls-row">
-                            <button id="rewind-button" class="control-button" aria-label="Rewind 10 seconds">
-                                <i class="rewind-icon"></i>
-                            </button>
-                            <button id="play-pause" class="control-button large" aria-label="Play/Pause">
-                                <i class="play-icon"></i>
-                            </button>
-                            <button id="forward-button" class="control-button" aria-label="Forward 10 seconds">
-                                <i class="forward-icon"></i>
-                            </button>
-                        </div>
-                        <div class="progress-container" id="progress-container">
-                            <div class="progress-bar" id="progress-bar"></div>
-                            <div class="progress-handle" id="progress-handle"></div>
-                        </div>
-                        <div class="time-display">
-                            <span id="current-time">0:00</span>
-                            <span id="total-time">${formatTimeDisplay(book.duration)}</span>
-                        </div>
-                        <div class="volume-control">
-                            <i class="volume-icon"></i>
-                            <input type="range" id="volume-slider" min="0" max="100" value="100" aria-label="Volume control">
-                        </div>
-                    </div>
-                </div>
-                <div class="book-details fade-in">
-                    <div class="book-text-content">
-                        <h2>${book.title}</h2>
-                        <h3>${book.author}</h3>
-                        ${categoriesHtml}
-                        <p>${trimmedDescription}</p>
-                        <div class="meta-inline">
-                            ${audioStatus}
-                            <div class="meta-item"><i class="channel-icon-small"></i>Canale ${channelHtml}</div>
-                            <div class="meta-item"><i class="duration-icon"></i>Durata ${durationHtml}</div>
-                            ${uploadDate ? `<div class="meta-item">Pubblicato il ${uploadDate}</div>` : ''}
-                        </div>
-                    </div>
+        // Create header with genre info and navigation (without close button)
+        const genreHeader = `
+            <div class="genre-grid-header">
+                <div class="genre-grid-title-area">
+                    <h3 class="genre-grid-title">${capitalizeCategory(genre)}</h3>
+                    <span class="genre-count-badge">${genreBooks.length} audiolibri</span>
                 </div>
             </div>
         `;
         
-        // Add CSS styles for genre navigation header
-        addGenreNavHeaderStyles();
+        // Create grid of book cards with scroll buttons
+        let booksGrid = `
+            <div class="books-grid-container">
+                <button class="scroll-button scroll-left" id="scroll-left" aria-label="Scroll left">
+                    <i class="arrow-left-icon">←</i>
+                </button>
+                <div class="books-grid" id="books-grid">`;
         
-        // Set up audio player if audio is available
-        const audioPlayer = document.getElementById('audio-player');
-        if (audioAvailable) {
-            audioPlayer.src = book.audioUrl;
-            audioPlayer.style.display = 'block';
-        } else {
-            audioPlayer.style.display = 'none';
-        }
-        
-        // Set up player controls
-        setupPlayerControls(book);
-        
-        // Set up YouTube player if video ID is available
-        if (book.videoId) {
-            document.getElementById('youtube-player').innerHTML = '';
-            loadYouTubeVideo(book.videoId);
-        } else {
-            document.getElementById('youtube-player').innerHTML = '';
-        }
-        
-        // Add navigation event listeners
-        document.getElementById('back-to-main').addEventListener('click', () => {
-            // Clear selected genre pill
-            document.querySelectorAll('.genre-pill').forEach(pill => {
-                pill.classList.remove('selected');
-            });
-            
-            // Return to previous state before genre browsing
-            if (previousBooks.length > 0) {
-                currentBook = previousBooks.pop();
-            }
-            displayBook(currentBook);
+        genreBooks.forEach((book, index) => {
+            booksGrid += `
+                <div class="book-grid-item" data-index="${index}">
+                    <div class="book-grid-cover" style="background-image: url('${book.coverImage}')">
+                        <span class="book-grid-duration">${book.formattedDuration}</span>
+                    </div>
+                    <div class="book-grid-details">
+                        <h4 class="book-grid-title">${book.title}</h4>
+                        <p class="book-grid-author">${book.author}</p>
+                    </div>
+                </div>
+            `;
         });
         
-        const currentIndex = genreBooks.indexOf(book);
+        booksGrid += `
+                </div>
+                <button class="scroll-button scroll-right" id="scroll-right" aria-label="Scroll right">
+                    <i class="arrow-right-icon">→</i>
+                </button>
+            </div>
+        `;
         
-        // Previous book button
-        const prevButton = document.getElementById('prev-genre-book');
-        if (prevButton) {
-            if (currentIndex > 0) {
-                prevButton.addEventListener('click', () => {
-                    currentBook = genreBooks[currentIndex - 1];
-                    displayBookWithGenreNav(currentBook, genre, genreBooks);
-                });
-            }
+        // Combine header and grid
+        genreGridCard.innerHTML = genreHeader + booksGrid;
+        
+        // Insert the new card BEFORE the current audiobook card
+        const currentAudiobookCard = document.getElementById('current-audiobook');
+        currentAudiobookCard.parentNode.insertBefore(genreGridCard, currentAudiobookCard);
+        
+        // Add event listeners for book selection
+        document.querySelectorAll('.book-grid-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const index = parseInt(this.dataset.index);
+                if (!isNaN(index) && index >= 0 && index < genreBooks.length) {
+                    currentBook = genreBooks[index];
+                    displayBook(currentBook);
+                    
+                    // No need to scroll now that the player is below the grid
+                    // Just update the active state in the grid
+                    document.querySelectorAll('.book-grid-item').forEach(gridItem => {
+                        gridItem.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                }
+            });
+        });
+        
+        // Add scroll button functionality
+        const scrollLeftButton = document.getElementById('scroll-left');
+        const scrollRightButton = document.getElementById('scroll-right');
+        const booksGridElement = document.getElementById('books-grid');
+        
+        // Initially check if scrolling is needed and hide buttons if not
+        setTimeout(() => {
+            updateScrollButtonsVisibility(booksGridElement, scrollLeftButton, scrollRightButton);
+        }, 100);
+        
+        scrollLeftButton.addEventListener('click', () => {
+            // Scroll left by a specific amount (3 items)
+            const itemWidth = booksGridElement.querySelector('.book-grid-item').offsetWidth + 20; // width + margin
+            booksGridElement.scrollBy({ left: -itemWidth * 3, behavior: 'smooth' });
+        });
+        
+        scrollRightButton.addEventListener('click', () => {
+            // Scroll right by a specific amount (3 items)
+            const itemWidth = booksGridElement.querySelector('.book-grid-item').offsetWidth + 20; // width + margin
+            booksGridElement.scrollBy({ left: itemWidth * 3, behavior: 'smooth' });
+        });
+        
+        // Update button visibility on scroll
+        booksGridElement.addEventListener('scroll', () => {
+            updateScrollButtonsVisibility(booksGridElement, scrollLeftButton, scrollRightButton);
+        });
+        
+        // Add CSS styles for the grid card
+        addGenreGridStyles();
+    }
+    
+    // Helper function to update scroll button visibility
+    function updateScrollButtonsVisibility(scrollContainer, leftButton, rightButton) {
+        // Show/hide left button based on scroll position
+        if (scrollContainer.scrollLeft <= 20) {
+            leftButton.classList.add('hidden');
+        } else {
+            leftButton.classList.remove('hidden');
         }
         
-        // Next book button
-        const nextButton = document.getElementById('next-genre-book');
-        if (nextButton) {
-            if (currentIndex < genreBooks.length - 1) {
-                nextButton.addEventListener('click', () => {
-                    currentBook = genreBooks[currentIndex + 1];
-                    displayBookWithGenreNav(currentBook, genre, genreBooks);
-                });
-            }
+        // Show/hide right button based on whether there's more content to scroll
+        const maxScrollLeft = scrollContainer.scrollWidth - scrollContainer.clientWidth - 20;
+        if (scrollContainer.scrollLeft >= maxScrollLeft) {
+            rightButton.classList.add('hidden');
+        } else {
+            rightButton.classList.remove('hidden');
         }
     }
-
-    // Add style for genre navigation header
-    function addGenreNavHeaderStyles() {
-        if (document.getElementById('genre-nav-header-styles')) return;
+    
+    // Add styles for the genre grid card
+    function addGenreGridStyles() {
+        // Check if styles already exist
+        if (document.getElementById('genre-grid-styles')) return;
         
         const styleElement = document.createElement('style');
-        styleElement.id = 'genre-nav-header-styles';
+        styleElement.id = 'genre-grid-styles';
         styleElement.textContent = `
-            .genre-nav-header {
+            .genre-books-grid-card {
+                background: var(--card-background);
+                border-radius:
+                0px;
+                padding:
+                1.5rem;
+                margin-bottom: 1.2rem;
+                box-shadow: none;
+                border: 0px solid var(--border-color);
+                transition:
+                all 0.3s ease;
+            }
+            
+            .genre-grid-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
                 margin-bottom: 1.5rem;
-                padding-bottom: 1rem;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             }
             
-            .genre-nav-breadcrumbs {
+            .genre-grid-title-area {
                 display: flex;
                 align-items: center;
-                flex-wrap: wrap;
                 gap: 12px;
-                margin-bottom: 1rem;
-            }
-            
-            .genre-nav-title {
-                color: white;
-                display: flex;
-                align-items: center;
-                gap: 8px;
                 flex-wrap: wrap;
             }
             
-            .genre-label {
-                opacity: 0.8;
+            .genre-grid-title {
+                font-size: 1.5rem;
+                margin: 0;
+                color: var(--header-color);
             }
             
-            .genre-nav-buttons {
-                display: flex;
-                gap: 10px;
+            .genre-count-badge {
+                background: rgba(var(--primary-rgb), 0.1);
+                color: var(--primary-color);
+                padding: 5px 12px;
+                border-radius: 999px;
+                font-size: 0.85rem;
+                font-weight: 500;
             }
             
-            .nav-button {
-                padding: 8px 14px;
-                background: rgba(255, 255, 255, 0.15);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                color: white;
-                border-radius: 8px;
+            /* Horizontal scrolling container */
+            .books-grid-container {
+                position: relative;
                 display: flex;
                 align-items: center;
-                gap: 6px;
-                font-size: 0.9rem;
+                width: 100%;
+            }
+            
+            .books-grid {
+                display: flex;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                scroll-behavior: smooth;
+                -webkit-overflow-scrolling: touch;
+                padding: 10px 0;
+                gap: 16px;
+                scrollbar-width: none; /* Firefox */
+                -ms-overflow-style: none; /* IE and Edge */
+            }
+            
+            /* Hide scrollbar for Chrome, Safari and Opera */
+            .books-grid::-webkit-scrollbar {
+                display: none;
+            }
+            
+            /* Scroll buttons */
+            .scroll-button {
+                position: absolute;
+                z-index: 10;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background: var(--card-background);
+                color: var(--primary-color);
+                border: 1px solid rgba(var(--primary-rgb), 0.3);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
                 transition: all 0.2s ease;
+                opacity: 0.9;
             }
             
-            .nav-button:hover:not([disabled]) {
-                background: rgba(255, 255, 255, 0.25);
-                transform: translateY(-2px);
+            .scroll-button:hover {
+                background: rgba(var(--primary-rgb), 0.1);
+                transform: scale(1.1);
+                opacity: 1;
             }
             
-            .nav-button[disabled] {
-                opacity: 0.5;
-                cursor: not-allowed;
+            .scroll-button.hidden {
+                opacity: 0;
+                visibility: hidden;
+                transform: scale(0.8);
             }
             
-            .nav-icon {
+            .scroll-left {
+                left: -10px;
+            }
+            
+            .scroll-right {
+                right: -10px;
+            }
+            
+            .arrow-left-icon, .arrow-right-icon {
+                font-size: 1.2rem;
+                font-weight: 700;
+            }
+            
+            .book-grid-item {
+                flex: 0 0 180px;
+                background: rgba(var(--card-background-rgb), 0.5);
+                border: 1px solid var(--border-color);
+                border-radius: 12px;
+                overflow: hidden;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .book-grid-item:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 12px 20px rgba(0,0,0,0.1);
+            }
+            
+            .book-grid-cover {
+                height: 120px;
+                background-size: cover;
+                background-position: center;
+                position: relative;
+            }
+            
+            .book-grid-duration {
+                position: absolute;
+                bottom: 8px;
+                right: 8px;
+                background: rgba(0,0,0,0.75);
+                color: white;
+                padding: 3px 8px;
+                border-radius: 4px;
+                font-size: 0.75rem;
+            }
+            
+            .book-grid-details {
+                padding: 12px;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .book-grid-title {
+                margin: 0 0 6px 0;
+                font-size: 0.95rem;
+                font-weight: 600;
+                color: var(--text-color);
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                line-height: 1.3;
+            }
+            
+            .book-grid-author {
+                margin: 0;
                 font-size: 0.8rem;
+                color: var(--secondary-text);
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
             
-            .prev-icon::before {
-                content: "←";
+            /* Animation classes */
+            .fade-in {
+                animation: fadeIn 0.4s ease forwards;
             }
             
-            .next-icon::before {
-                content: "→";
+            .fade-out {
+                animation: fadeOut 0.3s ease forwards;
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            
+            @keyframes fadeOut {
+                from { opacity: 1; transform: translateY(0); }
+                to { opacity: 0; transform: translateY(10px); }
             }
             
             @media (max-width: 768px) {
-                .genre-nav-breadcrumbs,
-                .genre-nav-buttons {
-                    flex-direction: column;
-                    align-items: flex-start;
-                    width: 100%;
+                .genre-books-grid-card {
+                    padding: 1rem;
+                    margin: 1rem 0;
                 }
                 
-                .genre-nav-buttons {
-                    flex-direction: row;
+                .genre-grid-title {
+                    font-size: 1.25rem;
                 }
                 
-                .nav-button {
-                    flex: 1;
-                    justify-content: center;
+                .book-grid-item {
+                    flex: 0 0 140px;
+                }
+                
+                .book-grid-cover {
+                    height: 100px;
+                }
+                
+                .scroll-button {
+                    width: 36px;
+                    height: 36px;
+                }
+                
+                .arrow-left-icon, .arrow-right-icon {
+                    font-size: 1rem;
                 }
             }
         `;
         
         document.head.appendChild(styleElement);
     }
-    
+
     function resetPlayerState() {
         playerState = {
             currentTime: 0,
@@ -916,7 +1038,7 @@ document.addEventListener('DOMContentLoaded', () => {
             categoriesHtml = `
             <div class="book-categories">
                 ${book.categories.map(category => 
-                    `<span class="category-tag">${category}</span>`
+                    `<span class="category-tag">${capitalizeCategory(category)}</span>`
                 ).join('')}
             </div>`;
         }
