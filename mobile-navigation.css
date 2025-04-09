@@ -1,0 +1,66 @@
+/* Mobile Categories Navigation Styles */
+.mobile-categories-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 10px 0;
+    margin-bottom: 15px;
+    position: relative;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.mobile-categories-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+/* Style the mobile genre navigation */
+@media (max-width: 768px) {
+    .genre-navigation {
+        padding: 0.5rem !important;
+        margin: 10px 0 !important;
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .genre-list {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        gap: 8px !important;
+        padding-bottom: 5px;
+        width: auto;
+        min-width: max-content;
+    }
+
+    .genre-pill {
+        flex-shrink: 0;
+        padding: 8px 12px !important;
+        font-size: 0.8rem !important;
+        border: none !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+        white-space: nowrap;
+    }
+
+    .genre-count {
+        padding: 2px 6px !important;
+        font-size: 0.7rem !important;
+    }
+    
+    /* Make mobile scrolling indicator */
+    .mobile-categories-container::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        width: 30px;
+        background: linear-gradient(to right, transparent, var(--background-color, #fff));
+        pointer-events: none;
+    }
+}
+
+/* Active state for category selection */
+.genre-pill.active {
+    background: var(--primary-color) !important;
+    color: white !important;
+}

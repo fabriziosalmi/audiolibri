@@ -224,7 +224,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Filter genres with at least 10 items
         const filteredGenres = Object.keys(genreCounts).filter(genre => genreCounts[genre] >= 10);
 
-        // First, create or check for the genre navigation container
+        if (filteredGenres.length === 0) {
+            return;
+        }
+
+        // First, handle the regular desktop navigation
         let genreNavContainer = document.getElementById('genre-navigation');
         if (!genreNavContainer) {
             // Create the container if it doesn't exist
@@ -248,48 +252,44 @@ document.addEventListener('DOMContentLoaded', () => {
         // Clear existing content
         genreNavContainer.innerHTML = '';
         
-        if (filteredGenres.length === 0) {
-            genreNavContainer.style.display = 'none';
-            return;
+        // Now, handle the mobile-specific navigation
+        const mobileContainer = document.getElementById('mobile-categories-container');
+        if (mobileContainer) {
+            const mobileNav = document.createElement('div');
+            mobileNav.id = 'mobile-genre-navigation';
+            mobileNav.className = 'genre-navigation mobile-nav';
+            
+            const mobileGenreList = document.createElement('div');
+            mobileGenreList.className = 'genre-list';
+            mobileGenreList.setAttribute('role', 'list');
+            mobileGenreList.setAttribute('aria-label', 'Generi disponibili');
+            
+            mobileNav.appendChild(mobileGenreList);
+            mobileContainer.innerHTML = '';
+            mobileContainer.appendChild(mobileNav);
+            
+            // Generate navigation for the mobile view
+            filteredGenres.forEach(genre => {
+                const genrePill = document.createElement('button');
+                genrePill.className = 'genre-pill';
+                genrePill.dataset.genre = genre;
+                genrePill.setAttribute('role', 'listitem');
+                genrePill.innerHTML = `
+                    <span class="genre-name">${capitalizeCategory(genre)}</span>
+                    <span class="genre-count" aria-label="${genreCounts[genre]} audiolibri">${genreCounts[genre]}</span>
+                `;
+                
+                // Add click event listener
+                genrePill.addEventListener('click', function() {
+                    showGenreView(genre);
+                });
+                
+                mobileGenreList.appendChild(genrePill);
+            });
         }
 
-        // Add title and list container
+        // Add title and list container for desktop
         genreNavContainer.innerHTML = `
-            <div class="genre-list" role="list" aria-label="Generi disponibili">
-            </div>
-        `;
-        
-        const genreList = genreNavContainer.querySelector('.genre-list');
-
-        // Generate navigation for filtered genres
-        filteredGenres.forEach(genre => {
-            const genrePill = document.createElement('button');
-            genrePill.className = 'genre-pill';
-            genrePill.dataset.genre = genre;
-            genrePill.setAttribute('role', 'listitem');
-            genrePill.innerHTML = `
-                <span class="genre-name">${capitalizeCategory(genre)}</span>
-                <span class="genre-count" aria-label="${genreCounts[genre]} audiolibri">${genreCounts[genre]}</span>
-            `;
-            
-            // Add click event listener
-            genrePill.addEventListener('click', function() {
-                showGenreView(genre);
-            });
-            
-            genreList.appendChild(genrePill);
-        });
-        
-        // Add CSS styles for genre navigation
-        addGenreNavigationStyles();
-    }
-
-    // Add CSS styles for genre navigation
-    function addGenreNavigationStyles() {
-        // Check if styles are already added
-        if (document.getElementById('genre-nav-styles')) return;
-        
-        const styleElement = document.createElement('style');
         styleElement.id = 'genre-nav-styles';
         styleElement.textContent = `
             .genre-navigation {
