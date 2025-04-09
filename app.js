@@ -227,8 +227,98 @@ document.addEventListener('DOMContentLoaded', () => {
         if (filteredGenres.length === 0) {
             return;
         }
+        
+        // Add mobile-specific CSS for genre navigation
+        if (!document.getElementById('mobile-genre-styles')) {
+            const mobileStyles = document.createElement('style');
+            mobileStyles.id = 'mobile-genre-styles';
+            mobileStyles.textContent = `
+                @media (max-width: 768px) {
+                    .mobile-genre-nav {
+                        width: 100%;
+                        overflow-x: auto;
+                        white-space: nowrap;
+                        padding: 15px 15px;
+                        -webkit-overflow-scrolling: touch;
+                        scrollbar-width: none;
+                        margin: 10px 0;
+                        display: flex;
+                        flex-wrap: nowrap;
+                    }
+                    
+                    .mobile-genre-nav::-webkit-scrollbar {
+                        display: none;
+                    }
+                    
+                    .mobile-genre-nav .genre-list {
+                        display: flex;
+                        flex-wrap: nowrap;
+                        gap: 10px;
+                        padding-bottom: 5px;
+                        margin-bottom: 0;
+                    }
+                    
+                    .mobile-genre-nav .genre-pill {
+                        flex: 0 0 auto;
+                        border: none !important;
+                        box-shadow: 0 3px 8px rgba(var(--primary-rgb), 0.15) !important;
+                        white-space: nowrap;
+                        padding: 8px 14px;
+                        font-size: 0.85rem;
+                    }
+                    
+                    /* Hide desktop navigation on mobile */
+                    .genre-navigation:not(.mobile-genre-nav) {
+                        display: none;
+                    }
+                }
+            `;
+            document.head.appendChild(mobileStyles);
+        }
 
-        // First, handle the regular desktop navigation
+        // First, create the mobile navigation
+        let mobileCategoriesContainer = document.getElementById('mobile-categories-container');
+        if (!mobileCategoriesContainer) {
+            mobileCategoriesContainer = document.createElement('div');
+            mobileCategoriesContainer.id = 'mobile-categories-container';
+            mobileCategoriesContainer.className = 'mobile-genre-nav';
+            
+            // Insert after header
+            const header = document.querySelector('header');
+            if (header && header.parentNode) {
+                header.parentNode.insertBefore(mobileCategoriesContainer, header.nextSibling);
+            }
+        }
+        
+        // Clear and populate mobile navigation
+        mobileCategoriesContainer.innerHTML = '';
+        
+        const mobileGenreList = document.createElement('div');
+        mobileGenreList.className = 'genre-list';
+        mobileGenreList.setAttribute('role', 'list');
+        
+        // Generate pills for mobile
+        filteredGenres.forEach(genre => {
+            const genrePill = document.createElement('button');
+            genrePill.className = 'genre-pill';
+            genrePill.dataset.genre = genre;
+            genrePill.setAttribute('role', 'listitem');
+            genrePill.innerHTML = `
+                <span class="genre-name">${capitalizeCategory(genre)}</span>
+                <span class="genre-count" aria-label="${genreCounts[genre]} audiolibri">${genreCounts[genre]}</span>
+            `;
+            
+            // Add click event listener
+            genrePill.addEventListener('click', function() {
+                showGenreView(genre);
+            });
+            
+            mobileGenreList.appendChild(genrePill);
+        });
+        
+        mobileCategoriesContainer.appendChild(mobileGenreList);
+        
+        // Now handle the regular desktop navigation
         let genreNavContainer = document.getElementById('genre-navigation');
         if (!genreNavContainer) {
             // Create the container if it doesn't exist
