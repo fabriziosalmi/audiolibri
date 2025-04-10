@@ -1,0 +1,326 @@
+/* tailwind-styles.css */
+/* Questo file contiene classi Tailwind personalizzate che possono essere utilizzate insieme allo stile esistente */
+
+/* Classi di utilità per spaziatura e layout */
+.tw-container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 2rem;
+}
+
+/* Classi per i componenti principali */
+.tw-card {
+  background-color: var(--card-background);
+  border-radius: 1rem;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 2rem;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.tw-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  border-radius: 1rem;
+  box-shadow: var(--card-shadow);
+  padding: 2rem;
+  border: 1px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
+}
+
+.tw-button {
+  padding: 0.875rem 1.25rem;
+  border-radius: 9999px;
+  border: none;
+  background-color: var(--primary-color);
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  line-height: 1;
+}
+
+.tw-button:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.tw-button:active {
+  transform: translateY(0);
+}
+
+.tw-button-disabled {
+  background-color: var(--disabled-button);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  opacity: 0.7;
+}
+
+.tw-input {
+  padding: 0.875rem 1.25rem;
+  width: 100%;
+  border-radius: 9999px;
+  border: 1px solid var(--search-border);
+  font-size: 1rem;
+  font-family: inherit;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  transition: all 0.25s ease;
+  background-color: var(--card-background);
+  color: var(--text-color);
+}
+
+.tw-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.15);
+}
+
+/* Classi per il layout flessibile */
+.tw-flex {
+  display: flex;
+}
+
+.tw-flex-col {
+  flex-direction: column;
+}
+
+.tw-items-center {
+  align-items: center;
+}
+
+.tw-justify-center {
+  justify-content: center;
+}
+
+.tw-justify-between {
+  justify-content: space-between;
+}
+
+.tw-gap-1 {
+  gap: 0.25rem;
+}
+
+.tw-gap-2 {
+  gap: 0.5rem;
+}
+
+.tw-gap-4 {
+  gap: 1rem;
+}
+
+.tw-gap-6 {
+  gap: 1.5rem;
+}
+
+/* Classi per il testo */
+.tw-text-center {
+  text-align: center;
+}
+
+.tw-text-sm {
+  font-size: 0.875rem;
+}
+
+.tw-text-base {
+  font-size: 1rem;
+}
+
+.tw-text-lg {
+  font-size: 1.125rem;
+}
+
+.tw-text-xl {
+  font-size: 1.25rem;
+}
+
+.tw-text-2xl {
+  font-size: 1.5rem;
+}
+
+.tw-font-medium {
+  font-weight: 500;
+}
+
+.tw-font-semibold {
+  font-weight: 600;
+}
+
+.tw-font-bold {
+  font-weight: 700;
+}
+
+/* Classi per i margini e padding */
+.tw-m-0 {
+  margin: 0;
+}
+
+.tw-m-1 {
+  margin: 0.25rem;
+}
+
+.tw-m-2 {
+  margin: 0.5rem;
+}
+
+.tw-m-4 {
+  margin: 1rem;
+}
+
+.tw-mb-1 {
+  margin-bottom: 0.25rem;
+}
+
+.tw-mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.tw-mb-4 {
+  margin-bottom: 1rem;
+}
+
+.tw-mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+.tw-mb-8 {
+  margin-bottom: 2rem;
+}
+
+.tw-mt-1 {
+  margin-top: 0.25rem;
+}
+
+.tw-mt-2 {
+  margin-top: 0.5rem;
+}
+
+.tw-mt-4 {
+  margin-top: 1rem;
+}
+
+.tw-mt-6 {
+  margin-top: 1.5rem;
+}
+
+.tw-p-1 {
+  padding: 0.25rem;
+}
+
+.tw-p-2 {
+  padding: 0.5rem;
+}
+
+.tw-p-4 {
+  padding: 1rem;
+}
+
+.tw-p-6 {
+  padding: 1.5rem;
+}
+
+.tw-p-8 {
+  padding: 2rem;
+}
+
+/* Classi per i bordi */
+.tw-rounded-md {
+  border-radius: 0.375rem;
+}
+
+.tw-rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.tw-rounded-xl {
+  border-radius: 0.75rem;
+}
+
+.tw-rounded-2xl {
+  border-radius: 1rem;
+}
+
+.tw-rounded-full {
+  border-radius: 9999px;
+}
+
+/* Classi per le ombre */
+.tw-shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.tw-shadow {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.tw-shadow-md {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.tw-shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Classi per la griglia */
+.tw-grid {
+  display: grid;
+}
+
+.tw-grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.tw-grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.tw-grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.tw-grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* Media queries */
+@media (max-width: 800px) {
+  .tw-container {
+    padding: 1.25rem;
+  }
+  
+  .tw-header {
+    padding: 1.5rem;
+  }
+  
+  .tw-md-grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  
+  .tw-md-flex-col {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 600px) {
+  .tw-sm-grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  
+  .tw-sm-flex-col {
+    flex-direction: column;
+  }
+  
+  .tw-sm-w-full {
+    width: 100%;
+  }
+}

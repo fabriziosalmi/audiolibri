@@ -79,6 +79,7 @@
     </script>
     
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="tailwind-styles.css">
     <!-- Add CSS variables for RGB values -->
     <style>
         :root {
@@ -107,39 +108,39 @@
     <script src="https://www.youtube.com/iframe_api" defer></script>
 </head>
 <body>
-    <div class="container">
+    <div class="container tw-container">
         <header>
             <div class="site-title-container">
                 <h1><img src="audiobooks_transparent.png" alt="Audiolibri.org logo" class="header-logo"> audiolibri.org</h1>
                 <p class="site-tagline">Esplora la più grande collezione di audiolibri italiani gratuiti</p>
             </div>
             
-            <div class="library-stats-container fade-in">
-                <div id="library-stats" class="stats-grid">
+            <div class="library-stats-container fade-in tw-mb-6 tw-pb-6 tw-relative">
+                <div id="library-stats" class="stats-grid tw-grid tw-grid-cols-4 tw-gap-4 tw-md-grid-cols-2 tw-sm-grid-cols-1">
                     <!-- Stats will be populated by JavaScript -->
-                    <div class="stat-item">
-                        <div class="stat-value">...</div>
-                        <div class="stat-label">Audiolibri</div>
+                    <div class="stat-item tw-p-3 tw-flex tw-flex-col tw-items-center tw-justify-center">
+                        <div class="stat-value tw-text-2xl tw-font-bold tw-mb-1">...</div>
+                        <div class="stat-label tw-text-sm tw-font-medium tw-uppercase tw-tracking-wider">Audiolibri</div>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-value">...</div>
-                        <div class="stat-label">Autori</div>
+                    <div class="stat-item tw-p-3 tw-flex tw-flex-col tw-items-center tw-justify-center">
+                        <div class="stat-value tw-text-2xl tw-font-bold tw-mb-1">...</div>
+                        <div class="stat-label tw-text-sm tw-font-medium tw-uppercase tw-tracking-wider">Autori</div>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-value">...</div>
-                        <div class="stat-label">Canali</div>
+                    <div class="stat-item tw-p-3 tw-flex tw-flex-col tw-items-center tw-justify-center">
+                        <div class="stat-value tw-text-2xl tw-font-bold tw-mb-1">...</div>
+                        <div class="stat-label tw-text-sm tw-font-medium tw-uppercase tw-tracking-wider">Canali</div>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-value">...</div>
-                        <div class="stat-label">Durata</div>
+                    <div class="stat-item tw-p-3 tw-flex tw-flex-col tw-items-center tw-justify-center">
+                        <div class="stat-value tw-text-2xl tw-font-bold tw-mb-1">...</div>
+                        <div class="stat-label tw-text-sm tw-font-medium tw-uppercase tw-tracking-wider">Durata</div>
                     </div>
                 </div>
             </div>
             
-            <div class="header-content">
-                <div class="search-container">
-                    <input type="text" id="search" placeholder="Cerca per titolo, autore o lettore" aria-label="Search audiobooks">
-                    <button id="search-button" aria-label="Search">
+            <div class="header-content tw-flex tw-flex-col tw-gap-4">
+                <div class="search-container tw-flex tw-justify-center tw-gap-3 tw-w-full tw-max-w-[650px] tw-mx-auto">
+                    <input type="text" id="search" class="tw-input" placeholder="Cerca per titolo, autore o lettore" aria-label="Search audiobooks">
+                    <button id="search-button" class="tw-button" aria-label="Search">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
                         </svg>
@@ -150,39 +151,39 @@
         </header>
         
         <main>
-            <div class="single-card fade-in">
-                <div class="audiobook-card" id="current-audiobook">
+            <div class="single-card fade-in tw-card">
+                <div class="audiobook-card tw-relative tw-flex tw-flex-col tw-min-h-[500px] tw-bg-cover tw-bg-center" id="current-audiobook">
                     <!-- Audiobook content will be displayed here -->
-                    <div class="loading-container">
-                        <div class="loading-spinner"></div>
-                        <p>Loading your audiobook library...</p>
+                    <div class="loading-container tw-flex tw-flex-col tw-justify-center tw-items-center tw-h-[500px]">
+                        <div class="loading-spinner tw-w-[50px] tw-h-[50px] tw-mb-6"></div>
+                        <p class="tw-text-base">Loading your audiobook library...</p>
                     </div>
                 </div>
             </div>
         </main>
         
         <!-- Changelog Card - New Addition -->
-        <div id="changelog-card" class="changelog-card fade-in">
-            <div class="changelog-header">
-                <h2>Ultimi aggiornamenti</h2>
-                <button id="changelog-toggle" class="icon-button" aria-label="Toggle changelog visibility">
-                    <span class="collapse-icon">−</span>
+        <div id="changelog-card" class="changelog-card fade-in tw-card tw-transition-all tw-duration-300">
+            <div class="changelog-header tw-flex tw-justify-between tw-items-center tw-p-4 tw-border-b tw-border-border">
+                <h2 class="tw-m-0 tw-text-base tw-font-light">Ultimi aggiornamenti</h2>
+                <button id="changelog-toggle" class="icon-button tw-bg-transparent tw-border-none tw-w-8 tw-h-8 tw-rounded-full tw-flex tw-items-center tw-justify-center" aria-label="Toggle changelog visibility">
+                    <span class="collapse-icon tw-block tw-transition-transform tw-duration-300">−</span>
                 </button>
             </div>
-            <div id="changelog-content" class="changelog-content">
-                <div class="loading-spinner small"></div>
-                <p>Caricamento aggiornamenti...</p>
+            <div id="changelog-content" class="changelog-content tw-p-4 tw-p-6">
+                <div class="loading-spinner small tw-w-6 tw-h-6 tw-border-[3px] tw-mx-auto tw-my-4"></div>
+                <p class="tw-text-center">Caricamento aggiornamenti...</p>
             </div>
         </div>
         
-        <footer>
-            <div class="footer-content">
-                <button id="theme-toggle" aria-label="Toggle light/dark theme">
-                    <span class="theme-icon">🌓</span>
+        <footer class="tw-text-center tw-mt-8 tw-pt-6 tw-border-t tw-border-border">
+            <div class="footer-content tw-flex tw-items-center tw-gap-4 tw-justify-center tw-flex-wrap">
+                <button id="theme-toggle" class="tw-bg-transparent tw-text-text tw-border tw-border-border tw-py-2 tw-px-4 tw-text-sm tw-inline-flex tw-items-center tw-gap-2 tw-rounded-full" aria-label="Toggle light/dark theme">
+                    <span class="theme-icon tw-text-base">🌓</span>
                     <span id="theme-label">Toggle Theme</span>
                 </button>
-                <a href="https://github.com/fabriziosalmi/audiolibri" class="source-code-link" aria-label="View source code on GitHub">
-                    <span class="source-icon">
+                <a href="https://github.com/fabriziosalmi/audiolibri" class="source-code-link tw-flex tw-items-center tw-gap-1.5 tw-no-underline tw-text-inherit tw-border tw-border-border tw-py-0.5 tw-px-4 tw-rounded-full tw-text-sm tw-transition-all" aria-label="View source code on GitHub">
+                    <span class="source-icon tw-text-lg">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                             <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
                         </svg>
