@@ -1,10 +1,10 @@
 {
-  "version": "1.4.1",
+  "version": "1.4.2",
   "entries": [
     {
       "date": "2025-04-10",
-      "title": "Miglioramenti navigazione per categorie",
-      "description": "Barra con i titoli per categoria e comoda navigazione.",
+      "title": "Miglioramenti CSS",
+      "description": "Introdotto Tailwind CSS per migliorare la struttura CSS e facilitare la personalizzazione.",
       "changes": [
         "Alcuni contenuti testuali potrebbero essere aggiornati per una maggiore accuratezza.",
         "Nuovi contenuti possono essere aggiunti in qualunque momento."
