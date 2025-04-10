@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Manteniamo le variabili CSS personalizzate esistenti */
+:root {
+    /* Light theme colors */
+    --background-color: #f5f7fa;
+    --text-color: #2d3748;
+    --card-background: #ffffff;
+    --card-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    --border-color: #e2e8f0;
+    --primary-color: #4a6cf7;
+    --primary-hover: #3a56d4;
+    --accent-color: #10b981;
+    --accent-hover: #059669;
+    --danger-color: #ef4444;
+    --danger-hover: #dc2626;
+    --header-color: #1e293b;
+    --secondary-text: #64748b;
+    --placeholder-bg: #f8fafc;
+    --meta-background: rgba(0, 0, 0, 0.65);
+    --search-border: #cbd5e1;
+    --disabled-button: #cbd5e1;
+    --loading-color: #4a6cf7;
+    --tag-bg: #e2e8f0;
+    --tag-text: #4a5568;
+    --hover-overlay: rgba(0, 0, 0, 0.03);
+    --progress-bg: #e2e8f0;
+    --progress-fill: #4a6cf7;
+    --primary-rgb: 74, 108, 247;
+    --accent-rgb: 16, 185, 129;
+    --card-background-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Dark theme colors - pure black and dark gray tones */
+        --background-color: #000000;
+        --text-color: #e2e8f0;
+        --card-background: #121212;
+        --card-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        --border-color: #2a2a2a;
+        --primary-color: #ff4343;
+        --primary-hover: #ff0000;
+        --accent-color: #03dac6;
+        --accent-hover: #00b3a6;
+        --danger-color: #cf6679;
+        --danger-hover: #b55464;
+        --header-color: #ffffff;
+        --secondary-text: #a0a0a0;
+        --placeholder-bg: #1e1e1e;
+        --meta-background: rgba(0, 0, 0, 0.75);
+        --search-border: #333333;
+        --disabled-button: #444444;
+        --hover-overlay: rgba(255, 255, 255, 0.05);
+        --tag-bg: #333333;
+        --tag-text: #e0e0e0;
+        --progress-bg: #333333;
+        --progress-fill: #bb86fc;
+        --primary-rgb: 252, 134, 134;
+        --accent-rgb: 3, 218, 198;
+        --card-background-rgb: 18, 18, 18;
+    }
+}
+
+/* Classi personalizzate che utilizzano Tailwind ma mantengono lo stile esistente */
+@layer components {
+    .btn {
+        @apply py-3.5 px-5 rounded-full border-none cursor-pointer text-base font-medium transition-all duration-200 flex items-center justify-center gap-2 leading-none;
+    }
+    
+    .btn-primary {
+        @apply bg-primary text-white hover:bg-primary-hover hover:translate-y-[-2px] hover:shadow-md active:translate-y-0;
+    }
+    
+    .btn-disabled {
+        @apply bg-[var(--disabled-button)] cursor-not-allowed transform-none shadow-none opacity-70 hover:bg-[var(--disabled-button)] hover:transform-none hover:shadow-none;
+    }
+    
+    .card {
+        @apply bg-card rounded-2xl shadow-card mb-8 overflow-hidden border border-border;
+    }
+    
+    .input-search {
+        @apply py-3.5 px-5 w-full rounded-full border border-[var(--search-border)] text-base font-inherit shadow-sm transition-all duration-250 bg-card text-text focus:outline-none focus:border-primary focus:shadow-[0_0_0_3px_rgba(74,108,247,0.15)];
+    }
+}
+
+/* Stili di base che non possono essere facilmente sostituiti con Tailwind */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: var(--background-color);
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+    line-height: 1.6;
+    font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Animazioni personalizzate */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+.slide-up {
+    animation: slideUp 0.4s ease forwards;
+}
