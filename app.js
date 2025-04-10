@@ -335,7 +335,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 padding: 10px 16px;
                 border-radius: 12px;
                 background: rgba(var(--primary-rgb), 0.1);
-                border: 1px solid rgba(var(--primary-rgb), 0.2);
                 color: var(--primary-color);
                 font-size: 1rem;
                 font-weight: lighter;
