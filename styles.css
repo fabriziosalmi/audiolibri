@@ -84,7 +84,7 @@ header {
     border-radius: 16px;
     box-shadow: var(--card-shadow);
     padding: 2rem;
-    border: 1px solid var(--border-color);
+    border: 0px solid var(--border-color);
     position: relative;
     overflow: hidden;
     isolation: isolate;
