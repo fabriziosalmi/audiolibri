@@ -1,10 +1,10 @@
 {
-  "version": "1.4.2",
+  "version": "1.4.3",
   "entries": [
     {
       "date": "2025-04-10",
-      "title": "Miglioramenti CSS",
-      "description": "Introdotto Tailwind CSS per migliorare la struttura CSS e facilitare la personalizzazione.",
+      "title": "Miglioramenti vari",
+      "description": "Migliorati risultati di ricerca e la navigazione per categoria.",
       "changes": [
         "Alcuni contenuti testuali potrebbero essere aggiornati per una maggiore accuratezza.",
         "Nuovi contenuti possono essere aggiunti in qualunque momento."
