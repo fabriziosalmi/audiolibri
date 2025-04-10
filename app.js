@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('current-audiobook').innerHTML = 
                     `<div class="error-message">
                         <div class="error-icon">!</div>
-                        <p>No audiobooks found in the library.</p>
+                        <p>Nessun audiolibro trovato nella libreria.</p>
                         <small>Please check your data source and try again.</small>
                     </div>`;
             }
@@ -135,8 +135,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('current-audiobook').innerHTML = 
                 `<div class="error-message">
                     <div class="error-icon">!</div>
-                    <p>Error loading audiobooks library.</p>
-                    <small>Please check your connection and try again later.</small>
+                    <p>Errore caricando la libreria di audiolibri.</p>
+                    <small>Controlla la connessione e riprova più tard.</small>
                 </div>`;
         });
         
@@ -621,9 +621,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('current-audiobook').innerHTML = `
                     <div class="no-results fade-in">
                         <i class="search-icon"></i>
-                        <h3>No audiobooks found</h3>
-                        <p>We couldn't find any audiobooks in the "${genre}" category</p>
-                        <button class="back-button" id="empty-back-button">Back to main view</button>
+                        <h3>Nessun audiolibro trovato</h3>
+                        <p>Nessun audiolibro trovato nella categoria "${genre}"</p>
+                        <button class="back-button" id="empty-back-button">Torna alla ricerca</button>
                     </div>`;
                 
                 document.getElementById('empty-back-button').addEventListener('click', () => {
@@ -1273,62 +1273,391 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function performSearch() {
-        const searchTerm = document.getElementById('search').value.toLowerCase();
-        if (!searchTerm) {
-            return;
-        }
+        const searchTerm = searchInput.value.trim().toLowerCase();
+        if (!searchTerm) return; // Don't search if the term is empty
         
-        // Clear any selected genre pills
-        document.querySelectorAll('.genre-pill').forEach(pill => {
-            pill.classList.remove('selected');
-        });
+        // Filter audiobooks based on search term
+        const results = audiobooks.filter(book =>
+            book.title.toLowerCase().includes(searchTerm) ||
+            book.author.toLowerCase().includes(searchTerm) ||
+            (book.description && book.description.toLowerCase().includes(searchTerm)) ||
+            (book.tags && book.tags.some(tag => tag.toLowerCase().includes(searchTerm))) ||
+            (book.genre && book.genre.toLowerCase().includes(searchTerm))
+        );
         
-        // Show loading state while searching
+        // Show loading state
         document.getElementById('current-audiobook').innerHTML = `
             <div class="loading-container slide-up">
                 <div class="loading-spinner"></div>
                 <p>Searching for "${searchTerm}"...</p>
-                <small>Looking through our audiobook collection</small>
+                <small>Finding matching audiobooks</small>
             </div>
         `;
         
-        // Clear previous interval
+        // Clear previous player interval if exists
         if (updateInterval) clearInterval(updateInterval);
         
-        // Short timeout to allow loading state to render before potentially intensive search
         setTimeout(() => {
-            const results = audiobooks.filter(book => 
-                (book.title && book.title.toLowerCase().includes(searchTerm)) ||
-                (book.author && book.author.toLowerCase().includes(searchTerm)) ||
-                (book.description && book.description.toLowerCase().includes(searchTerm)) ||
-                (book.categories && book.categories.some(cat => cat.toLowerCase().includes(searchTerm))) ||
-                (book.tags && book.tags.some(tag => tag.toLowerCase().includes(searchTerm)))
-            );
-            
             if (results.length > 0) {
-                if (currentBook) {
-                    previousBooks.push(currentBook); // Save current book before showing search result
-                }
-                currentBook = results[0];
-                displayBook(currentBook);
+                // Create search results view
+                displaySearchResults(searchTerm, results);
             } else {
+                // Show no results message
                 document.getElementById('current-audiobook').innerHTML = `
                     <div class="no-results fade-in">
                         <i class="search-icon"></i>
-                        <h3>No matching audiobooks found</h3>
+                        <h3>Nessun audiolibro trovato</h3>
                         <p>We couldn't find any audiobooks matching "${searchTerm}"</p>
-                        <button class="back-button" id="search-back-button">Back to main view</button>
+                        <button class="back-button" id="empty-back-button">Torna alla ricerca</button>
                     </div>`;
-                    
-                // Add event listener for the back button
-                document.getElementById('search-back-button').addEventListener('click', () => {
-                    if (previousBooks.length > 0) {
-                        currentBook = previousBooks.pop();
+                
+                document.getElementById('empty-back-button').addEventListener('click', () => {
+                    if (currentBook) {
+                        displayBook(currentBook);
+                    } else if (audiobooks.length > 0) {
+                        // If no current book, display a random one
+                        const randomIndex = Math.floor(Math.random() * audiobooks.length);
+                        currentBook = audiobooks[randomIndex];
+                        displayBook(currentBook);
                     }
-                    displayBook(currentBook);
                 });
             }
         }, 500);
+    }
+    
+    // Function to display search results
+    function displaySearchResults(searchTerm, results) {
+        // Remove any existing search results card first
+        const existingCard = document.getElementById('search-results-card');
+        if (existingCard) {
+            existingCard.remove();
+        }
+        
+        // Set up pagination
+        const resultsPerPage = 10;
+        let currentPage = 1;
+        const totalPages = Math.ceil(results.length / resultsPerPage);
+        
+        // Display the first book from search results
+        if (results.length > 0) {
+            if (currentBook) {
+                previousBooks.push(currentBook);
+            }
+            currentBook = results[0];
+            displayBook(currentBook);
+        }
+        
+        // Create a new card for the search results
+        const searchResultsCard = document.createElement('div');
+        searchResultsCard.id = 'search-results-card';
+        searchResultsCard.className = 'search-results-card fade-in';
+        
+        // Create header with search info
+        searchResultsCard.innerHTML = `
+            <div class="search-results-header">
+                <div class="search-info">
+                    <h2 class="search-title">Risultati per "${searchTerm}"</h2>
+                    <span class="results-count">${results.length} audiolibri trovati</span>
+                </div>
+                <button class="back-button" id="search-back-button">
+                    <span class="back-icon"></span> Torna alla ricerca
+                </button>
+            </div>
+            <div class="search-results-container" id="search-results"></div>
+            <div class="pagination-controls" id="pagination-controls"></div>
+        `;
+        
+        // Insert the search results card before the current audiobook card
+        const currentAudiobookCard = document.querySelector('.single-card');
+        if (currentAudiobookCard && currentAudiobookCard.parentNode) {
+            currentAudiobookCard.parentNode.insertBefore(searchResultsCard, currentAudiobookCard);
+        }
+        
+        // Add event listener to back button
+        document.getElementById('search-back-button').addEventListener('click', () => {
+            // Remove the search results card
+            searchResultsCard.remove();
+            
+            // Display the previous book or current book
+            if (previousBooks.length > 0) {
+                currentBook = previousBooks.pop();
+                displayBook(currentBook);
+            } else if (currentBook) {
+                displayBook(currentBook);
+            }
+        });
+        
+        // Function to render a specific page of results
+        function renderPage(page) {
+            const start = (page - 1) * resultsPerPage;
+            const end = start + resultsPerPage;
+            const booksToDisplay = results.slice(start, end);
+            
+            // Get the search results container
+            const resultsContainer = document.getElementById('search-results');
+            
+            // Create the grid of book cards
+            resultsContainer.innerHTML = `
+                <div class="audiobooks-grid">
+                    ${booksToDisplay.map(book => `
+                        <div class="book-card" data-book-id="${book.id}">
+                            <div class="book-card-cover" style="background-image: url('${book.coverImage}');"></div>
+                            <div class="book-card-details">
+                                <h3 class="book-card-title">${book.title}</h3>
+                                <p class="book-card-author">${book.author}</p>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            
+            // Add click event listeners to book cards
+            document.querySelectorAll('.book-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const bookId = this.getAttribute('data-book-id');
+                    const selectedBook = audiobooks.find(book => book.id === bookId);
+                    if (selectedBook) {
+                        if (currentBook) {
+                            previousBooks.push(currentBook);
+                        }
+                        currentBook = selectedBook;
+                        displayBook(currentBook);
+                        
+                        // Scroll to the audiobook container element
+                        const audiobookContainer = document.getElementById('current-audiobook');
+                        if (audiobookContainer) {
+                            audiobookContainer.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }
+                });
+            });
+            
+            // Update pagination controls
+            const paginationControls = document.getElementById('pagination-controls');
+            if (totalPages > 1) {
+                paginationControls.innerHTML = `
+                    <button class="pagination-button" ${page === 1 ? 'disabled' : ''} id="prev-page-button">
+                        <span class="prev-icon"></span> Previous
+                    </button>
+                    <span class="page-indicator">Page ${page} of ${totalPages}</span>
+                    <button class="pagination-button" ${page === totalPages ? 'disabled' : ''} id="next-page-button">
+                        Next <span class="next-icon"></span>
+                    </button>
+                `;
+                
+                // Add event listeners to pagination buttons
+                const prevButton = document.getElementById('prev-page-button');
+                const nextButton = document.getElementById('next-page-button');
+                
+                if (prevButton) {
+                    prevButton.addEventListener('click', () => {
+                        if (currentPage > 1) {
+                            currentPage--;
+                            renderPage(currentPage);
+                        }
+                    });
+                }
+                
+                if (nextButton) {
+                    nextButton.addEventListener('click', () => {
+                        if (currentPage < totalPages) {
+                            currentPage++;
+                            renderPage(currentPage);
+                        }
+                    });
+                }
+            } else {
+                paginationControls.innerHTML = '';
+            }
+        }
+        
+        // Render the first page of results
+        renderPage(currentPage);
+        
+        // Add CSS styles for search results
+        addSearchResultsStyles();
+    }
+    
+    // Add CSS styles for search results
+    function addSearchResultsStyles() {
+        // Check if styles are already added
+        if (document.getElementById('search-results-styles')) return;
+        
+        const styleElement = document.createElement('style');
+        styleElement.id = 'search-results-styles';
+        styleElement.textContent = `
+            .search-results-card {
+                margin: 20px 0;
+                padding: 1.5rem;
+                background: var(--card-background);
+                border-radius: 16px;
+                box-shadow: var(--card-shadow);
+                border: 1px solid var(--border-color);
+                transition: all 0.3s ease;
+                margin-bottom: 30px; /* Add more space below search results */
+            }
+            
+            .search-results-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 1.5rem;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+            
+            .search-info {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+            }
+            
+            .search-title {
+                font-size: 1.5rem;
+                color: var(--header-color);
+                margin: 0;
+                font-weight: 600;
+            }
+            
+            .results-count {
+                color: var(--secondary-text);
+                font-size: 0.9rem;
+            }
+            
+            .back-button {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 8px 16px;
+                background: rgba(var(--primary-rgb), 0.1);
+                border-radius: 999px;
+                color: var(--primary-color);
+                border: 1px solid rgba(var(--primary-rgb), 0.2);
+                font-size: 0.9rem;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+            
+            .back-button:hover {
+                background: rgba(var(--primary-rgb), 0.2);
+                box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            }
+            
+            .back-icon::before {
+                content: "←";
+                margin-right: 4px;
+            }
+            
+            .audiobooks-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 20px;
+                margin-bottom: 1.5rem;
+            }
+            
+            .pagination-controls {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 16px;
+                margin-top: 1.5rem;
+            }
+            
+            .pagination-button {
+                padding: 8px 16px;
+                background: rgba(var(--primary-rgb), 0.1);
+                border: 1px solid rgba(var(--primary-rgb), 0.2);
+                border-radius: 999px;
+                color: var(--primary-color);
+                cursor: pointer;
+                transition: all 0.2s ease;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+            
+            .pagination-button:hover:not([disabled]) {
+                background: rgba(var(--primary-rgb), 0.2);
+                box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            }
+            
+            .pagination-button[disabled] {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+            
+            .page-indicator {
+                color: var(--secondary-text);
+                font-size: 0.9rem;
+            }
+            
+            .prev-icon::before {
+                content: "←";
+            }
+            
+            .next-icon::before {
+                content: "→";
+            }
+            
+            .no-results {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 3rem;
+                text-align: center;
+            }
+            
+            .no-results h3 {
+                margin: 1rem 0 0.5rem;
+                color: var(--header-color);
+            }
+            
+            .no-results p {
+                color: var(--secondary-text);
+                margin-bottom: 1.5rem;
+            }
+            
+            .search-icon {
+                display: inline-block;
+                width: 60px;
+                height: 60px;
+                background-color: rgba(var(--primary-rgb), 0.1);
+                border-radius: 50%;
+                position: relative;
+            }
+            
+            .search-icon::before {
+                content: "🔍";
+                font-size: 2rem;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+            
+            @media (max-width: 768px) {
+                .search-results-card {
+                    padding: 1rem;
+                }
+                
+                .search-title {
+                    font-size: 1.25rem;
+                }
+                
+                .audiobooks-grid {
+                    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                    gap: 15px;
+                }
+                
+                .pagination-button {
+                    padding: 6px 12px;
+                    font-size: 0.85rem;
+                }
+            }
+        `;
+        
+        document.head.appendChild(styleElement);
     }
     
     function formatTimeDisplay(seconds) {
