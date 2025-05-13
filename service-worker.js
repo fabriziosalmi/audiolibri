@@ -1,15 +1,19 @@
-const CACHE_NAME = 'audiolibri-cache-v1';
+const CACHE_NAME = 'audiolibri-cache-v2';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/styles.css',
+  '/tailwind-styles.css',
+  '/mobile-navigation.css',
   '/app.js',
+  '/mobile-navigation.js',
   '/audiobooks.js',
   '/icons/favicon.ico',
   '/icons/apple-touch-icon.png',
   '/icons/favicon-32x32.png',
   '/icons/favicon-16x16.png',
   '/images/og-image.jpg',
+  '/offline.html',
   // Add other essential assets here
 ];
 

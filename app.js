@@ -26,8 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('current-audiobook').innerHTML = `
         <div class="loading-container slide-up">
             <div class="loading-spinner"></div>
-            <p>Loading your audiobook library...</p>
-            <small>Please wait while we prepare your collection</small>
+            <p>Caricamento della tua libreria di audiolibri...</p>
+            <small>Attendi mentre prepariamo la tua collezione</small>
         </div>
     `;
     
