@@ -9,6 +9,12 @@
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE and Edge */
     scroll-behavior: smooth; /* Smooth scrolling for better UX */
+    /* Add physics-based scrolling for iOS */
+    -webkit-overflow-scrolling: touch;
+    /* Prevent text selection during swipe */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .mobile-categories-container::-webkit-scrollbar {
@@ -22,6 +28,13 @@
         margin: 10px 0 !important;
         width: 100%;
         overflow-x: auto;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background-color: var(--background-color);
+        margin-top: 0 !important;
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
     }
 
     .genre-list {
@@ -31,6 +44,11 @@
         padding-bottom: 5px;
         width: auto;
         min-width: max-content;
+        /* Add snap scrolling for better mobile experience */
+        scroll-snap-type: x mandatory;
+        /* Add extra padding for better thumb scrolling experience */
+        padding-left: 4px;
+        padding-right: 4px;
     }
 
     .genre-pill {
@@ -42,6 +60,13 @@
         white-space: nowrap;
         transition: transform 0.2s ease, background-color 0.2s ease !important;
         -webkit-tap-highlight-color: transparent; /* Remove default mobile tap highlight */
+        /* Improve touch target size */
+        min-height: 36px;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        /* Add snap scrolling */
+        scroll-snap-align: start;
     }
     
     /* Add touch feedback animation */
@@ -62,7 +87,7 @@
         top: 0;
         height: 100%;
         width: 30px;
-        background: linear-gradient(to right, transparent, var(--background-color, #fff));
+        background: linear-gradient(to right, transparent, rgba(var(--card-background-rgb), 0.95));
         pointer-events: none;
         opacity: 0.8;
     }
@@ -75,7 +100,7 @@
         top: 0;
         height: 100%;
         width: 30px;
-        background: linear-gradient(to left, transparent, var(--background-color, #fff));
+        background: linear-gradient(to left, transparent, rgba(var(--card-background-rgb), 0.95));
         pointer-events: none;
         opacity: 0.8;
     }
@@ -85,4 +110,71 @@
 .genre-pill.active {
     background: var(--primary-color) !important;
     color: white !important;
+}
+
+/* Enhanced Mobile Navigation Controls */
+.mobile-nav-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 20;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.mobile-nav-control span {
+    font-size: 18px;
+    line-height: 1;
+}
+
+.left-nav {
+    left: 5px;
+}
+
+.right-nav {
+    right: 5px;
+}
+
+.mobile-nav-control.visible {
+    opacity: 0.8;
+    pointer-events: auto;
+}
+
+.mobile-nav-control:hover {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.mobile-nav-control:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+/* Hide gradients when no scrolling needed */
+.mobile-categories-container.no-scroll-needed::after,
+.mobile-categories-container.no-scroll-needed::before {
+    display: none;
+}
+
+/* Touch feedback styles */
+.mobile-categories-container.touching {
+    cursor: grabbing;
+}
+
+/* Hide navigation controls on smaller screens where they cause issues */
+@media (max-width: 480px) {
+    .mobile-nav-control {
+        display: none;
+    }
 }
