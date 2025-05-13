@@ -5,63 +5,111 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Offline - Audiolibri.org</title>
     <style>
+        /* Common variables for light/dark mode */
+        :root {
+            --background-color: #f5f7fa;
+            --text-color: #2d3748;
+            --card-background: #ffffff;
+            --card-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            --border-color: #e2e8f0;
+            --primary-color: #4a6cf7;
+            --header-color: #1e293b;
+            --secondary-text: #64748b;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #000000;
+                --text-color: #e2e8f0;
+                --card-background: #121212;
+                --card-shadow: 0 10px 25px rgba(0,0,0,0.4);
+                --border-color: #2a2a2a;
+                --primary-color: #ff4343;
+                --header-color: #ffffff;
+                --secondary-text: #a0a0a0;
+            }
+        }
+        
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: #f5f7fa;
-            color: #2d3748;
+            background-color: var(--background-color);
+            color: var(--text-color);
             display: flex;
             align-items: center;
             justify-content: center;
             height: 100vh;
             margin: 0;
             padding: 0 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         .offline-container {
             max-width: 500px;
             text-align: center;
-            background-color: #ffffff;
+            background-color: var(--card-background);
             padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            animation: fadeIn 0.5s ease-out;
         }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
         h1 {
             margin-bottom: 1rem;
-            color: #1e293b;
+            color: var(--header-color);
+            font-size: 1.8rem;
         }
+        
         p {
             margin-bottom: 1.5rem;
             line-height: 1.6;
+            color: var(--secondary-text);
+            font-size: 1rem;
         }
+        
         .emoji {
             font-size: 4rem;
             margin-bottom: 1.5rem;
             display: block;
         }
+        
         .button {
             display: inline-block;
-            background-color: rgba(74, 108, 247, 1);
+            background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 0.75rem 1.5rem;
+            padding: 0.875rem 1.5rem;
             border-radius: 9999px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
             text-decoration: none;
+            transition: all 0.2s ease;
+            font-size: 1rem;
         }
-        @media (prefers-color-scheme: dark) {
-            body {
-                background-color: #000000;
-                color: #e2e8f0;
-            }
+        
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .button:active {
+            transform: translateY(0);
+        }
+        
+        /* Responsive design for smaller screens */
+        @media (max-width: 480px) {
             .offline-container {
-                background-color: #121212;
-                box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+                padding: 1.5rem;
             }
             h1 {
-                color: #ffffff;
+                font-size: 1.5rem;
             }
-            .button {
-                background-color: rgba(252, 134, 134, 1);
+            .emoji {
+                font-size: 3rem;
             }
         }
     </style>
@@ -72,7 +120,24 @@
         <h1>Sei offline</h1>
         <p>Sembra che tu sia disconnesso da Internet. Verifica la tua connessione e ricarica la pagina per accedere ad Audiolibri.org.</p>
         <p>Nel frattempo, puoi ascoltare eventuali audiolibri che hai già caricato in precedenza.</p>
-        <button class="button" onclick="window.location.reload()">Riprova</button>
+        <button class="button" onclick="reloadPage()">Riprova</button>
     </div>
+    <script>
+        // Check for network status changes
+        window.addEventListener('online', () => {
+            window.location.reload();
+        });
+        
+        function reloadPage() {
+            const button = document.querySelector('.button');
+            button.textContent = 'Ricaricamento...';
+            button.style.opacity = '0.7';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                window.location.reload();
+            }, 300);
+        }
+    </script>
 </body>
 </html>
