@@ -31,6 +31,9 @@
         min-width: 18px !important;
         text-align: center !important;
         border-radius: 8px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
     
     /* Adjust spacing for better arrangement */
@@ -38,6 +41,8 @@
         gap: 5px !important; /* Reduced from 6px for more compact layout */
         justify-content: flex-start !important; /* Ensure proper alignment */
         padding-bottom: 3px !important;
+        overscroll-behavior-x: contain !important; /* Prevent page overscroll */
+        scroll-padding: 0.5rem !important; /* Better scroll experience */
     }
     
     /* Fix for multiple genre pills in a row */
