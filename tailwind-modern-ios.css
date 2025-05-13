@@ -1,0 +1,135 @@
+/* Tailwind Modern iOS Integration */
+/* Classi Tailwind ottimizzate per iOS e interfacce moderne */
+
+@layer components {
+  /* Stile card moderno ispirato a iOS per le cover degli audiolibri */
+  .tw-ios-card {
+    @apply rounded-xl bg-white dark:bg-black shadow-lg overflow-hidden 
+           transition-all duration-300 transform;
+  }
+
+  /* Bottoni in stile iOS */
+  .tw-ios-button {
+    @apply rounded-full bg-primary text-white dark:bg-dark-primary
+           font-medium py-2 px-4 touch-manipulation active:scale-95 
+           flex items-center justify-center;
+  }
+
+  /* Badge in stile iOS per generi */
+  .tw-ios-badge {
+    @apply rounded-full bg-tag text-tag-text dark:bg-dark-tag dark:text-dark-tag-text 
+           text-xs font-medium px-2 py-1 inline-flex items-center;
+  }
+
+  /* Contenitore principale */
+  .tw-ios-container {
+    @apply px-4 sm:px-6 md:px-8 max-w-screen-xl mx-auto;
+  }
+
+  /* Liste di elementi in stile iOS */
+  .tw-ios-list {
+    @apply rounded-xl bg-white dark:bg-black shadow-md overflow-hidden divide-y 
+           divide-border dark:divide-dark-border;
+  }
+
+  /* Elementi di lista in stile iOS */
+  .tw-ios-list-item {
+    @apply px-4 py-3 flex items-center justify-between hover:bg-gray-50 
+           dark:hover:bg-gray-900 active:bg-gray-100 dark:active:bg-gray-800;
+  }
+
+  /* Form input in stile iOS */
+  .tw-ios-input {
+    @apply rounded-xl bg-gray-100 dark:bg-gray-800 border-none px-4 py-3 
+           focus:ring-2 focus:ring-primary dark:focus:ring-dark-primary
+           focus:outline-none w-full;
+  }
+
+  /* Intestazioni in stile moderno */
+  .tw-ios-header {
+    @apply text-lg font-semibold mb-2;
+  }
+}
+
+@layer utilities {
+  /* Scroll elastico in stile iOS */
+  .ios-momentum-scroll {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  /* Angoli arrotondati in stile iOS */
+  .ios-rounded-2xl {
+    border-radius: 1.125rem;
+  }
+
+  /* Effetto pressione bottone */
+  .ios-tap-effect {
+    @apply active:scale-95 transition-transform duration-150;
+  }
+
+  /* Contenitore sicuro per notch e elementi UI del dispositivo */
+  .ios-safe-container {
+    @apply pt-safe-top pb-safe-bottom pl-safe-left pr-safe-right;
+  }
+
+  /* Sfondi sfumati in stile iOS */
+  .ios-blur-bg {
+    @apply backdrop-blur-md bg-white/75 dark:bg-black/75;
+  }
+}
+
+/* Animazioni specifiche per iOS */
+@keyframes ios-scale-in {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.ios-scale-in {
+  animation: ios-scale-in 0.3s ease-out forwards;
+}
+
+/* Modalità specifiche per tema scuro iOS */
+@media (prefers-color-scheme: dark) {
+  .ios-adaptive-text {
+    @apply text-gray-100;
+  }
+  
+  .ios-adaptive-bg {
+    @apply bg-gray-900;
+  }
+}
+
+/* Classi di utility per il design mobile-first */
+.tw-mobile-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  padding: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .tw-mobile-card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 0.75rem;
+    padding: 0.375rem;
+  }
+}
+
+/* Pill navigation ottimizzati per mobile */
+.tw-mobile-pills {
+  @apply flex overflow-x-auto py-2 px-1 gap-2 scrollbar-hide ios-momentum-scroll
+         snap-x snap-mandatory;
+}
+
+.tw-mobile-pill {
+  @apply flex items-center px-3 py-1.5 rounded-full bg-tag text-tag-text
+         dark:bg-dark-tag dark:text-dark-tag-text text-xs font-medium
+         whitespace-nowrap flex-shrink-0 touch-manipulation active:scale-95
+         shadow-sm snap-start;
+}
+
+.tw-mobile-pill.active {
+  @apply bg-primary text-white dark:bg-dark-primary;
+}
