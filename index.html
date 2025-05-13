@@ -118,64 +118,61 @@
     <script src="https://www.youtube.com/iframe_api" defer></script>
 </head>
 <body>
-    <div class="container tw-container">
+    <div class="container tw-container mobile-container ios-safe-inset">
         <header>
-
-            <div class="site-title-container">
-                <h1>audiolibri.org</h1>
-                <p class="site-tagline">Esplora la più grande collezione di audiolibri italiani gratuiti</p>
+            <div class="site-title-container tw-flex tw-flex-col tw-items-center tw-py-3 tw-px-2 sm:tw-py-4">
+                <h1 class="tw-flex tw-items-center tw-gap-2"><img src="audiobooks_transparent.png" alt="Audiolibri.org logo" class="header-logo"> audiolibri.org</h1>
+                <p class="site-tagline tw-text-sm">Esplora la più grande collezione di audiolibri italiani gratuiti</p>
             </div>
             
             <div class="header-content tw-flex tw-flex-col tw-gap-4">
-                <div class="search-container tw-flex tw-justify-center tw-gap-3 tw-w-full tw-max-w-[650px] tw-mx-auto">
-                    <input type="text" id="search" class="tw-input" placeholder="Cerca per titolo, autore o lettore" aria-label="Search audiobooks">
-                    <button id="search-button" class="tw-button" aria-label="Search">
+                <div class="search-container tw-flex tw-justify-center tw-items-center tw-gap-2 tw-w-full tw-max-w-[650px] tw-mx-auto tw-px-2 sm:tw-px-4">
+                    <input type="text" id="search" class="tw-input tw-mobile-input ios-touch-target tw-w-full" placeholder="Cerca per titolo, autore o lettore" aria-label="Search audiobooks">
+                    <button id="search-button" class="tw-button mobile-button ios-button" aria-label="Search">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
                         </svg>
-                        CERCA
+                        <span class="tw-hidden xs:tw-inline">CERCA</span>
                     </button>
                 </div>
             </div>
         </header>
         
         <main>
-
-            <div class="single-card fade-in tw-card">
-                <div class="audiobook-card tw-relative tw-flex tw-flex-col tw-min-h-[500px] tw-bg-cover tw-bg-center" id="current-audiobook">
+            <div class="single-card fade-in tw-card mobile-card ios-card">
+                <div class="audiobook-card tw-relative tw-flex tw-flex-col tw-min-h-[400px] sm:tw-min-h-[500px] tw-bg-cover tw-bg-center" id="current-audiobook">
                     <!-- Audiobook content will be displayed here -->
-                    <div class="loading-container tw-flex tw-flex-col tw-justify-center tw-items-center tw-h-[500px]">
-                        <div class="loading-spinner tw-w-[50px] tw-h-[50px] tw-mb-6"></div>
+                    <div class="loading-container tw-flex tw-flex-col tw-justify-center tw-items-center tw-h-[400px] sm:tw-h-[500px]">
+                        <div class="loading-spinner tw-w-[40px] tw-h-[40px] sm:tw-w-[50px] sm:tw-h-[50px] tw-mb-6"></div>
                         <p class="tw-text-base">Caricamento della tua libreria di audiolibri...</p>
                         <small class="tw-text-secondary-text tw-mt-2">Attendi mentre prepariamo la tua collezione</small>
                     </div>
                 </div>
             </div>
-
         </main>
         
         <!-- Changelog Card - New Addition -->
-        <div id="changelog-card" class="changelog-card fade-in tw-card tw-transition-all tw-duration-300">
-            <div class="changelog-header tw-flex tw-justify-between tw-items-center tw-p-4 tw-border-b tw-border-border">
-                <h2 class="tw-m-0 tw-text-base tw-font-light" style="font-size: 0.8rem;">Ultimi aggiornamenti</h2>
-                <button id="changelog-toggle" class="icon-button tw-bg-transparent tw-border-none tw-w-8 tw-h-8 tw-rounded-full tw-flex tw-items-center tw-justify-center" aria-label="Toggle changelog visibility">
+        <div id="changelog-card" class="changelog-card fade-in tw-card mobile-card tw-transition-all tw-duration-300 tw-mt-4">
+            <div class="changelog-header tw-flex tw-justify-between tw-items-center tw-p-3 sm:tw-p-4 tw-border-b tw-border-border">
+                <h2 class="tw-m-0 tw-text-xs sm:tw-text-sm tw-font-medium">Ultimi aggiornamenti</h2>
+                <button id="changelog-toggle" class="icon-button tw-bg-transparent tw-border-none tw-w-8 tw-h-8 tw-rounded-full tw-flex tw-items-center tw-justify-center tap-highlight-none" aria-label="Toggle changelog visibility">
                     <span class="collapse-icon tw-block tw-transition-transform tw-duration-300">−</span>
                 </button>
             </div>
-            <div id="changelog-content" class="changelog-content tw-p-4 tw-p-6" style="font-size: 0.8rem;">
-                <div class="loading-spinner small tw-w-6 tw-h-6 tw-border-[3px] tw-mx-auto tw-my-4"></div>
-                <p class="tw-text-center" style="font-size: 0.8rem;">Caricamento aggiornamenti...</p>
+            <div id="changelog-content" class="changelog-content tw-p-3 tw-text-sm sm:tw-p-4">
+                <div class="loading-spinner small tw-w-5 tw-h-5 sm:tw-w-6 sm:tw-h-6 tw-border-[3px] tw-mx-auto tw-my-4"></div>
+                <p class="tw-text-center tw-text-xs sm:tw-text-sm">Caricamento aggiornamenti...</p>
             </div>
         </div>
         
-        <footer class="tw-text-center tw-mt-8 tw-pt-6 tw-border-t tw-border-border">
-            <div class="footer-content tw-flex tw-items-center tw-gap-4 tw-justify-center tw-flex-wrap">
-                <button id="theme-toggle" class="tw-bg-transparent tw-text-text tw-border tw-border-border tw-py-2 tw-px-4 tw-text-sm tw-inline-flex tw-items-center tw-gap-2 tw-rounded-full" aria-label="Toggle light/dark theme">
-                    <span class="theme-icon tw-text-base">🌓</span>
+        <footer class="tw-text-center tw-mt-6 sm:tw-mt-8 tw-pt-4 sm:tw-pt-6 tw-border-t tw-border-border ios-bottom-safe">
+            <div class="footer-content tw-flex tw-items-center tw-gap-3 sm:tw-gap-4 tw-justify-center tw-flex-wrap tw-px-2 tw-pb-4 sm:tw-pb-2">
+                <button id="theme-toggle" class="tw-bg-transparent tw-text-text tw-border tw-border-border tw-py-1.5 sm:tw-py-2 tw-px-3 sm:tw-px-4 tw-text-xs sm:tw-text-sm tw-inline-flex tw-items-center tw-gap-1.5 sm:tw-gap-2 tw-rounded-full tap-highlight-none" aria-label="Toggle light/dark theme">
+                    <span class="theme-icon tw-text-sm sm:tw-text-base">🌓</span>
                     <span id="theme-label">Toggle Theme</span>
                 </button>
-                <a href="https://github.com/fabriziosalmi/audiolibri" class="source-code-link tw-flex tw-items-center tw-gap-1.5 tw-no-underline tw-text-inherit tw-border tw-border-border tw-py-0.5 tw-px-4 tw-rounded-full tw-text-sm tw-transition-all" aria-label="View source code on GitHub">
-                    <span class="source-icon tw-text-lg">
+                <a href="https://github.com/fabriziosalmi/audiolibri" class="source-code-link tw-flex tw-items-center tw-gap-1 sm:tw-gap-1.5 tw-no-underline tw-text-inherit tw-border tw-border-border tw-py-0.5 tw-px-3 sm:tw-px-4 tw-rounded-full tw-text-xs sm:tw-text-sm tw-transition-all" aria-label="View source code on GitHub">
+                    <span class="source-icon tw-text-base sm:tw-text-lg">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                             <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
                         </svg>

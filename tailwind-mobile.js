@@ -1,117 +1,135 @@
-// Tailwind Dynamic Integration for Mobile
+// Mobile UI enhancements with Tailwind integration
 document.addEventListener('DOMContentLoaded', () => {
-    // Identifica dispositivo e browser
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    // Apply Tailwind classes dynamically based on screen size
+    applyResponsiveTailwindClasses();
     
-    // Aggiungi classi al body per selettori CSS specifici
-    if (isIOS) document.body.classList.add('ios-device');
-    if (isSafari) document.body.classList.add('safari-browser');
-    if (isMobile) document.body.classList.add('mobile-device');
+    // Optimize for mobile touch
+    enhanceTouchInteractions();
     
-    // Applica classi Tailwind in modo dinamico
-    applyTailwindClasses();
+    // Setup responsive behaviors
+    setupResponsiveBehaviors();
     
-    // Aggiungi supporto per safe area insets di iOS
-    applySafeAreaInsets();
-    
-    // Converti elementi esistenti in componenti Tailwind
-    convertToTailwindComponents();
-    
-    // Aggiorna le classi quando cambia l'orientamento
+    // Listen for resize events with debouncing
     window.addEventListener('resize', debounce(() => {
-        applyTailwindClasses();
+        applyResponsiveTailwindClasses();
     }, 250));
 });
 
-// Applica classi Tailwind in base al contesto
-function applyTailwindClasses() {
+// Apply Tailwind classes based on screen size
+function applyResponsiveTailwindClasses() {
+    const isMobile = window.innerWidth <= 768;
     const isSmallMobile = window.innerWidth <= 480;
-    const isMobilePortrait = window.innerWidth < window.innerHeight;
     
-    // Converti i container principali
-    document.querySelectorAll('.main-container, .content-container').forEach(container => {
-        if (isSmallMobile) {
-            container.classList.add('tw-mobile-container');
-            container.classList.add('ios-safe-container');
+    // Target the main content container
+    const mainContainer = document.querySelector('.main-container');
+    if (mainContainer) {
+        if (isMobile) {
+            // Add mobile Tailwind classes
+            mainContainer.classList.add('px-2', 'max-w-full');
+            mainContainer.classList.remove('px-4', 'px-6');
+        } else {
+            // Revert to desktop classes
+            mainContainer.classList.remove('px-2', 'max-w-full');
+            mainContainer.classList.add('px-4');
         }
-    });
+    }
     
-    // Ottimizza griglia per visualizzazione portrait/landscape
-    document.querySelectorAll('.audiobook-grid').forEach(grid => {
+    // Optimize the audiobook grid for mobile
+    const audiobookGrid = document.querySelector('.audiobook-grid');
+    if (audiobookGrid) {
         if (isSmallMobile) {
-            if (isMobilePortrait) {
-                grid.classList.add('tw-mobile-card-grid');
-            } else {
-                grid.classList.add('tw-grid-autofit-sm');
-            }
+            // 2 columns for very small screens
+            audiobookGrid.classList.add('grid-cols-2', 'gap-2');
+            audiobookGrid.classList.remove('grid-cols-3', 'grid-cols-4', 'gap-4', 'gap-6');
+        } else if (isMobile) {
+            // 3 columns for larger mobile screens
+            audiobookGrid.classList.add('grid-cols-3', 'gap-3');
+            audiobookGrid.classList.remove('grid-cols-2', 'grid-cols-4', 'gap-2', 'gap-6');
+        } else {
+            // Default desktop grid
+            audiobookGrid.classList.add('grid-cols-4', 'gap-4');
+            audiobookGrid.classList.remove('grid-cols-2', 'grid-cols-3', 'gap-2', 'gap-3');
         }
-    });
+    }
     
-    // Aggiungi classi per la navigazione mobile
-    document.querySelectorAll('.genre-list').forEach(list => {
-        list.classList.add('tw-mobile-pills');
-        list.classList.add('ios-momentum-scroll');
-    });
-    
-    // Migliora button e pills
-    document.querySelectorAll('.genre-pill').forEach(pill => {
-        pill.classList.add('ios-tap-effect');
-        pill.classList.add('touch-manipulation');
+    // Apply touch-optimized classes to buttons on mobile
+    const actionButtons = document.querySelectorAll('.action-button');
+    actionButtons.forEach(button => {
+        if (isMobile) {
+            button.classList.add('py-2', 'active:scale-95', 'touch-manipulation');
+            button.classList.remove('py-3');
+        } else {
+            button.classList.remove('py-2', 'active:scale-95', 'touch-manipulation');
+            button.classList.add('py-3');
+        }
     });
 }
 
-// Applica insets per notch e UI di sistema
-function applySafeAreaInsets() {
-    const header = document.querySelector('.site-header');
-    if (header) {
-        header.style.paddingTop = 'env(safe-area-inset-top, 10px)';
-    }
-    
-    const footer = document.querySelector('.site-footer');
-    if (footer) {
-        footer.style.paddingBottom = 'env(safe-area-inset-bottom, 10px)';
-    }
-}
-
-// Converti elementi esistenti in componenti Tailwind
-function convertToTailwindComponents() {
-    // Converti bottoni in stile iOS
-    document.querySelectorAll('.primary-button').forEach(button => {
-        button.classList.add('tw-ios-button');
+// Enhance touch interactions for mobile devices
+function enhanceTouchInteractions() {
+    // Add touch-action: manipulation to prevent delays
+    document.querySelectorAll('a, button, .clickable').forEach(element => {
+        element.style.touchAction = 'manipulation';
     });
     
-    // Converti card in stile iOS
-    document.querySelectorAll('.audiobook-card').forEach(card => {
-        card.classList.add('tw-ios-card');
-    });
-    
-    // Converti badge/pills
-    document.querySelectorAll('.badge, .tag, .pill').forEach(badge => {
-        badge.classList.add('tw-ios-badge');
-    });
-    
-    // Migliora liste
-    document.querySelectorAll('.list-container').forEach(list => {
-        list.classList.add('tw-ios-list');
+    // Add active state for touch feedback
+    document.querySelectorAll('.genre-pill, .audiobook-card, .action-button').forEach(element => {
+        element.addEventListener('touchstart', () => {
+            element.classList.add('active');
+        }, { passive: true });
         
-        // Aggiunge classi ai figli
-        list.querySelectorAll('li, .list-item').forEach(item => {
-            item.classList.add('tw-ios-list-item');
+        element.addEventListener('touchend', () => {
+            element.classList.remove('active');
+        }, { passive: true });
+    });
+}
+
+// Setup responsive behaviors
+function setupResponsiveBehaviors() {
+    // Check for iOS device to apply special iOS fixes
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if (isIOS) {
+        document.documentElement.classList.add('ios-device');
+        document.body.classList.add('ios-body');
+        
+        // Aggiungi classi iOS specifiche ai contenitori
+        document.querySelectorAll('.mobile-categories-container').forEach(container => {
+            container.classList.add('ios-scroll', 'ios-momentum-scroll');
+        });
+        
+        document.querySelectorAll('.genre-pill').forEach(pill => {
+            pill.classList.add('tap-highlight-none', 'ios-touch-target');
+        });
+        
+        document.querySelectorAll('button, a').forEach(element => {
+            element.classList.add('tap-highlight-none');
+        });
+        
+        // Fix for iOS momentum scrolling in overflow containers
+        document.querySelectorAll('.scroll-container, .mobile-scroll').forEach(container => {
+            container.classList.add('ios-momentum-scroll');
+        });
+    }
+    
+    // Setup scroll containers with snap points
+    document.querySelectorAll('.horizontal-scroll').forEach(container => {
+        // Apply Tailwind scroll snap classes
+        container.classList.add('snap-x', 'snap-mandatory', 'scroll-smooth');
+        
+        // Add snap alignment to children
+        container.querySelectorAll('.scroll-item').forEach(item => {
+            item.classList.add('snap-start');
         });
     });
 }
 
-// Funzione per debouncing (prevenire troppe chiamate)
-function debounce(func, wait) {
+// Debounce utility for resize events
+function debounce(func, delay) {
     let timeout;
     return function() {
         const context = this;
         const args = arguments;
         clearTimeout(timeout);
-        timeout = setTimeout(() => {
-            func.apply(context, args);
-        }, wait);
+        timeout = setTimeout(() => func.apply(context, args), delay);
     };
 }

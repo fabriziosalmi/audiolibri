@@ -12,7 +12,6 @@
         border-radius: 8px !important; /* Further reduced border radius for modern look */
         touch-action: manipulation !important; /* Improve touch response */
         -webkit-tap-highlight-color: transparent !important; /* Remove tap highlight on iOS */
-        transition: transform 0.15s ease, box-shadow 0.15s ease !important; /* Smooth transitions */
     }
     
     /* Ensure genre name doesn't overflow - improved text handling */
@@ -137,28 +136,5 @@
     .search-input {
         height: 40px !important;
         font-size: 0.9rem !important;
-        border-radius: 12px !important; /* iOS-style rounded corners */
-        padding-left: 12px !important;
-        -webkit-appearance: none !important; /* Remove default iOS styling */
-        appearance: none !important; /* Standard property for compatibility */
-    }
-    
-    /* Miglioramenti accessibilità e interazione per liste su mobile */
-    .list-container {
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important; /* Scroll elastico iOS */
-        overscroll-behavior-y: contain !important; /* Prevenire scroll "bounce" eccessivo */
-        scroll-padding-top: 10px !important; /* Padding per lo scroll snap */
-        height: calc(100vh - 120px) !important; /* Altezza dinamica in base alla viewport */
-        padding-bottom: env(safe-area-inset-bottom, 20px) !important; /* Supporto notch iOS */
-    }
-    
-    /* Ottimizzazioni per i bottoni di azione principali */
-    .action-button {
-        min-height: 44px !important; /* Dimensione minima per target touch accessibili */
-        touch-action: manipulation !important;
-        -webkit-tap-highlight-color: transparent !important;
-        position: relative !important;
-        overflow: hidden !important; /* Per effetto ripple contenuto */
     }
 }
