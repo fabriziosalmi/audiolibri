@@ -17,6 +17,13 @@
     user-select: none;
 }
 
+@media (max-width: 480px) {
+    .mobile-categories-container {
+        padding: 8px 0;
+        margin-bottom: 12px;
+    }
+}
+
 .mobile-categories-container::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
 }
@@ -50,11 +57,18 @@
         padding-left: 4px;
         padding-right: 4px;
     }
+    
+    @media (max-width: 480px) {
+        .genre-list {
+            gap: 6px !important;
+            padding-bottom: 3px;
+        }
+    }
 
     .genre-pill {
         flex-shrink: 0;
-        padding: 8px 12px !important;
-        font-size: 0.8rem !important;
+        padding: 6px 10px !important;
+        font-size: 0.75rem !important;
         border: none !important;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
         white-space: nowrap;
@@ -67,6 +81,19 @@
         justify-content: center !important;
         /* Add snap scrolling */
         scroll-snap-align: start;
+        /* Limit maximum width on small screens */
+        max-width: 140px !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+    
+    /* Special sizing for mobile portrait */
+    @media (max-width: 480px) {
+        .genre-pill {
+            max-width: 110px !important;
+            padding: 6px 8px !important;
+            font-size: 0.7rem !important;
+        }
     }
     
     /* Add touch feedback animation */
@@ -77,6 +104,14 @@
     .genre-count {
         padding: 2px 6px !important;
         font-size: 0.7rem !important;
+    }
+    
+    @media (max-width: 480px) {
+        .genre-count {
+            padding: 1px 5px !important;
+            font-size: 0.65rem !important;
+            margin-left: 4px !important;
+        }
     }
     
     /* Make mobile scrolling indicator */
@@ -92,6 +127,12 @@
         opacity: 0.8;
     }
     
+    @media (max-width: 480px) {
+        .mobile-categories-container::after {
+            width: 20px;
+        }
+    }
+    
     /* Add left gradient for scroll indication when not at start */
     .mobile-categories-container.scrolled-right::before {
         content: '';
@@ -103,6 +144,12 @@
         background: linear-gradient(to left, transparent, rgba(var(--card-background-rgb), 0.95));
         pointer-events: none;
         opacity: 0.8;
+    }
+    
+    @media (max-width: 480px) {
+        .mobile-categories-container.scrolled-right::before {
+            width: 20px;
+        }
     }
 }
 

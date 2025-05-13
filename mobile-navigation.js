@@ -137,5 +137,12 @@ function checkIfScrollNeeded(container) {
         } else {
             container.classList.remove('no-scroll-needed');
         }
+        
+        // Add portrait mode class for additional styling
+        if (window.innerWidth <= 480) {
+            container.classList.add('portrait-mode');
+        } else {
+            container.classList.remove('portrait-mode');
+        }
     }
 }
