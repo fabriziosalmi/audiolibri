@@ -83,6 +83,10 @@
     <link rel="stylesheet" href="tailwind-styles.css">
     <link rel="stylesheet" href="mobile-navigation.css">
     <link rel="stylesheet" href="mobile-fixes.css">
+    <!-- Mobile optimization libraries -->
+    <link rel="stylesheet" href="tailwind-mobile.css">
+    <script defer src="tailwind-mobile.js"></script>
+    
     <!-- Add CSS variables for RGB values -->
     <style>
         :root {
@@ -147,14 +151,14 @@
         <!-- Changelog Card - New Addition -->
         <div id="changelog-card" class="changelog-card fade-in tw-card tw-transition-all tw-duration-300">
             <div class="changelog-header tw-flex tw-justify-between tw-items-center tw-p-4 tw-border-b tw-border-border">
-                <h2 class="tw-m-0 tw-text-base tw-font-light">Ultimi aggiornamenti</h2>
+                <h2 class="tw-m-0 tw-text-base tw-font-light" style="font-size: 0.7rem;">Ultimi aggiornamenti</h2>
                 <button id="changelog-toggle" class="icon-button tw-bg-transparent tw-border-none tw-w-8 tw-h-8 tw-rounded-full tw-flex tw-items-center tw-justify-center" aria-label="Toggle changelog visibility">
                     <span class="collapse-icon tw-block tw-transition-transform tw-duration-300">−</span>
                 </button>
             </div>
-            <div id="changelog-content" class="changelog-content tw-p-4 tw-p-6">
+            <div id="changelog-content" class="changelog-content tw-p-4 tw-p-6" style="font-size: 1rem;">
                 <div class="loading-spinner small tw-w-6 tw-h-6 tw-border-[3px] tw-mx-auto tw-my-4"></div>
-                <p class="tw-text-center">Caricamento aggiornamenti...</p>
+                <p class="tw-text-center" style="font-size: 0.8rem;">Caricamento aggiornamenti...</p>
             </div>
         </div>
         
