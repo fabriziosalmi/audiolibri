@@ -1,0 +1,45 @@
+/* Additional CSS fixes for mobile genre navigation buttons */
+@media (max-width: 480px) {
+    /* Fix for the genre pill width issue in portrait mode */
+    .genre-pill {
+        max-width: 100px !important; /* Reduced from 110px to have more pills in view */
+        padding: 6px 8px !important;
+        font-size: 0.7rem !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important; /* Lighter shadow for mobile */
+        width: auto !important; /* Allow buttons to size based on content */
+        flex-basis: auto !important; /* Auto flex basis */
+    }
+    
+    /* Ensure genre name doesn't overflow */
+    .genre-name {
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 65px !important;
+    }
+    
+    /* Fix for the genre count badge */
+    .genre-count {
+        padding: 1px 4px !important;
+        font-size: 0.65rem !important;
+        margin-left: 3px !important;
+        box-shadow: none !important; /* Remove shadow from the count badge */
+    }
+    
+    /* Adjust spacing for better arrangement */
+    .genre-list {
+        gap: 5px !important; /* Reduced from 6px for more compact layout */
+        justify-content: flex-start !important; /* Ensure proper alignment */
+    }
+    
+    /* Fix for multiple genre pills in a row */
+    .mobile-categories-container {
+        padding: 8px 4px !important;
+    }
+}
+
+/* Fix for genre pill selected state on mobile */
+@media (max-width: 480px) {
+    .genre-pill.selected {
+        box-shadow: 0 2px 5px rgba(var(--primary-rgb), 0.2) !important;
+    }
+}
