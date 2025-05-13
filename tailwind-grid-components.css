@@ -1,0 +1,130 @@
+/* File: tailwind-grid-components.css */
+/* Componenti grid ottimizzati per dispositivi mobili */
+
+.tw-grid {
+  display: grid;
+}
+
+/* Grid di base */
+.tw-grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.tw-grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.tw-grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.tw-grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* Spaziatura */
+.tw-gap-1 {
+  gap: 0.25rem;
+}
+
+.tw-gap-2 {
+  gap: 0.5rem;
+}
+
+.tw-gap-3 {
+  gap: 0.75rem;
+}
+
+.tw-gap-4 {
+  gap: 1rem;
+}
+
+/* Grid per dispositivi mobili */
+@media (max-width: 480px) {
+  .tw-sm-grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  
+  .tw-sm-grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  
+  .tw-sm-grid-auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+  
+  .tw-sm-gap-2 {
+    gap: 0.5rem;
+  }
+}
+
+/* Grid per tablet */
+@media (min-width: 481px) and (max-width: 768px) {
+  .tw-md-grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  
+  .tw-md-grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  
+  .tw-md-grid-auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+  
+  .tw-md-gap-3 {
+    gap: 0.75rem;
+  }
+}
+
+/* Grid layout avanzato per contenuto adattivo */
+.tw-grid-autofit-xs {
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+}
+
+.tw-grid-autofit-sm {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.tw-grid-autofit-md {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+/* Layout a mascera */
+.tw-masonry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 1rem;
+  grid-auto-flow: dense;
+}
+
+@media (max-width: 480px) {
+  .tw-masonry-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    grid-gap: 0.5rem;
+  }
+}
+
+/* Card grid ottimizzata per mobile */
+.tw-mobile-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+  padding: 0.5rem;
+  width: 100%;
+}
+
+@media (max-width: 374px) {
+  .tw-mobile-card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.5rem;
+  }
+}
+
+@media (min-width: 481px) {
+  .tw-mobile-card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+    padding: 0.75rem;
+  }
+}

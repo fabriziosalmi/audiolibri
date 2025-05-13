@@ -1,0 +1,91 @@
+/* Tailwind mobile optimizations */
+/* To be included after compilation in the main CSS bundle */
+
+/* Mobile-first utilities */
+.tw-mobile-container {
+    @apply w-full max-w-screen-sm mx-auto px-2 sm:px-4;
+}
+
+.tw-mobile-card {
+    @apply rounded-lg shadow-sm bg-card dark:bg-dark-card p-3 
+           transition-all duration-200 hover:shadow-md
+           border border-border dark:border-dark-border;
+}
+
+.tw-mobile-text {
+    @apply text-sm leading-tight;
+}
+
+/* Full-width mobile elements */
+.tw-mobile-full {
+    @apply w-full max-w-full overflow-hidden;
+}
+
+/* Touch-optimized buttons */
+.tw-touch-button {
+    @apply py-2 px-3 rounded-md active:scale-95 transition-transform
+           text-sm font-medium touch-manipulation
+           bg-primary text-white dark:bg-primary
+           shadow-sm active:shadow-none;
+}
+
+/* Bottom navigation */
+.tw-mobile-nav {
+    @apply fixed bottom-0 left-0 right-0 bg-card dark:bg-dark-card
+           shadow-lg border-t border-border dark:border-dark-border
+           flex items-center justify-around py-2 px-1 z-50;
+}
+
+.tw-nav-item {
+    @apply flex flex-col items-center justify-center
+           py-1 px-2 rounded-md active:bg-gray-100 dark:active:bg-gray-800
+           text-xs text-secondary-text dark:text-dark-secondary-text
+           transition-colors;
+}
+
+.tw-nav-item.active {
+    @apply text-primary dark:text-primary;
+}
+
+/* Optimized grid layouts */
+.tw-mobile-grid {
+    @apply grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5
+           gap-2 sm:gap-3 md:gap-4;
+}
+
+/* Responsive typography */
+.tw-mobile-title {
+    @apply text-lg font-semibold;
+}
+
+.tw-mobile-subtitle {
+    @apply text-sm text-secondary-text dark:text-dark-secondary-text;
+}
+
+/* Fluid spacing */
+.tw-mobile-section {
+    @apply py-3 sm:py-4 md:py-6;
+}
+
+/* Improved scroll containers */
+.tw-mobile-scroll {
+    @apply flex overflow-x-auto pb-3 -mx-2 px-2
+           snap-x snap-mandatory scroll-smooth
+           scrollbar-hide;
+}
+
+.tw-mobile-scroll-item {
+    @apply snap-start shrink-0 w-40 sm:w-48 mr-3;
+}
+
+/* Image optimizations */
+.tw-mobile-img {
+    @apply w-full h-auto object-cover rounded-md;
+}
+
+/* Touch-friendly form elements */
+.tw-mobile-input {
+    @apply h-12 w-full px-3 rounded-lg border border-border
+           dark:border-dark-border dark:bg-dark-card
+           text-base;
+}

@@ -3,10 +3,27 @@ module.exports = {
   content: [
     "./index.html",
     "./offline.html",
-    "./app.js"
+    "./app.js",
+    "./mobile-enhancements.js",
+    "./tailwind-mobile.css",
+    "./tailwind-mobile.js"
   ],
   darkMode: 'media', // Mantiene la modalità dark basata sulle preferenze del sistema
   theme: {
+    screens: {
+        'xs': '320px',  // Extra small devices (mobiles)
+        'sm': '480px',  // Small devices (larger phones, small tablets)
+        'md': '768px',  // Medium devices (tablets)
+        'lg': '1024px', // Large devices (desktops)
+        'xl': '1280px', // Extra large devices (large desktops)
+        '2xl': '1536px' // Ultra wide screens
+      },
+      spacing: {
+        'safe-top': 'env(safe-area-inset-top)',
+        'safe-bottom': 'env(safe-area-inset-bottom)',
+        'safe-left': 'env(safe-area-inset-left)',
+        'safe-right': 'env(safe-area-inset-right)',
+      },
     extend: {
       colors: {
         // Light theme colors
@@ -53,7 +70,56 @@ module.exports = {
       fontFamily: {
         'sans': ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'sans-serif'],
       },
+      screens: {
+        'xs': '320px',  // Extra small devices (mobiles)
+        'sm': '480px',  // Small devices (larger phones, small tablets)
+        'md': '768px',  // Medium devices (tablets)
+        'lg': '1024px', // Large devices (desktops)
+        'xl': '1280px', // Extra large devices (large desktops)
+        '2xl': '1536px' // Ultra wide screens
+      },
+      spacing: {
+        'safe-top': 'env(safe-area-inset-top)',
+        'safe-bottom': 'env(safe-area-inset-bottom)',
+        'safe-left': 'env(safe-area-inset-left)',
+        'safe-right': 'env(safe-area-inset-right)',
+      },
+      /* Tailwind Utilities Extension */
+      extend: {
+        /* Touch interaction utilities */
+        touchAction: {
+          'manipulation': 'manipulation',
+          'none': 'none',
+        },
+        /* CSS scroll snap utilities */
+        scrollSnapType: {
+          'x': 'x var(--tw-scroll-snap-strictness)',
+          'y': 'y var(--tw-scroll-snap-strictness)',
+          'mandatory': 'both mandatory',
+          'proximity': 'both proximity',
+        },
+        scrollSnapStrictness: {
+          'mandatory': 'mandatory',
+          'proximity': 'proximity',
+        },
+        scrollSnapAlign: {
+          'start': 'start',
+          'end': 'end',
+          'center': 'center',
+        },
+        scrollSnapStop: {
+          'normal': 'normal',
+          'always': 'always',
+        },
+        /* Animation utilities for mobile */
+        scale: {
+          '95': '0.95',
+          '98': '0.98',
+        },
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    require('./tailwind-mobile-plugin.js'),
+  ],
 };
