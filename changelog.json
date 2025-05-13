@@ -1,12 +1,11 @@
 {
-  "version": "1.4.3",
+  "version": "1.4.5",
   "entries": [
     {
-      "date": "2025-04-10",
-      "title": "Miglioramenti vari",
-      "description": "Migliorati risultati di ricerca e la navigazione per categoria.",
+      "date": "2025-05-13",
+      "title": "Miglioramenti e risoluzioni ai problemi riscontrati.",
       "changes": [
-        "Alcuni contenuti testuali potrebbero essere aggiornati per una maggiore accuratezza.",
+        "Risolti i problemi di navigazione tra categorie da mobile.",
         "Nuovi contenuti possono essere aggiunti in qualunque momento."
      ]
     }

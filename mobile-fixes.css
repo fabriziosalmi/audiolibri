@@ -8,6 +8,8 @@
         box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important; /* Lighter shadow for mobile */
         width: auto !important; /* Allow buttons to size based on content */
         flex-basis: auto !important; /* Auto flex basis */
+        overflow: hidden !important;
+        border-radius: 10px !important; /* Slightly reduced border radius */
     }
     
     /* Ensure genre name doesn't overflow */
@@ -15,6 +17,7 @@
         overflow: hidden !important;
         text-overflow: ellipsis !important;
         max-width: 65px !important;
+        white-space: nowrap !important;
     }
     
     /* Fix for the genre count badge */
@@ -23,23 +26,62 @@
         font-size: 0.65rem !important;
         margin-left: 3px !important;
         box-shadow: none !important; /* Remove shadow from the count badge */
+        min-width: 18px !important;
+        text-align: center !important;
+        border-radius: 8px !important;
     }
     
     /* Adjust spacing for better arrangement */
     .genre-list {
         gap: 5px !important; /* Reduced from 6px for more compact layout */
         justify-content: flex-start !important; /* Ensure proper alignment */
+        padding-bottom: 3px !important;
     }
     
     /* Fix for multiple genre pills in a row */
     .mobile-categories-container {
         padding: 8px 4px !important;
     }
-}
-
-/* Fix for genre pill selected state on mobile */
-@media (max-width: 480px) {
-    .genre-pill.selected {
+    
+    /* Fix for the active state of genre pills */
+    .genre-pill.active, .genre-pill.selected {
         box-shadow: 0 2px 5px rgba(var(--primary-rgb), 0.2) !important;
     }
+    
+    /* Improve touch feedback */
+    .genre-pill:active {
+        transform: scale(0.95) !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1) !important;
+    }
+}
+
+/* Additional fixes for very small screens (iPhone SE, etc.) */
+@media (max-width: 375px) {
+    .genre-pill {
+        max-width: 90px !important;
+        padding: 5px 6px !important;
+    }
+    
+    .genre-name {
+        max-width: 55px !important;
+    }
+    
+    .genre-count {
+        min-width: 16px !important;
+        font-size: 0.6rem !important;
+    }
+    
+    .genre-list {
+        gap: 4px !important;
+    }
+}
+
+/* Fix for portrait mode container */
+.mobile-categories-container.portrait-mode {
+    padding: 6px 3px !important;
+}
+
+/* Fix the mobile navigation shadow rendering */
+.mobile-nav-control {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15) !important;
 }
