@@ -253,9 +253,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Add title and list container
+        // Add title and list container with mobile-categories-container wrapper for mobile view
         genreNavContainer.innerHTML = `
-            <div class="genre-list" role="list" aria-label="Generi disponibili">
+            <div class="mobile-categories-container">
+                <div class="genre-list" role="list" aria-label="Generi disponibili">
+                </div>
             </div>
         `;
         
@@ -282,6 +284,30 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Add CSS styles for genre navigation
         addGenreNavigationStyles();
+        
+        // Add scroll detection for mobile navigation
+        initializeMobileNavigation();
+    }
+    
+    // Handle mobile navigation scroll indicators
+    function initializeMobileNavigation() {
+        const mobileContainer = document.querySelector('.mobile-categories-container');
+        if (mobileContainer) {
+            // Add scroll event listener to show/hide gradients
+            mobileContainer.addEventListener('scroll', function() {
+                // Show left gradient when scrolled right
+                if (this.scrollLeft > 10) {
+                    this.classList.add('scrolled-right');
+                } else {
+                    this.classList.remove('scrolled-right');
+                }
+            });
+            
+            // Initial check
+            if (mobileContainer.scrollLeft > 10) {
+                mobileContainer.classList.add('scrolled-right');
+            }
+        }
     }
 
     // Add CSS styles for genre navigation
