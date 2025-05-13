@@ -255,8 +255,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Add title and list container with mobile-categories-container wrapper for mobile view
         genreNavContainer.innerHTML = `
-            <div class="mobile-categories-container">
-                <div class="genre-list" role="list" aria-label="Generi disponibili">
+            <div class="mobile-categories-container tw-mobile-scroll ios-momentum-scroll touch-manipulation">
+                <div class="genre-list tw-grid tw-grid-flow-col tw-gap-2 tw-snap-x" role="list" aria-label="Generi disponibili">
                 </div>
             </div>
         `;
@@ -266,12 +266,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Generate navigation for filtered genres
         filteredGenres.forEach(genre => {
             const genrePill = document.createElement('button');
-            genrePill.className = 'genre-pill';
+            genrePill.className = 'genre-pill tw-pill snap-start tap-highlight-none';
             genrePill.dataset.genre = genre;
             genrePill.setAttribute('role', 'listitem');
             genrePill.innerHTML = `
-                <span class="genre-name">${capitalizeCategory(genre)}</span>
-                <span class="genre-count" aria-label="${genreCounts[genre]} audiolibri">${genreCounts[genre]}</span>
+                <span class="genre-name text-truncate">${capitalizeCategory(genre)}</span>
+                <span class="genre-count tw-flex tw-items-center tw-justify-center" aria-label="${genreCounts[genre]} audiolibri">${genreCounts[genre]}</span>
             `;
             
             // Add click event listener
