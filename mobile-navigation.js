@@ -33,10 +33,20 @@ function setupMobileNavigation(container) {
     // Check if scroll is needed, hide gradients if not
     checkIfScrollNeeded(container);
     
-    // Recheck on window resize
+    // Recheck on window resize and orientation change
     window.addEventListener('resize', () => {
         checkIfScrollNeeded(container);
     });
+    
+    window.addEventListener('orientationchange', () => {
+        // Small delay to let the orientation change complete
+        setTimeout(() => {
+            checkIfScrollNeeded(container);
+        }, 100);
+    });
+    
+    // Initial orientation check
+    checkIfScrollNeeded(container);
 }
 
 function handleScrollIndicators(container) {
@@ -141,8 +151,19 @@ function checkIfScrollNeeded(container) {
         // Add portrait mode class for additional styling
         if (window.innerWidth <= 480) {
             container.classList.add('portrait-mode');
+            
+            // Apply additional optimizations for portrait mode
+            document.body.classList.add('portrait-screen');
+            
+            // Optimize genre pills for very small screens
+            if (window.innerWidth < 360) {
+                container.classList.add('very-small-screen');
+            } else {
+                container.classList.remove('very-small-screen');
+            }
         } else {
             container.classList.remove('portrait-mode');
+            document.body.classList.remove('portrait-screen');
         }
     }
 }
