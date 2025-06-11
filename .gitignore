@@ -8,3 +8,6 @@ yarn.lock
 package-lock.json
 package.json
 README.md
+augmented.json.backup_*
+synopsis_checkpoint_*
+augment_checkpoint_*
