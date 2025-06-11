@@ -48,7 +48,10 @@
     "real_title": "LA HORLA I",
     "real_author": "Guy de Maupassant",
     "real_synopsis": "Un narratore, Lucien, che ha perso la memoria dopo un incidente, viene coinvolto in una misteriosa indagine che lo porterà a scoprire una trama sconcertante legata a un'antica storia e a una serie di eventi inquietanti. Con l'aiuto di un amico, dovrà affrontare i ricordi oscurati e svelare un enigma che sembra legato a una figura misteriosa chiamata La Horla.",
-    "real_genre": "racconto"
+    "real_genre": "racconto",
+    "content_type": "audiobook",
+    "real_language": "it",
+    "real_narrator": "VALTER ZANARDI letture"
   },
   "fTsPj03aJCI": {
     "title": "Iginio Ugo Tarchetti   FOSCA - romanzo - LETTURA INTEGRALE",
@@ -99,7 +102,10 @@
     "real_title": "FOSCA",
     "real_author": "Iginio Ugo Tarchetti",
     "real_synopsis": "Un giovane studioso si imbatte in un antico libro che lo trasporta nel tempo, facendolo vivere le storie degli eroi e dei tristi amori che lo circondano, tra passato e presente. Tra misteri, passioni e tragici destino, il libro lo condurrà in un viaggio suggestivo attraverso le ombre della sua città e i segreti del suo cuore.",
-    "real_genre": "romanzo"
+    "real_genre": "romanzo",
+    "content_type": "audiobook",
+    "real_language": "it",
+    "real_narrator": "VALTER ZANARDI letture"
   },
   "ttR7f-HjLxg": {
     "title": "LA CONFIDENZA  -  racconto di Guy De Maupassant",
@@ -150,7 +156,10 @@
     "real_title": "LA CONFIDENZA",
     "real_author": "Guy de Maupassant",
     "real_synopsis": "Un uomo si imbatte in un vecchio amico durante una passeggiata e, mentre condivide una confidenza apparentemente innocente, si svela un passato segreto che rivela la complessità delle loro relazioni e dei loro caratteri. La storia si dipana tra realtà e illusione, svelando le fragilità dell'amicizia e la portata delle verità non dette. Con uno stile preciso e atmosferico, Maupassant esplora i limiti della fiducia e la natura ambigua delle parole.",
-    "real_genre": "racconto"
+    "real_genre": "racconto",
+    "content_type": "audiobook",
+    "real_language": "it",
+    "real_narrator": "VALTER ZANARDI letture"
   },
   "2dFyR1dhWyU": {
     "title": "02 - LE MILLE E UNA NOTTE- I viaggi di Sindibad",
@@ -199,9 +208,12 @@
       "Education"
     ],
     "real_title": "LE MILLE E UNA NOTTE- I viaggi di Sindibad",
-    "real_author": "Abu al-Faraj al-Jahiz",
+    "real_author": "aa.vv",
     "real_synopsis": ", scritto da Abu al-Faraj al-Jahiz, è un'opera fantastica che racconta le avventure del marecchiaro Sindibad attraverso mari e mondi immaginari, dove la magia e le leggi strane della natura conducono a misteriose scoperte e incontri con creature e culture inaspettate. Con un linguaggio ricco di immaginazione, l'autore offre una narrazione avventurosa e filosofica che mescola miti, leggende e visioni di un mondo sconosciuto.",
-    "real_genre": "fantascienza"
+    "real_genre": "fiaba",
+    "content_type": "audiobook",
+    "real_language": "it",
+    "real_narrator": "VALTER ZANARDI letture"
   },
   "v5cbJXjvrRw": {
     "title": "Gli uomini vuoti - di T. Eliot",
@@ -252,7 +264,10 @@
     "real_title": "Gli uomini vuoti",
     "real_author": "T.S. Eliot",
     "real_synopsis": "\"Gli Uomini Vuoti\" di T.S. Eliot è un'opera poetica e filosofica che esplora l'alienazione e la ricerca di significato in un mondo caotico. Attraverso una serie di poesie interconnesse, l'autore indaga lo stato dell'anima umano nell'epoca moderna, con immagini forti e metafore intense che riflettono l'isolamento e la disconnessione dell'uomo contemporaneo. L'opera si distingue per il suo linguaggio evocativo e la sua capacità di catturare l'essenza dell'esperienza umana in un contesto esistenziale.",
-    "real_genre": "fantascienza"
+    "real_genre": "poesia",
+    "content_type": "audiobook",
+    "real_language": "it",
+    "real_narrator": "VALTER ZANARDI letture"
   },
   "5ugJmNEkOkM": {
     "title": "Da Narciso e Boccadoro Romanzo di H. Hesse -  Estratto",
