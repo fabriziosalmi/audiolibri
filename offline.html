@@ -3,30 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- EN 301 549: Accessibility Meta Tags -->
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#4a6cf7" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#ff4343" media="(prefers-color-scheme: dark)">
+    
     <title>Offline - Audiolibri.org</title>
+    
     <style>
-        /* Common variables for light/dark mode */
+        /* EN 301 549 Compliant Styles */
+        
+        /* Common variables for light/dark mode with enhanced contrast */
         :root {
             --background-color: #f5f7fa;
-            --text-color: #2d3748;
+            --text-color: #1a202c; /* Enhanced contrast for EN 301 549 */
             --card-background: #ffffff;
             --card-shadow: 0 10px 25px rgba(0,0,0,0.05);
             --border-color: #e2e8f0;
-            --primary-color: #4a6cf7;
-            --header-color: #1e293b;
-            --secondary-text: #64748b;
+            --primary-color: #3b51d4; /* Enhanced contrast */
+            --header-color: #111827; /* Enhanced contrast */
+            --secondary-text: #4b5563; /* Enhanced contrast */
+            --focus-ring: #3b51d4;
         }
         
         @media (prefers-color-scheme: dark) {
             :root {
                 --background-color: #000000;
-                --text-color: #e2e8f0;
+                --text-color: #f1f5f9; /* Enhanced contrast for dark mode */
                 --card-background: #121212;
                 --card-shadow: 0 10px 25px rgba(0,0,0,0.4);
-                --border-color: #2a2a2a;
-                --primary-color: #ff4343;
+                --border-color: #404040; /* Enhanced visibility */
+                --primary-color: #ff6b6b; /* Enhanced contrast */
                 --header-color: #ffffff;
-                --secondary-text: #a0a0a0;
+                --secondary-text: #b3b3b3; /* Enhanced contrast */
+                --focus-ring: #ff6b6b;
+            }
+        }
+        
+        /* EN 301 549: Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            ::before,
+            ::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            .fadeIn {
+                animation: none !important;
+            }
+        }
+        
+        /* EN 301 549: Focus indicators */
+        *:focus {
+            outline: 3px solid var(--focus-ring);
+            outline-offset: 2px;
+        }
+        
+        /* EN 301 549: High contrast mode support */
+        @media (prefers-contrast: high) {
+            :root {
+                --border-color: #000000;
+                --text-color: #000000;
+            }
+            
+            @media (prefers-color-scheme: dark) {
+                :root {
+                    --border-color: #ffffff;
+                    --text-color: #ffffff;
+                }
             }
         }
         
@@ -89,6 +136,8 @@
             text-decoration: none;
             transition: all 0.2s ease;
             font-size: 1rem;
+            min-height: 44px; /* EN 301 549: Minimum touch target size */
+            min-width: 44px;
         }
         
         .button:hover {
@@ -98,6 +147,32 @@
         
         .button:active {
             transform: translateY(0);
+        }
+        
+        /* EN 301 549: Focus indicator for buttons */
+        .button:focus {
+            outline: 3px solid var(--focus-ring);
+            outline-offset: 2px;
+        }
+        
+        /* EN 301 549: Disabled state */
+        .button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        /* EN 301 549: Screen reader only text */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
         
         /* Responsive design for smaller screens */
@@ -115,29 +190,103 @@
     </style>
 </head>
 <body>
-    <div class="offline-container">
-        <span class="emoji">🎧</span>
-        <h1>Sei offline</h1>
-        <p>Sembra che tu sia disconnesso da Internet. Verifica la tua connessione e ricarica la pagina per accedere ad Audiolibri.org.</p>
-        <p>Nel frattempo, puoi ascoltare eventuali audiolibri che hai già caricato in precedenza.</p>
-        <button class="button" onclick="reloadPage()">Riprova</button>
-    </div>
+    <!-- EN 301 549: Skip link for keyboard users -->
+    <a href="#main-content" class="sr-only" style="position: absolute; top: -40px; left: 6px; background: var(--primary-color); color: white; padding: 8px 16px; text-decoration: none; border-radius: 4px; z-index: 1000;" onfocus="this.style.top='6px'" onblur="this.style.top='-40px'">Salta al contenuto principale</a>
+    
+    <main id="main-content" role="main">
+        <div class="offline-container" role="status" aria-live="polite">
+            <span class="emoji" aria-hidden="true">🎧</span>
+            <h1>Sei offline</h1>
+            <p>Sembra che tu sia disconnesso da Internet. Verifica la tua connessione e ricarica la pagina per accedere ad Audiolibri.org.</p>
+            <p>Nel frattempo, puoi ascoltare eventuali audiolibri che hai già caricato in precedenza.</p>
+            <button class="button" 
+                    onclick="reloadPage()" 
+                    type="button"
+                    aria-describedby="reload-description">
+                Riprova
+            </button>
+            <div id="reload-description" class="sr-only">
+                Ricarica la pagina per tentare di riconnettersi a Internet
+            </div>
+        </div>
+    </main>
+    
+    <!-- EN 301 549: Live region for status announcements -->
+    <div id="status-announcements" aria-live="polite" aria-atomic="true" class="sr-only"></div>
     <script>
+        // EN 301 549: Enhanced accessibility features
+        
+        // Function to announce status to screen readers
+        function announceStatus(message) {
+            const statusRegion = document.getElementById('status-announcements');
+            statusRegion.textContent = message;
+            // Clear after announcement
+            setTimeout(() => {
+                statusRegion.textContent = '';
+            }, 1000);
+        }
+        
         // Check for network status changes
         window.addEventListener('online', () => {
-            window.location.reload();
+            announceStatus('Connessione Internet ripristinata. Ricaricamento della pagina...');
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
         });
         
+        window.addEventListener('offline', () => {
+            announceStatus('Connessione Internet persa.');
+        });
+        
+        // EN 301 549: Enhanced reload function with accessibility
         function reloadPage() {
             const button = document.querySelector('.button');
+            const originalText = button.textContent;
+            
             button.textContent = 'Ricaricamento...';
             button.style.opacity = '0.7';
             button.disabled = true;
+            button.setAttribute('aria-busy', 'true');
+            
+            announceStatus('Tentativo di ricaricamento in corso...');
+            
+            // EN 301 549: Add keyboard event listeners
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    button.textContent = originalText;
+                    button.style.opacity = '1';
+                    button.disabled = false;
+                    button.setAttribute('aria-busy', 'false');
+                    announceStatus('Ricaricamento annullato.');
+                }
+            });
             
             setTimeout(() => {
-                window.location.reload();
+                if (navigator.onLine) {
+                    window.location.reload();
+                } else {
+                    button.textContent = originalText;
+                    button.style.opacity = '1';
+                    button.disabled = false;
+                    button.setAttribute('aria-busy', 'false');
+                    announceStatus('Impossibile ricaricare: ancora offline.');
+                }
             }, 300);
         }
+        
+        // EN 301 549: Initialize accessibility features on load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Announce initial offline state
+            announceStatus('Pagina offline caricata. Verifica la connessione Internet.');
+            
+            // Add keyboard support for main actions
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'r' && (e.ctrlKey || e.metaKey)) {
+                    e.preventDefault();
+                    reloadPage();
+                }
+            });
+        });
     </script>
 </body>
 </html>
