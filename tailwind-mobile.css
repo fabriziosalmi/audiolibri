@@ -1,98 +1,253 @@
-/* Tailwind mobile optimizations */
-/* To be included after compilation in the main CSS bundle */
+/* EN 301 549 Compliant Mobile CSS */
+/* European Accessibility Act (EAA) Standards Implementation */
 
 /* Mobile-first utilities */
 .tw-mobile-container {
-    @apply w-full max-w-screen-sm mx-auto px-2 sm:px-4;
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 8px;
+}
+
+@media (min-width: 640px) {
+    .tw-mobile-container {
+        padding: 0 16px;
+    }
 }
 
 .tw-mobile-card {
-    @apply rounded-lg shadow-sm bg-card dark:bg-dark-card p-3 
-           transition-all duration-200 hover:shadow-md
-           border border-border dark:border-dark-border;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    background-color: var(--card-background, #ffffff);
+    padding: 12px;
+    transition: all 0.2s ease;
+    border: 1px solid var(--border-color, #e5e7eb);
+}
+
+.tw-mobile-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+@media (prefers-color-scheme: dark) {
+    .tw-mobile-card {
+        background-color: var(--dark-card-background, #1f2937);
+        border-color: var(--dark-border-color, #374151);
+    }
 }
 
 .tw-mobile-text {
-    @apply text-sm leading-tight;
+    font-size: 14px;
+    line-height: 1.4;
 }
 
 /* Full-width mobile elements */
 .tw-mobile-full {
-    @apply w-full max-w-full overflow-hidden;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 /* Touch-optimized buttons */
 .tw-touch-button {
-    @apply py-2 px-3 rounded-md active:scale-95 transition-transform
-           text-sm font-medium touch-manipulation
-           bg-primary text-white dark:bg-primary
-           shadow-sm active:shadow-none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    touch-action: manipulation;
+    background-color: var(--primary-color, #3b82f6);
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.1s ease;
+}
+
+.tw-touch-button:active {
+    transform: scale(0.95);
+    box-shadow: none;
 }
 
 /* Bottom navigation */
 .tw-mobile-nav {
-    @apply fixed bottom-0 left-0 right-0 bg-card dark:bg-dark-card
-           shadow-lg border-t border-border dark:border-dark-border
-           flex items-center justify-around py-2 px-1 z-50;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--card-background, #ffffff);
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+    border-top: 1px solid var(--border-color, #e5e7eb);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 8px 4px;
+    z-index: 50;
+}
+
+@media (prefers-color-scheme: dark) {
+    .tw-mobile-nav {
+        background-color: var(--dark-card-background, #1f2937);
+        border-top-color: var(--dark-border-color, #374151);
+    }
 }
 
 .tw-nav-item {
-    @apply flex flex-col items-center justify-center
-           py-1 px-2 rounded-md active:bg-gray-100 dark:active:bg-gray-800
-           text-xs text-secondary-text dark:text-dark-secondary-text
-           transition-colors;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--secondary-text, #6b7280);
+    text-decoration: none;
+    transition: colors 0.2s ease;
+    cursor: pointer;
+}
+
+.tw-nav-item:active {
+    background-color: var(--gray-100, #f3f4f6);
+}
+
+@media (prefers-color-scheme: dark) {
+    .tw-nav-item {
+        color: var(--dark-secondary-text, #9ca3af);
+    }
+    
+    .tw-nav-item:active {
+        background-color: var(--gray-800, #1f2937);
+    }
 }
 
 .tw-nav-item.active {
-    @apply text-primary dark:text-primary;
+    color: var(--primary-color, #3b82f6);
 }
 
 /* Optimized grid layouts */
 .tw-mobile-grid {
-    @apply grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5
-           gap-2 sm:gap-3 md:gap-4;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+@media (min-width: 640px) {
+    .tw-mobile-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+    }
+}
+
+@media (min-width: 768px) {
+    .tw-mobile-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .tw-mobile-grid {
+        grid-template-columns: repeat(5, 1fr);
+    }
 }
 
 /* Responsive typography */
 .tw-mobile-title {
-    @apply text-lg font-semibold;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.3;
 }
 
 .tw-mobile-subtitle {
-    @apply text-sm text-secondary-text dark:text-dark-secondary-text;
+    font-size: 14px;
+    color: var(--secondary-text, #6b7280);
+}
+
+@media (prefers-color-scheme: dark) {
+    .tw-mobile-subtitle {
+        color: var(--dark-secondary-text, #9ca3af);
+    }
 }
 
 /* Fluid spacing */
 .tw-mobile-section {
-    @apply py-3 sm:py-4 md:py-6;
+    padding: 12px 0;
+}
+
+@media (min-width: 640px) {
+    .tw-mobile-section {
+        padding: 16px 0;
+    }
+}
+
+@media (min-width: 768px) {
+    .tw-mobile-section {
+        padding: 24px 0;
+    }
 }
 
 /* Improved scroll containers */
 .tw-mobile-scroll {
-    @apply flex overflow-x-auto pb-3 -mx-2 px-2
-           snap-x snap-mandatory scroll-smooth
-           scrollbar-hide;
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    margin: 0 -8px;
+    padding-left: 8px;
+    padding-right: 8px;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.tw-mobile-scroll::-webkit-scrollbar {
+    display: none;
 }
 
 .tw-mobile-scroll-item {
-    @apply snap-start shrink-0 w-40 sm:w-48 mr-3;
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    width: 160px;
+    margin-right: 12px;
+}
+
+@media (min-width: 640px) {
+    .tw-mobile-scroll-item {
+        width: 192px;
+    }
 }
 
 /* Image optimizations */
 .tw-mobile-img {
-    @apply w-full h-auto object-cover rounded-md;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 6px;
 }
 
 /* Touch-friendly form elements */
 .tw-mobile-input {
-    @apply h-12 w-full px-3 rounded-lg border border-border
-           dark:border-dark-border dark:bg-dark-card
-           text-base;
+    height: 48px;
+    width: 100%;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color, #e5e7eb);
+    font-size: 16px;
+    background-color: var(--card-background, #ffffff);
 }
 
-/* EN 301 549 Compliance Enhancements for Mobile */
+@media (prefers-color-scheme: dark) {
+    .tw-mobile-input {
+        border-color: var(--dark-border-color, #374151);
+        background-color: var(--dark-card-background, #1f2937);
+        color: #ffffff;
+    }
+}
 
-/* Reduced Motion Support */
+/* ==============================================
+   EN 301 549 COMPLIANCE ENHANCEMENTS FOR MOBILE
+   ============================================== */
+
+/* Reduced Motion Support (EN 301 549 - 2.3.3) */
 @media (prefers-reduced-motion: reduce) {
     .tw-mobile-card,
     .tw-touch-button,
@@ -103,31 +258,63 @@
         animation-iteration-count: 1 !important;
         scroll-behavior: auto !important;
     }
-}
-
-/* Enhanced Focus Indicators for Mobile */
-.tw-mobile-input:focus,
-.tw-touch-button:focus,
-.tw-nav-item:focus {
-    outline: 3px solid var(--primary-color);
-    outline-offset: 2px;
-    border-radius: 4px;
-}
-
-@media (prefers-color-scheme: dark) {
-    .tw-mobile-input:focus,
-    .tw-touch-button:focus,
-    .tw-nav-item:focus {
-        outline-color: var(--accent-color);
+    
+    /* Disable all animations and smooth scrolling */
+    .tw-mobile-nav {
+        transform: none !important;
+    }
+    
+    .tw-nav-item {
+        transform: none !important;
     }
 }
 
-/* High Contrast Mode Support */
+/* Enhanced Focus Indicators (EN 301 549 - 2.4.7) */
+.tw-mobile-input:focus,
+.tw-touch-button:focus,
+.tw-nav-item:focus,
+.tw-mobile-scroll:focus,
+.tw-mobile-card:focus {
+    outline: 3px solid var(--primary-color, #3b82f6);
+    outline-offset: 2px;
+    border-radius: 4px;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+/* Focus for dark mode */
+@media (prefers-color-scheme: dark) {
+    .tw-mobile-input:focus,
+    .tw-touch-button:focus,
+    .tw-nav-item:focus,
+    .tw-mobile-scroll:focus,
+    .tw-mobile-card:focus {
+        outline-color: var(--accent-color, #10b981);
+        box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+    }
+}
+
+/* High Contrast Mode Support (EN 301 549 - 1.4.3) */
 @media (prefers-contrast: high) {
     .tw-mobile-card,
     .tw-mobile-input,
     .tw-touch-button {
         border: 2px solid #000000 !important;
+        background-color: #ffffff !important;
+        color: #000000 !important;
+    }
+    
+    .tw-mobile-nav {
+        border-top: 3px solid #000000 !important;
+        background-color: #ffffff !important;
+    }
+    
+    .tw-nav-item {
+        color: #000000 !important;
+    }
+    
+    .tw-nav-item.active {
+        background-color: #000000 !important;
+        color: #ffffff !important;
     }
     
     @media (prefers-color-scheme: dark) {
@@ -135,20 +322,46 @@
         .tw-mobile-input,
         .tw-touch-button {
             border: 2px solid #ffffff !important;
+            background-color: #000000 !important;
+            color: #ffffff !important;
+        }
+        
+        .tw-mobile-nav {
+            border-top: 3px solid #ffffff !important;
+            background-color: #000000 !important;
+        }
+        
+        .tw-nav-item {
+            color: #ffffff !important;
+        }
+        
+        .tw-nav-item.active {
+            background-color: #ffffff !important;
+            color: #000000 !important;
         }
     }
 }
 
-/* Enhanced Touch Targets for EN 301 549 */
+/* Enhanced Touch Targets (EN 301 549 - 2.5.5, 2.5.8) */
 .tw-touch-button,
 .tw-nav-item,
-.tw-mobile-input {
+.tw-mobile-input,
+.tw-mobile-scroll-item {
     min-height: 44px;
     min-width: 44px;
     touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
 }
 
-/* Mobile Accessibility Improvements */
+/* Ensure sufficient spacing between touch targets */
+.tw-touch-button + .tw-touch-button,
+.tw-nav-item + .tw-nav-item {
+    margin-left: 8px;
+}
+
+/* Mobile Accessibility Improvements (EN 301 549 - 1.4.4, 1.4.10) */
 @media (max-width: 768px) {
     /* Larger text for better readability */
     .tw-mobile-text {
@@ -160,12 +373,262 @@
     .tw-touch-button {
         margin: 4px;
         padding: 12px 16px;
+        font-size: 16px;
     }
     
     /* Better contrast for interactive elements */
     .tw-nav-item.active {
-        background-color: rgba(var(--primary-rgb), 0.1);
+        background-color: rgba(59, 130, 246, 0.15);
         border-radius: 6px;
+    }
+    
+    /* Ensure text can be zoomed to 200% without loss of functionality */
+    .tw-mobile-container {
+        max-width: none;
+        overflow-x: auto;
+    }
+}
+
+/* Keyboard Navigation Support (EN 301 549 - 2.1.1, 2.1.2) */
+.tw-mobile-nav {
+    position: relative;
+}
+
+.tw-nav-item:focus-within {
+    z-index: 51;
+}
+
+/* Skip links for mobile navigation */
+.tw-mobile-skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: var(--primary-color, #3b82f6);
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 4px;
+    z-index: 100;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateY(-100%);
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.tw-mobile-skip-link:focus {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Error State Indicators (EN 301 549 - 3.3.1, 3.3.3) */
+.tw-mobile-input.error {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 1px #dc2626;
+}
+
+.tw-mobile-input.error:focus {
+    outline-color: #dc2626;
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.3);
+}
+
+.tw-mobile-error-message {
+    color: #dc2626;
+    font-size: 14px;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.tw-mobile-error-message::before {
+    content: "⚠️";
+    margin-right: 4px;
+}
+
+/* Loading States (EN 301 549 - 4.1.3) */
+.tw-mobile-loading {
+    position: relative;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.tw-mobile-loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid transparent;
+    border-top: 2px solid var(--primary-color, #3b82f6);
+    border-radius: 50%;
+    animation: tw-mobile-spin 1s linear infinite;
+}
+
+@keyframes tw-mobile-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Respect reduced motion for loading animations */
+@media (prefers-reduced-motion: reduce) {
+    .tw-mobile-loading::after {
+        animation: none;
+        border: 2px solid var(--primary-color, #3b82f6);
+        border-radius: 0;
+    }
+}
+
+/* Session Timeout Warning (EN 301 549 - 2.2.1) */
+.tw-mobile-timeout-warning {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fbbf24;
+    color: #92400e;
+    padding: 12px 16px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    max-width: calc(100vw - 40px);
+    text-align: center;
+    font-size: 14px;
+    border: 2px solid #f59e0b;
+}
+
+.tw-mobile-timeout-actions {
+    margin-top: 8px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.tw-mobile-timeout-button {
+    background: #92400e;
+    color: #fbbf24;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    touch-action: manipulation;
+    min-height: 44px;
+    min-width: 44px;
+}
+
+.tw-mobile-timeout-button:focus {
+    outline: 2px solid #92400e;
+    outline-offset: 2px;
+}
+
+/* Color Blindness Support (EN 301 549 - 1.4.1) */
+.tw-mobile-status-success {
+    background-color: #065f46;
+    color: #d1fae5;
+    border-left: 4px solid #10b981;
+}
+
+.tw-mobile-status-warning {
+    background-color: #92400e;
+    color: #fef3c7;
+    border-left: 4px solid #f59e0b;
+}
+
+.tw-mobile-status-error {
+    background-color: #991b1b;
+    color: #fee2e2;
+    border-left: 4px solid #ef4444;
+}
+
+.tw-mobile-status-info {
+    background-color: #1e40af;
+    color: #dbeafe;
+    border-left: 4px solid #3b82f6;
+}
+
+/* Add patterns for color blind users */
+.tw-mobile-status-success::before {
+    content: "✓ ";
+}
+
+.tw-mobile-status-warning::before {
+    content: "⚠ ";
+}
+
+.tw-mobile-status-error::before {
+    content: "✗ ";
+}
+
+.tw-mobile-status-info::before {
+    content: "ℹ ";
+}
+
+/* Language and Text Direction Support (EN 301 549 - 3.1.1, 3.1.2) */
+[dir="rtl"] .tw-mobile-nav {
+    direction: rtl;
+}
+
+[dir="rtl"] .tw-nav-item {
+    text-align: right;
+}
+
+[dir="rtl"] .tw-mobile-scroll {
+    direction: rtl;
+}
+
+[dir="rtl"] .tw-mobile-error-message::before {
+    margin-right: 0;
+    margin-left: 4px;
+}
+
+/* Cognitive Accessibility Enhancements (EN 301 549 - 3.2.1, 3.2.2) */
+.tw-mobile-breadcrumb {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    background: rgba(107, 114, 128, 0.1);
+    border-radius: 6px;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.tw-mobile-breadcrumb-separator {
+    margin: 0 8px;
+    color: var(--secondary-text, #6b7280);
+}
+
+.tw-mobile-breadcrumb a {
+    color: var(--primary-color, #3b82f6);
+    text-decoration: none;
+}
+
+.tw-mobile-breadcrumb a:hover,
+.tw-mobile-breadcrumb a:focus {
+    text-decoration: underline;
+}
+
+/* Progress Indicators */
+.tw-mobile-progress {
+    width: 100%;
+    height: 8px;
+    background: rgba(107, 114, 128, 0.2);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 12px 0;
+}
+
+.tw-mobile-progress-bar {
+    height: 100%;
+    background: var(--primary-color, #3b82f6);
+    transition: width 0.3s ease;
+    border-radius: 4px;
+}
+
+/* Respect reduced motion for progress animations */
+@media (prefers-reduced-motion: reduce) {
+    .tw-mobile-progress-bar {
+        transition: none;
     }
 }
 
@@ -192,16 +655,508 @@
     overflow: hidden;
 }
 
-/* Print Styles for Mobile */
+/* Mobile Modal Dialogs (EN 301 549 - 2.4.3) */
+.tw-mobile-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+}
+
+.tw-mobile-modal-content {
+    background: var(--card-background, #ffffff);
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 90vw;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 2px solid var(--border-color, #e5e7eb);
+}
+
+@media (prefers-color-scheme: dark) {
+    .tw-mobile-modal-content {
+        background: var(--dark-card-background, #1f2937);
+        border-color: var(--dark-border-color, #374151);
+    }
+}
+
+.tw-mobile-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color, #e5e7eb);
+}
+
+@media (prefers-color-scheme: dark) {
+    .tw-mobile-modal-header {
+        border-bottom-color: var(--dark-border-color, #374151);
+    }
+}
+
+.tw-mobile-modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tw-mobile-modal-close:focus {
+    outline: 2px solid var(--primary-color, #3b82f6);
+    outline-offset: 2px;
+}
+
+/* Orientation Support (EN 301 549 - 1.3.4) */
+@media (orientation: landscape) and (max-height: 500px) {
+    .tw-mobile-modal-content {
+        max-height: 90vh;
+        padding: 16px;
+    }
+    
+    .tw-mobile-nav {
+        padding: 8px 0;
+    }
+    
+    .tw-nav-item {
+        padding: 6px 8px;
+    }
+}
+
+/* Print Styles for Mobile (EN 301 549 - 1.4.13) */
 @media print {
     .tw-mobile-nav,
     .tw-touch-button,
-    .tw-mobile-scroll {
+    .tw-mobile-scroll,
+    .tw-mobile-modal,
+    .tw-mobile-timeout-warning {
         display: none !important;
     }
     
     .tw-mobile-card {
         break-inside: avoid;
         margin-bottom: 1rem;
+        border: 1px solid #000;
     }
+    
+    .tw-mobile-text {
+        color: #000 !important;
+        font-size: 12pt !important;
+    }
+    
+    .tw-mobile-title {
+        color: #000 !important;
+        font-size: 14pt !important;
+        font-weight: bold !important;
+    }
+}
+
+/* Support for Voice Control (EN 301 549 - 2.5.3) */
+.tw-mobile-voice-target {
+    position: relative;
+}
+
+.tw-mobile-voice-target[data-voice-label]::after {
+    content: attr(data-voice-label);
+    position: absolute;
+    top: -20px;
+    left: 0;
+    font-size: 10px;
+    color: transparent;
+    pointer-events: none;
+}
+
+/* Force Colors Mode Support (Windows High Contrast) */
+@media (prefers-contrast: more) {
+    .tw-mobile-card,
+    .tw-mobile-input,
+    .tw-touch-button,
+    .tw-mobile-nav {
+        forced-color-adjust: none;
+        border: 2px solid ButtonText;
+    }
+    
+    .tw-touch-button {
+        background: ButtonFace;
+        color: ButtonText;
+    }
+    
+    .tw-touch-button:focus,
+    .tw-touch-button:hover {
+        background: Highlight;
+        color: HighlightText;
+    }
+}
+
+/* Zoom and Reflow Support (EN 301 549 - 1.4.4, 1.4.10) */
+@media (max-width: 320px) {
+    .tw-mobile-container {
+        padding: 8px 4px;
+    }
+    
+    .tw-mobile-card {
+        padding: 12px 8px;
+    }
+    
+    .tw-mobile-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    
+    .tw-touch-button {
+        width: 100%;
+        margin: 2px 0;
+    }
+    
+    .tw-mobile-nav {
+        flex-wrap: wrap;
+        padding: 4px;
+    }
+    
+    .tw-nav-item {
+        min-width: 60px;
+        margin: 2px;
+    }
+}
+
+/* Dynamic Type Support (iOS) */
+@supports (font: -apple-system-body) {
+    .tw-mobile-text {
+        font: -apple-system-body;
+    }
+    
+    .tw-mobile-title {
+        font: -apple-system-headline;
+    }
+    
+    .tw-mobile-subtitle {
+        font: -apple-system-subheadline;
+    }
+}
+
+/* Font Size Scaling for Accessibility */
+@media (min-resolution: 2dppx) {
+    .tw-mobile-text {
+        font-size: calc(16px + 0.5vw);
+    }
+    
+    .tw-mobile-title {
+        font-size: calc(18px + 0.5vw);
+    }
+}
+
+/* Gesture Support Indicators */
+.tw-mobile-swipeable {
+    position: relative;
+    touch-action: pan-x;
+}
+
+.tw-mobile-swipeable::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid var(--secondary-text);
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    opacity: 0.6;
+}
+
+[dir="rtl"] .tw-mobile-swipeable::before {
+    right: auto;
+    left: 8px;
+    border-left: none;
+    border-right: 6px solid var(--secondary-text);
+}
+
+/* Focus Management for Screen Readers */
+.tw-mobile-focus-trap {
+    outline: none;
+}
+
+.tw-mobile-focus-trap:focus {
+    outline: 2px solid transparent;
+}
+
+/* Assistive Technology Announcements */
+.tw-mobile-announcement {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* Mobile Specific ARIA Labels */
+[role="button"][aria-label],
+[role="tab"][aria-label],
+[role="menuitem"][aria-label] {
+    cursor: pointer;
+}
+
+/* Enhanced Mobile Navigation for Screen Readers */
+.tw-mobile-nav[role="navigation"] {
+    border-top: 2px solid var(--border-color);
+}
+
+.tw-mobile-nav[role="navigation"]::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--primary-color);
+}
+
+/* Mobile Device Orientation Lock Warning */
+.tw-orientation-warning {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--card-background);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+}
+
+@media (orientation: landscape) and (max-height: 500px) and (max-width: 900px) {
+    .tw-orientation-warning.show {
+        display: flex;
+    }
+}
+
+/* Additional EN 301 549 Mobile Enhancements */
+
+/* Alternative Input Methods Support */
+.tw-mobile-voice-input {
+    position: relative;
+}
+
+.tw-mobile-voice-input::after {
+    content: "🎤";
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    opacity: 0.6;
+}
+
+/* Switch Control Support */
+.tw-switch-group {
+    border: 2px solid transparent;
+    border-radius: 4px;
+    padding: 2px;
+}
+
+.tw-switch-group.focus {
+    border-color: var(--primary-color, #3b82f6);
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+/* Head Tracking Support */
+.tw-mobile-large-target {
+    min-height: 60px;
+    min-width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Dwell Click Support */
+.tw-dwell-target {
+    position: relative;
+    cursor: crosshair;
+}
+
+.tw-dwell-target::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border: 2px dashed var(--primary-color, #3b82f6);
+    border-radius: 6px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.tw-dwell-target:hover::before {
+    opacity: 1;
+}
+
+/* Eye Tracking Support */
+.tw-eye-tracking-zone {
+    padding: 8px;
+    margin: 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.tw-eye-tracking-zone:hover {
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+/* Motion-based Input Support */
+.tw-tilt-control {
+    transform-origin: center;
+    transition: transform 0.1s ease-out;
+}
+
+.tw-tilt-control.tilted {
+    transform: scale(1.05);
+}
+
+/* Simplified UI Mode */
+.tw-simple-mode .tw-mobile-card {
+    border: 3px solid var(--border-color, #e5e7eb);
+    padding: 20px;
+    margin: 8px 0;
+}
+
+.tw-simple-mode .tw-touch-button {
+    font-size: 18px;
+    padding: 16px 24px;
+    margin: 8px 0;
+}
+
+.tw-simple-mode .tw-mobile-text {
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+/* Cognitive Load Reduction */
+.tw-focus-mode .tw-mobile-nav {
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+}
+
+.tw-focus-mode .tw-mobile-nav:hover,
+.tw-focus-mode .tw-mobile-nav:focus-within {
+    opacity: 1;
+}
+
+/* Memory Aid Features */
+.tw-breadcrumb-trail {
+    position: sticky;
+    top: 0;
+    background: var(--card-background, #ffffff);
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--border-color, #e5e7eb);
+    z-index: 40;
+}
+
+@media (prefers-color-scheme: dark) {
+    .tw-breadcrumb-trail {
+        background: var(--dark-card-background, #1f2937);
+        border-bottom-color: var(--dark-border-color, #374151);
+    }
+}
+
+/* Error Prevention */
+.tw-confirm-action {
+    position: relative;
+}
+
+.tw-confirm-action::after {
+    content: "Tap twice to confirm";
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: var(--secondary-text, #6b7280);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+}
+
+.tw-confirm-action:hover::after {
+    opacity: 1;
+}
+
+/* Distraction Reduction */
+.tw-minimal-ui .tw-mobile-card {
+    box-shadow: none;
+    border: 1px solid var(--border-color, #e5e7eb);
+}
+
+.tw-minimal-ui .tw-touch-button {
+    box-shadow: none;
+    border: 1px solid var(--primary-color, #3b82f6);
+    background-color: transparent;
+    color: var(--primary-color, #3b82f6);
+}
+
+.tw-minimal-ui .tw-touch-button:active {
+    background-color: var(--primary-color, #3b82f6);
+    color: #ffffff;
+}
+
+/* Time-based Content Controls */
+.tw-auto-content {
+    position: relative;
+}
+
+.tw-auto-content-controls {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.tw-auto-content:hover .tw-auto-content-controls,
+.tw-auto-content:focus-within .tw-auto-content-controls {
+    opacity: 1;
+}
+
+.tw-pause-button,
+.tw-play-button {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.tw-pause-button:focus,
+.tw-play-button:focus {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
 }
