@@ -22,19 +22,45 @@ document.addEventListener('DOMContentLoaded', () => {
     let updateInterval;
     let prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
+    // WCAG: Create aria-live region for announcements
+    const announceRegion = document.createElement('div');
+    announceRegion.setAttribute('aria-live', 'polite');
+    announceRegion.setAttribute('aria-atomic', 'true');
+    announceRegion.className = 'sr-only';
+    announceRegion.id = 'announce-region';
+    document.body.appendChild(announceRegion);
+    
+    // Function to announce messages to screen readers
+    function announceToScreenReader(message) {
+        announceRegion.textContent = message;
+        // Clear after announcement to avoid repetition
+        setTimeout(() => {
+            announceRegion.textContent = '';
+        }, 1000);
+    }
+    
     // Show loading state immediately
-    document.getElementById('current-audiobook').innerHTML = `
-        <div class="loading-container slide-up">
-            <div class="loading-spinner"></div>
+    const loadingContent = `
+        <div class="loading-container slide-up" role="status" aria-live="polite">
+            <div class="loading-spinner" aria-hidden="true"></div>
             <p>Caricamento della tua libreria di audiolibri...</p>
             <small>Attendi mentre prepariamo la tua collezione</small>
         </div>
     `;
+    document.getElementById('current-audiobook').innerHTML = loadingContent;
     
     // Theme toggle functionality
     const themeToggle = document.getElementById('theme-toggle');
     const themeLabel = document.getElementById('theme-label');
     themeToggle.addEventListener('click', toggleTheme);
+    
+    // WCAG: Add keyboard support for theme toggle
+    themeToggle.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleTheme();
+        }
+    });
     
     // Set up search functionality
     const searchInput = document.getElementById('search');
@@ -48,41 +74,64 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
+    // WCAG: Add keyboard support for search button
+    searchButton.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            performSearch();
+        }
+    });
+    
     function toggleTheme() {
-        if (prefersDarkMode) {
+        const newTheme = !prefersDarkMode;
+        
+        if (newTheme) {
+            // Switching to dark mode
+            document.documentElement.style.setProperty('--background-color', '#000000');
+            document.documentElement.style.setProperty('--text-color', '#f1f5f9');
+            document.documentElement.style.setProperty('--card-background', '#121212');
+            document.documentElement.style.setProperty('--card-shadow', '0 10px 25px rgba(0,0,0,0.4)');
+            document.documentElement.style.setProperty('--border-color', '#404040');
+            document.documentElement.style.setProperty('--header-color', '#ffffff');
+            document.documentElement.style.setProperty('--secondary-text', '#b3b3b3');
+            document.documentElement.style.setProperty('--placeholder-bg', '#1e1e1e');
+            document.documentElement.style.setProperty('--search-border', '#525252');
+            document.documentElement.style.setProperty('--primary-rgb', '255, 107, 107');
+            document.documentElement.style.setProperty('--accent-rgb', '78, 205, 196');
+            document.documentElement.style.setProperty('--card-background-rgb', '18, 18, 18');
+            themeLabel.textContent = 'Tema chiaro';
+            announceToScreenReader('Tema scuro attivato');
+        } else {
+            // Switching to light mode
             document.documentElement.style.setProperty('--background-color', '#f5f7fa');
-            document.documentElement.style.setProperty('--text-color', '#2d3748');
+            document.documentElement.style.setProperty('--text-color', '#1a202c');
             document.documentElement.style.setProperty('--card-background', '#ffffff');
             document.documentElement.style.setProperty('--card-shadow', '0 10px 25px rgba(0,0,0,0.05)');
             document.documentElement.style.setProperty('--border-color', '#e2e8f0');
-            document.documentElement.style.setProperty('--header-color', '#1e293b');
-            document.documentElement.style.setProperty('--secondary-text', '#64748b');
+            document.documentElement.style.setProperty('--header-color', '#111827');
+            document.documentElement.style.setProperty('--secondary-text', '#4b5563');
             document.documentElement.style.setProperty('--placeholder-bg', '#f8fafc');
-            document.documentElement.style.setProperty('--search-border', '#cbd5e1');
-            document.documentElement.style.setProperty('--primary-rgb', '74, 108, 247');
-            document.documentElement.style.setProperty('--accent-rgb', '16, 185, 129');
+            document.documentElement.style.setProperty('--search-border', '#9ca3af');
+            document.documentElement.style.setProperty('--primary-rgb', '59, 81, 212');
+            document.documentElement.style.setProperty('--accent-rgb', '4, 120, 87');
             document.documentElement.style.setProperty('--card-background-rgb', '255, 255, 255');
-            prefersDarkMode = false;
-        } else {
-            document.documentElement.style.setProperty('--background-color', '#000000');
-            document.documentElement.style.setProperty('--text-color', '#e2e8f0');
-            document.documentElement.style.setProperty('--card-background', '#121212');
-            document.documentElement.style.setProperty('--card-shadow', '0 10px 25px rgba(0,0,0,0.4)');
-            document.documentElement.style.setProperty('--border-color', '#2a2a2a');
-            document.documentElement.style.setProperty('--header-color', '#ffffff');
-            document.documentElement.style.setProperty('--secondary-text', '#a0a0a0');
-            document.documentElement.style.setProperty('--placeholder-bg', '#1e1e1e');
-            document.documentElement.style.setProperty('--search-border', '#333333');
-            document.documentElement.style.setProperty('--primary-rgb', '252, 134, 134');
-            document.documentElement.style.setProperty('--accent-rgb', '3, 218, 198');
-            document.documentElement.style.setProperty('--card-background-rgb', '18, 18, 18');
-            prefersDarkMode = true;
+            themeLabel.textContent = 'Tema scuro';
+            announceToScreenReader('Tema chiaro attivato');
         }
-        themeLabel.textContent = prefersDarkMode ? 'Tema chiaro' : 'Tema scuro';
+        
+        prefersDarkMode = newTheme;
+        
+        // Update aria-label for theme toggle
+        themeToggle.setAttribute('aria-label', 
+            prefersDarkMode ? 'Cambia al tema chiaro' : 'Cambia al tema scuro'
+        );
     }
     
-    // Initialize theme toggle text
+    // Initialize theme toggle text and aria-label
     themeLabel.textContent = prefersDarkMode ? 'Tema chiaro' : 'Tema scuro';
+    themeToggle.setAttribute('aria-label', 
+        prefersDarkMode ? 'Cambia al tema chiaro' : 'Cambia al tema scuro'
+    );
     
     // Load the audiobook data from augmented.json
     fetch('augmented.json')
@@ -1029,6 +1078,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function displayBook(book) {
+        // WCAG: Announce book change to screen readers
+        announceToScreenReader(`Ora in riproduzione: ${book.title} di ${book.author}`);
+        
         const bookCard = document.getElementById('current-audiobook');
         
         // Set background image with a gradient overlay
@@ -1037,7 +1089,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Check if audio file is available
         const audioAvailable = book.audioUrl ? true : false;
         const audioStatus = audioAvailable ? 
-            `<span class="audio-status available"><i class="audio-icon"></i>Audio available</span>` : 
+            `<span class="audio-status available" role="status" aria-label="Audio disponibile">
+                <i class="audio-icon" aria-hidden="true"></i>Audio disponibile
+            </span>` : 
             ``;
         
         // Create trimmed description (max 300 characters)
@@ -1047,9 +1101,16 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Create channel link with icon
         const channelHtml = book.channelUrl 
-            ? `<a href="${book.channelUrl}" target="_blank" rel="noopener" class="channel-link">
-                <img src="https://www.youtube.com/s/desktop/7c155e84/img/favicon_144x144.png" alt="YouTube" class="channel-icon">
-                ${book.channel || 'YouTube Channel'}
+            ? `<a href="${book.channelUrl}" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  class="channel-link"
+                  aria-label="Apri canale YouTube di ${book.channel || 'questo creatore'} in una nuova finestra">
+                <img src="https://www.youtube.com/s/desktop/7c155e84/img/favicon_144x144.png" 
+                     alt="" 
+                     class="channel-icon" 
+                     aria-hidden="true">
+                ${book.channel || 'Canale YouTube'}
               </a>` 
             : `${book.channel || ''}`;
             
@@ -1061,59 +1122,106 @@ document.addEventListener('DOMContentLoaded', () => {
         let categoriesHtml = '';
         if (book.categories && book.categories.length > 0) {
             categoriesHtml = `
-            <div class="book-categories">
+            <div class="book-categories" role="list" aria-label="Categorie del libro">
                 ${book.categories.map(category => 
-                    `<span class="category-tag">${capitalizeCategory(category)}</span>`
+                    `<span class="category-tag" role="listitem">${capitalizeCategory(category)}</span>`
                 ).join('')}
             </div>`;
         }
         
         // Format duration as a styled element
-        const durationHtml = `<span class="duration-badge"><i class="time-icon"></i>${book.formattedDuration}</span>`;
+        const durationHtml = `<span class="duration-badge">
+            <i class="time-icon" aria-hidden="true"></i>${book.formattedDuration}
+        </span>`;
         
-        // Improved layout with better player interface
+        // Improved layout with better player interface and accessibility
         bookCard.innerHTML = `
             <div class="card-overlay">
                 <div class="media-container slide-up">
-                    <div id="youtube-player"></div>
-                    <audio id="audio-player" controls></audio>
-                    <div class="player-controls">
+                    <div id="youtube-player" role="region" aria-label="Lettore video YouTube"></div>
+                    <audio id="audio-player" 
+                           controls 
+                           preload="metadata"
+                           aria-describedby="audio-description">
+                        Il tuo browser non supporta l'elemento audio.
+                    </audio>
+                    <div id="audio-description" class="sr-only">
+                        Lettore audio per l'audiolibro ${book.title} di ${book.author}
+                    </div>
+                    <div class="player-controls" role="region" aria-label="Controlli di riproduzione">
                         <div class="controls-row">
-                            <button id="rewind-button" class="control-button" aria-label="Rewind 10 seconds">
-                                <i class="rewind-icon"></i>
+                            <button id="rewind-button" 
+                                    class="control-button" 
+                                    type="button"
+                                    aria-label="Riavvolgi di 10 secondi">
+                                <i class="rewind-icon" aria-hidden="true"></i>
+                                <span class="sr-only">Riavvolgi</span>
                             </button>
-                            <button id="play-pause" class="control-button large" aria-label="Play/Pause">
-                                <i class="play-icon"></i>
+                            <button id="play-pause" 
+                                    class="control-button large" 
+                                    type="button"
+                                    aria-label="Riproduci o metti in pausa">
+                                <i class="play-icon" aria-hidden="true"></i>
+                                <span class="sr-only">Riproduci</span>
                             </button>
-                            <button id="forward-button" class="control-button" aria-label="Forward 10 seconds">
-                                <i class="forward-icon"></i>
+                            <button id="forward-button" 
+                                    class="control-button" 
+                                    type="button"
+                                    aria-label="Avanza di 10 secondi">
+                                <i class="forward-icon" aria-hidden="true"></i>
+                                <span class="sr-only">Avanza</span>
                             </button>
                         </div>
-                        <div class="progress-container" id="progress-container">
+                        <div class="progress-container" 
+                             id="progress-container"
+                             role="slider"
+                             aria-label="Posizione di riproduzione"
+                             aria-valuemin="0"
+                             aria-valuemax="100"
+                             aria-valuenow="0"
+                             tabindex="0">
                             <div class="progress-bar" id="progress-bar"></div>
                             <div class="progress-handle" id="progress-handle"></div>
                         </div>
-                        <div class="time-display">
-                            <span id="current-time">0:00</span>
-                            <span id="total-time">${formatTimeDisplay(book.duration)}</span>
+                        <div class="time-display" aria-live="polite" aria-atomic="false">
+                            <span id="current-time" aria-label="Tempo corrente">0:00</span>
+                            <span aria-hidden="true">/</span>
+                            <span id="total-time" aria-label="Durata totale">${formatTimeDisplay(book.duration)}</span>
                         </div>
                         <div class="volume-control">
-                            <i class="volume-icon"></i>
-                            <input type="range" id="volume-slider" min="0" max="100" value="100" aria-label="Volume control">
+                            <i class="volume-icon" aria-hidden="true"></i>
+                            <label for="volume-slider" class="sr-only">Controllo volume</label>
+                            <input type="range" 
+                                   id="volume-slider" 
+                                   min="0" 
+                                   max="100" 
+                                   value="100" 
+                                   aria-label="Volume: 100%"
+                                   aria-valuemin="0"
+                                   aria-valuemax="100"
+                                   aria-valuenow="100">
                         </div>
                     </div>
                 </div>
                 <div class="book-details fade-in">
                     <div class="book-text-content">
-                        <h2>${book.title}</h2>
-                        <h3>${book.author}</h3>
+                        <h2 id="book-title">${book.title}</h2>
+                        <h3 id="book-author">di ${book.author}</h3>
                         ${categoriesHtml}
-                        <p>${trimmedDescription}</p>
+                        <p id="book-description">${trimmedDescription}</p>
                         <div class="meta-inline">
                             ${audioStatus}
-                            <div class="meta-item"><i class="channel-icon-small"></i>Canale ${channelHtml}</div>
-                            <div class="meta-item"><i class="duration-icon"></i>Durata ${durationHtml}</div>
-                            ${uploadDate ? `<div class="meta-item">Pubblicato il ${uploadDate}</div>` : ''}
+                            <div class="meta-item">
+                                <i class="channel-icon-small" aria-hidden="true"></i>
+                                <span>Canale: ${channelHtml}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="duration-icon" aria-hidden="true"></i>
+                                <span>Durata: ${durationHtml}</span>
+                            </div>
+                            ${uploadDate ? `<div class="meta-item">
+                                <span>Pubblicato il ${uploadDate}</span>
+                            </div>` : ''}
                         </div>
                     </div>
                 </div>
@@ -1298,45 +1406,64 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function performSearch() {
-        const searchTerm = searchInput.value.trim().toLowerCase();
-        if (!searchTerm) return; // Don't search if the term is empty
+        const searchTerm = searchInput.value.trim();
+        
+        // WCAG: Announce search start to screen readers
+        if (!searchTerm) {
+            announceToScreenReader('Inserisci un termine di ricerca');
+            searchInput.focus();
+            return;
+        }
+        
+        const searchTermLower = searchTerm.toLowerCase();
+        announceToScreenReader(`Ricerca in corso per: ${searchTerm}`);
         
         // Filter audiobooks based on search term
         const results = audiobooks.filter(book =>
-            book.title.toLowerCase().includes(searchTerm) ||
-            book.author.toLowerCase().includes(searchTerm) ||
-            (book.description && book.description.toLowerCase().includes(searchTerm)) ||
-            (book.tags && book.tags.some(tag => tag.toLowerCase().includes(searchTerm))) ||
-            (book.genre && book.genre.toLowerCase().includes(searchTerm))
+            book.title.toLowerCase().includes(searchTermLower) ||
+            book.author.toLowerCase().includes(searchTermLower) ||
+            (book.description && book.description.toLowerCase().includes(searchTermLower)) ||
+            (book.tags && book.tags.some(tag => tag.toLowerCase().includes(searchTermLower))) ||
+            (book.genre && book.genre.toLowerCase().includes(searchTermLower))
         );
         
-        // Show loading state
-        document.getElementById('current-audiobook').innerHTML = `
-            <div class="loading-container slide-up">
-                <div class="loading-spinner"></div>
-                <p>Searching for "${searchTerm}"...</p>
-                <small>Finding matching audiobooks</small>
+        // Show loading state with proper accessibility
+        const loadingContent = `
+            <div class="loading-container slide-up" role="status" aria-live="polite">
+                <div class="loading-spinner" aria-hidden="true"></div>
+                <p>Ricerca in corso per "${searchTerm}"...</p>
+                <small>Ricerca audiolibri corrispondenti</small>
             </div>
         `;
+        document.getElementById('current-audiobook').innerHTML = loadingContent;
         
         // Clear previous player interval if exists
         if (updateInterval) clearInterval(updateInterval);
         
         setTimeout(() => {
             if (results.length > 0) {
-                // Create search results view
+                // Announce results count
+                announceToScreenReader(`Trovati ${results.length} audiolibri per la ricerca: ${searchTerm}`);
                 displaySearchResults(searchTerm, results);
             } else {
-                // Show no results message
-                document.getElementById('current-audiobook').innerHTML = `
-                    <div class="no-results fade-in">
-                        <i class="search-icon"></i>
-                        <h3>Nessun audiolibro trovato</h3>
-                        <p>We couldn't find any audiobooks matching "${searchTerm}"</p>
-                        <button class="back-button" id="empty-back-button">Torna alla ricerca</button>
-                    </div>`;
+                // Announce no results
+                announceToScreenReader(`Nessun risultato trovato per: ${searchTerm}`);
                 
-                document.getElementById('empty-back-button').addEventListener('click', () => {
+                // Show no results message with better accessibility
+                const noResultsContent = `
+                    <div class="no-results fade-in" role="status" aria-live="polite">
+                        <i class="search-icon" aria-hidden="true"></i>
+                        <h3>Nessun audiolibro trovato</h3>
+                        <p>Non sono stati trovati audiolibri per "${searchTerm}"</p>
+                        <button class="back-button" id="empty-back-button" type="button" aria-label="Torna alla ricerca principale">
+                            Torna alla ricerca
+                        </button>
+                    </div>`;
+                document.getElementById('current-audiobook').innerHTML = noResultsContent;
+                
+                const backButton = document.getElementById('empty-back-button');
+                backButton.addEventListener('click', () => {
+                    announceToScreenReader('Tornando alla ricerca principale');
                     if (currentBook) {
                         displayBook(currentBook);
                     } else if (audiobooks.length > 0) {
@@ -1346,6 +1473,17 @@ document.addEventListener('DOMContentLoaded', () => {
                         displayBook(currentBook);
                     }
                 });
+                
+                // WCAG: Add keyboard support for back button
+                backButton.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        backButton.click();
+                    }
+                });
+                
+                // Focus the back button for better UX
+                setTimeout(() => backButton.focus(), 100);
             }
         }, 500);
     }
@@ -1748,19 +1886,47 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isCollapsed) {
             changelogCard.classList.add('collapsed');
             changelogToggle.querySelector('.collapse-icon').textContent = '+';
+            changelogToggle.setAttribute('aria-expanded', 'false');
+        } else {
+            changelogToggle.setAttribute('aria-expanded', 'true');
         }
         
-        // Toggle changelog visibility
+        // Toggle changelog visibility with enhanced accessibility
         changelogToggle.addEventListener('click', () => {
-            changelogCard.classList.toggle('collapsed');
-            const isNowCollapsed = changelogCard.classList.contains('collapsed');
-            localStorage.setItem('changelogCollapsed', isNowCollapsed);
-            changelogToggle.querySelector('.collapse-icon').textContent = isNowCollapsed ? '+' : '−';
+            toggleChangelog();
         });
         
-        // Load changelog data
+        // WCAG: Add keyboard support for changelog toggle
+        changelogToggle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleChangelog();
+            }
+        });
+        
+        function toggleChangelog() {
+            const wasCollapsed = changelogCard.classList.contains('collapsed');
+            changelogCard.classList.toggle('collapsed');
+            const isNowCollapsed = changelogCard.classList.contains('collapsed');
+            
+            // Update localStorage
+            localStorage.setItem('changelogCollapsed', isNowCollapsed);
+            
+            // Update visual indicator
+            changelogToggle.querySelector('.collapse-icon').textContent = isNowCollapsed ? '+' : '−';
+            
+            // Update ARIA attributes
+            changelogToggle.setAttribute('aria-expanded', !isNowCollapsed);
+            
+            // Announce to screen readers
+            announceToScreenReader(
+                isNowCollapsed ? 'Aggiornamenti nascosti' : 'Aggiornamenti mostrati'
+            );
+        }
+        
+        // Load changelog data with accessibility
         document.getElementById('changelog-content').innerHTML = `
-            <div class="loading-spinner small"></div>
+            <div class="loading-spinner small" aria-hidden="true"></div>
             <p>Caricamento aggiornamenti...</p>
         `;
         
