@@ -2,64 +2,69 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Manteniamo le variabili CSS personalizzate esistenti */
+/* Manteniamo le variabili CSS personalizzate esistenti - EN 301 549 Enhanced */
 :root {
-    /* Light theme colors */
+    /* Light theme colors - Enhanced for EN 301 549 compliance */
     --background-color: #f5f7fa;
-    --text-color: #2d3748;
+    --text-color: #1a202c; /* Enhanced contrast ratio 4.5:1+ */
     --card-background: #ffffff;
     --card-shadow: 0 10px 25px rgba(0,0,0,0.05);
     --border-color: #e2e8f0;
-    --primary-color: #4a6cf7;
-    --primary-hover: #3a56d4;
-    --accent-color: #10b981;
-    --accent-hover: #059669;
-    --danger-color: #ef4444;
-    --danger-hover: #dc2626;
-    --header-color: #1e293b;
-    --secondary-text: #64748b;
+    --primary-color: #3b51d4; /* Enhanced contrast for better visibility */
+    --primary-hover: #2a3cb8;
+    --accent-color: #047857; /* Enhanced green contrast */
+    --accent-hover: #065f46;
+    --danger-color: #dc2626; /* Enhanced red contrast */
+    --danger-hover: #b91c1c;
+    --header-color: #111827; /* Enhanced contrast */
+    --secondary-text: #4b5563; /* Enhanced contrast */
     --placeholder-bg: #f8fafc;
-    --meta-background: rgba(0, 0, 0, 0.65);
-    --search-border: #cbd5e1;
-    --disabled-button: #cbd5e1;
-    --loading-color: #4a6cf7;
-    --tag-bg: #e2e8f0;
-    --tag-text: #4a5568;
-    --hover-overlay: rgba(0, 0, 0, 0.03);
-    --progress-bg: #e2e8f0;
-    --progress-fill: #4a6cf7;
-    --primary-rgb: 74, 108, 247;
-    --accent-rgb: 16, 185, 129;
+    --meta-background: rgba(0, 0, 0, 0.75); /* Enhanced opacity for readability */
+    --search-border: #9ca3af; /* Enhanced border visibility */
+    --disabled-button: #9ca3af;
+    --loading-color: #3b51d4;
+    --tag-bg: #d1d5db; /* Enhanced background */
+    --tag-text: #374151; /* Enhanced text contrast */
+    --hover-overlay: rgba(0, 0, 0, 0.05);
+    --progress-bg: #e5e7eb;
+    --progress-fill: #3b51d4;
+    --primary-rgb: 59, 81, 212;
+    --accent-rgb: 4, 120, 87;
     --card-background-rgb: 255, 255, 255;
+    
+    /* EN 301 549: Focus ring colors */
+    --focus-ring-light: #3b51d4;
+    --focus-ring-dark: #4ecdc4;
+}
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
-        /* Dark theme colors - pure black and dark gray tones */
+        /* Dark theme colors - EN 301 549 Enhanced contrast */
         --background-color: #000000;
-        --text-color: #e2e8f0;
+        --text-color: #f1f5f9; /* Enhanced contrast for dark mode */
         --card-background: #121212;
         --card-shadow: 0 10px 25px rgba(0,0,0,0.4);
-        --border-color: #2a2a2a;
-        --primary-color: #ff4343;
-        --primary-hover: #ff0000;
-        --accent-color: #03dac6;
-        --accent-hover: #00b3a6;
-        --danger-color: #cf6679;
-        --danger-hover: #b55464;
+        --border-color: #404040; /* Enhanced border visibility */
+        --primary-color: #ff6b6b; /* Enhanced contrast */
+        --primary-hover: #ff5252;
+        --accent-color: #4ecdc4; /* Enhanced contrast cyan */
+        --accent-hover: #26a69a;
+        --danger-color: #ff5252;
+        --danger-hover: #f44336;
         --header-color: #ffffff;
-        --secondary-text: #a0a0a0;
+        --secondary-text: #b3b3b3; /* Enhanced contrast */
         --placeholder-bg: #1e1e1e;
-        --meta-background: rgba(0, 0, 0, 0.75);
-        --search-border: #333333;
-        --disabled-button: #444444;
-        --hover-overlay: rgba(255, 255, 255, 0.05);
-        --tag-bg: #333333;
-        --tag-text: #e0e0e0;
-        --progress-bg: #333333;
-        --progress-fill: #bb86fc;
-        --primary-rgb: 252, 134, 134;
-        --accent-rgb: 3, 218, 198;
+        --meta-background: rgba(0, 0, 0, 0.85); /* Enhanced opacity */
+        --search-border: #525252; /* Enhanced border visibility */
+        --disabled-button: #525252;
+        --hover-overlay: rgba(255, 255, 255, 0.08);
+        --tag-bg: #404040; /* Enhanced background */
+        --tag-text: #f1f5f9; /* Enhanced text contrast */
+        --progress-bg: #404040;
+        --progress-fill: #4ecdc4;
+        --primary-rgb: 255, 107, 107;
+        --accent-rgb: 78, 205, 196;
         --card-background-rgb: 18, 18, 18;
     }
 }

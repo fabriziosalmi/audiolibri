@@ -1,4 +1,4 @@
-// Enhanced mobile navigation script
+// Enhanced mobile navigation script - EN 301 549 Compliant
 
 document.addEventListener('DOMContentLoaded', () => {
     initEnhancedMobileNavigation();
@@ -16,9 +16,17 @@ function initEnhancedMobileNavigation() {
 }
 
 function setupMobileNavigation(container) {
+    // EN 301 549: Ensure container has proper ARIA attributes
+    if (!container.getAttribute('role')) {
+        container.setAttribute('role', 'region');
+        container.setAttribute('aria-label', 'Navigazione categorie scorrevole');
+    }
+    
     // Enhanced scroll event tracking
     container.addEventListener('scroll', function() {
         handleScrollIndicators(this);
+        // EN 301 549: Announce scroll position changes
+        announceScrollPosition(this);
     });
     
     // Initial check
@@ -32,6 +40,9 @@ function setupMobileNavigation(container) {
     
     // Check if scroll is needed, hide gradients if not
     checkIfScrollNeeded(container);
+    
+    // EN 301 549: Add keyboard navigation support
+    setupKeyboardNavigation(container);
     
     // Recheck on window resize and orientation change
     window.addEventListener('resize', () => {
@@ -165,5 +176,67 @@ function checkIfScrollNeeded(container) {
             container.classList.remove('portrait-mode');
             document.body.classList.remove('portrait-screen');
         }
+    }
+}
+
+// EN 301 549: Keyboard navigation support for scrollable containers
+function setupKeyboardNavigation(container) {
+    // Make container focusable
+    if (!container.hasAttribute('tabindex')) {
+        container.setAttribute('tabindex', '0');
+    }
+    
+    container.addEventListener('keydown', (e) => {
+        const scrollAmount = 100;
+        let scrolled = false;
+        
+        switch (e.key) {
+            case 'ArrowLeft':
+                e.preventDefault();
+                container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                scrolled = true;
+                break;
+            case 'ArrowRight':
+                e.preventDefault();
+                container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                scrolled = true;
+                break;
+            case 'Home':
+                e.preventDefault();
+                container.scrollTo({ left: 0, behavior: 'smooth' });
+                scrolled = true;
+                break;
+            case 'End':
+                e.preventDefault();
+                container.scrollTo({ left: container.scrollWidth, behavior: 'smooth' });
+                scrolled = true;
+                break;
+        }
+        
+        if (scrolled) {
+            // Announce the scroll action
+            setTimeout(() => announceScrollPosition(container), 100);
+        }
+    });
+}
+
+// EN 301 549: Announce scroll position changes to screen readers
+function announceScrollPosition(container) {
+    const scrollPercentage = Math.round((container.scrollLeft / (container.scrollWidth - container.clientWidth)) * 100);
+    
+    // Create or update live region for scroll announcements
+    let scrollLiveRegion = document.getElementById('scroll-live-region');
+    if (!scrollLiveRegion) {
+        scrollLiveRegion = document.createElement('div');
+        scrollLiveRegion.id = 'scroll-live-region';
+        scrollLiveRegion.setAttribute('aria-live', 'polite');
+        scrollLiveRegion.setAttribute('aria-atomic', 'true');
+        scrollLiveRegion.className = 'sr-only';
+        document.body.appendChild(scrollLiveRegion);
+    }
+    
+    // Only announce significant scroll changes
+    if (scrollPercentage % 25 === 0 || scrollPercentage === 0 || scrollPercentage >= 95) {
+        scrollLiveRegion.textContent = `Scorrimento al ${scrollPercentage}%`;
     }
 }
