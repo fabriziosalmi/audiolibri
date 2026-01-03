@@ -135,7 +135,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Load the audiobook data from augmented.json
     fetch('augmented.json')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             // Convert the JSON object to an array of audiobooks
             audiobooks = Object.entries(data).map(([id, book]) => {
@@ -181,12 +186,25 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => {
             console.error('Error loading audiobooks:', error);
+            const errorMessage = error.message || 'Unknown error';
             document.getElementById('current-audiobook').innerHTML = 
-                `<div class="error-message">
-                    <div class="error-icon">!</div>
-                    <p>Errore caricando la libreria di audiolibri.</p>
-                    <small>Controlla la connessione e riprova più tard.</small>
+                `<div class="error-message" role="alert">
+                    <div class="error-icon" aria-hidden="true">!</div>
+                    <p>Errore nel caricamento della libreria di audiolibri.</p>
+                    <small>Dettagli: ${errorMessage}</small>
+                    <small>Controlla la connessione e riprova più tardi.</small>
+                    <button id="retry-button" class="control-button" type="button" style="margin-top: 1rem;">
+                        Riprova
+                    </button>
                 </div>`;
+            
+            // Add retry functionality
+            const retryButton = document.getElementById('retry-button');
+            if (retryButton) {
+                retryButton.addEventListener('click', () => {
+                    location.reload();
+                });
+            }
         });
         
     // Function to calculate and display library stats
