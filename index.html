@@ -242,21 +242,6 @@
                     });
             });
         }
-        
-        // Suppress YouTube cross-origin cookie warnings (informational only)
-        // These warnings are expected behavior from YouTube iframes and don't affect functionality
-        const originalWarn = console.warn;
-        console.warn = function(...args) {
-            const msg = args[0];
-            if (typeof msg === 'string' && 
-                (msg.includes('__Secure-YEC') || 
-                 msg.includes('SameSite') || 
-                 msg.includes('cross-site'))) {
-                // Suppress known YouTube cookie warnings
-                return;
-            }
-            originalWarn.apply(console, args);
-        };
     </script>
 </body>
 </html>

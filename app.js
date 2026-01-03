@@ -186,17 +186,23 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => {
             console.error('Error loading audiobooks:', error);
-            const errorMessage = error.message || 'Unknown error';
-            document.getElementById('current-audiobook').innerHTML = 
+            const errorContainer = document.getElementById('current-audiobook');
+            errorContainer.innerHTML = 
                 `<div class="error-message" role="alert">
                     <div class="error-icon" aria-hidden="true">!</div>
                     <p>Errore nel caricamento della libreria di audiolibri.</p>
-                    <small>Dettagli: ${errorMessage}</small>
+                    <small id="error-details"></small>
                     <small>Controlla la connessione e riprova più tardi.</small>
                     <button id="retry-button" class="control-button" type="button" style="margin-top: 1rem;">
                         Riprova
                     </button>
                 </div>`;
+            
+            // Safely set error message using textContent to prevent XSS
+            const errorDetails = document.getElementById('error-details');
+            if (errorDetails && error) {
+                errorDetails.textContent = `Dettagli: ${error.message || 'Unknown error'}`;
+            }
             
             // Add retry functionality
             const retryButton = document.getElementById('retry-button');
