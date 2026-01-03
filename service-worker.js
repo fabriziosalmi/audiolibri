@@ -64,7 +64,7 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Fetch event - network-first strategy with cache fallback
+// Fetch event - cache-first strategy with background updates
 self.addEventListener('fetch', event => {
   const { request } = event;
   const requestUrl = new URL(request.url);
