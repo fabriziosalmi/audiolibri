@@ -135,7 +135,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Load the audiobook data from augmented.json
     fetch('augmented.json')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             // Convert the JSON object to an array of audiobooks
             audiobooks = Object.entries(data).map(([id, book]) => {
@@ -181,12 +186,31 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(error => {
             console.error('Error loading audiobooks:', error);
-            document.getElementById('current-audiobook').innerHTML = 
-                `<div class="error-message">
-                    <div class="error-icon">!</div>
-                    <p>Errore caricando la libreria di audiolibri.</p>
-                    <small>Controlla la connessione e riprova più tard.</small>
+            const errorContainer = document.getElementById('current-audiobook');
+            errorContainer.innerHTML = 
+                `<div class="error-message" role="alert">
+                    <div class="error-icon" aria-hidden="true">!</div>
+                    <p>Errore nel caricamento della libreria di audiolibri.</p>
+                    <small id="error-details"></small>
+                    <small>Controlla la connessione e riprova più tardi.</small>
+                    <button id="retry-button" class="control-button" type="button" style="margin-top: 1rem;">
+                        Riprova
+                    </button>
                 </div>`;
+            
+            // Safely set error message using textContent to prevent XSS
+            const errorDetails = document.getElementById('error-details');
+            if (errorDetails && error) {
+                errorDetails.textContent = `Dettagli: ${error.message || 'Unknown error'}`;
+            }
+            
+            // Add retry functionality
+            const retryButton = document.getElementById('retry-button');
+            if (retryButton) {
+                retryButton.addEventListener('click', () => {
+                    location.reload();
+                });
+            }
         });
         
     // Function to calculate and display library stats
