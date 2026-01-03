@@ -93,7 +93,6 @@
     <link rel="stylesheet" href="tailwind-grid-components.css">
     <link rel="stylesheet" href="tailwind-nav-components.css">
     <link rel="stylesheet" href="tailwind-modern-ios.css">
-    <script defer src="tailwind-mobile.js"></script>
     
     <!-- Add CSS variables for RGB values -->
     <style>
@@ -109,7 +108,15 @@
                 --card-background-rgb: 18, 18, 18;
             }
         }
+        /* Prevent FOUC */
+        body {
+            visibility: visible;
+        }
     </style>
+    
+    <!-- Preload critical CSS to prevent FOUC -->
+    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="tailwind-styles.css" as="style">
     
     <!-- Add before other resources -->
     <link rel="preconnect" href="https://www.youtube.com">
@@ -121,6 +128,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Add YouTube API -->
     <script src="https://www.youtube.com/iframe_api" defer></script>
+    <script defer src="tailwind-mobile.js"></script>
 </head>
 <body>
     <div class="container tw-container mobile-container ios-safe-inset">
@@ -225,13 +233,30 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js').then(registration => {
-                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
-                }, err => {
-                    console.error('ServiceWorker registration failed: ', err);
-                });
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(registration => {
+                        console.log('[ServiceWorker] Registration successful with scope:', registration.scope);
+                    })
+                    .catch(err => {
+                        console.error('[ServiceWorker] Registration failed:', err);
+                    });
             });
         }
+        
+        // Suppress YouTube cross-origin cookie warnings (informational only)
+        // These warnings are expected behavior from YouTube iframes and don't affect functionality
+        const originalWarn = console.warn;
+        console.warn = function(...args) {
+            const msg = args[0];
+            if (typeof msg === 'string' && 
+                (msg.includes('__Secure-YEC') || 
+                 msg.includes('SameSite') || 
+                 msg.includes('cross-site'))) {
+                // Suppress known YouTube cookie warnings
+                return;
+            }
+            originalWarn.apply(console, args);
+        };
     </script>
 </body>
 </html>
