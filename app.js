@@ -1508,12 +1508,17 @@ document.addEventListener('DOMContentLoaded', () => {
         
         return (match && match[2].length === 11) ? match[2] : null;
     }
-
-    // Changelog functionality
-    function initializeChangelog() {
-        const changelogCard = document.getElementById('changelog-card');
-        const changelogToggle = document.getElementById('changelog-toggle');
-        const changelogContent = document.getElementById('changelog-content');
+    
+    
+    // Cleanup on page unload to prevent memory leaks
+    window.addEventListener('beforeunload', () => {
+        if (updateInterval) {
+            clearInterval(updateInterval);
+        }
+        if (youtubePlayer && youtubePlayer.destroy) {
+            youtubePlayer.destroy();
+        }
+    });
         
         // Check if user preference for collapsing is stored
         const isCollapsed = localStorage.getItem('changelogCollapsed') === 'true';
@@ -1734,11 +1739,6 @@ document.addEventListener('DOMContentLoaded', () => {
             default:
                 return '<span class="change-icon">•</span>';
         }
-    }
-
-    // Initialize changelog if enabled in config
-    if (config.enableChangelog) {
-        initializeChangelog();
     }
     
     // Cleanup on page unload to prevent memory leaks
