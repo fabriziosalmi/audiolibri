@@ -1519,59 +1519,6 @@ document.addEventListener('DOMContentLoaded', () => {
             youtubePlayer.destroy();
         }
     });
-        
-        // Check if user preference for collapsing is stored
-        const isCollapsed = localStorage.getItem('changelogCollapsed') === 'true';
-        if (isCollapsed) {
-            changelogCard.classList.add('collapsed');
-            changelogToggle.querySelector('.collapse-icon').textContent = '+';
-            changelogToggle.setAttribute('aria-expanded', 'false');
-        } else {
-            changelogToggle.setAttribute('aria-expanded', 'true');
-        }
-        
-        // Toggle changelog visibility with enhanced accessibility
-        changelogToggle.addEventListener('click', () => {
-            toggleChangelog();
-        });
-        
-        // WCAG: Add keyboard support for changelog toggle
-        changelogToggle.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                toggleChangelog();
-            }
-        });
-        
-        function toggleChangelog() {
-            const wasCollapsed = changelogCard.classList.contains('collapsed');
-            changelogCard.classList.toggle('collapsed');
-            const isNowCollapsed = changelogCard.classList.contains('collapsed');
-            
-            // Update localStorage
-            localStorage.setItem('changelogCollapsed', isNowCollapsed);
-            
-            // Update visual indicator
-            changelogToggle.querySelector('.collapse-icon').textContent = isNowCollapsed ? '+' : '−';
-            
-            // Update ARIA attributes
-            changelogToggle.setAttribute('aria-expanded', !isNowCollapsed);
-            
-            // Announce to screen readers
-            announceToScreenReader(
-                isNowCollapsed ? 'Aggiornamenti nascosti' : 'Aggiornamenti mostrati'
-            );
-        }
-        
-        // Load changelog data with accessibility
-        document.getElementById('changelog-content').innerHTML = `
-            <div class="loading-spinner small" aria-hidden="true"></div>
-            <p>Caricamento aggiornamenti...</p>
-        `;
-        
-        // Try loading the changelog data
-        fetchChangelog();
-    }
 
     function fetchChangelog() {
         // Set a timeout for the fetch
