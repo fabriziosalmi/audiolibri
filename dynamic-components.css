@@ -41,25 +41,27 @@
 .genre-pill {
     display: flex;
     align-items: center;
-    padding: 10px 16px;
-    border-radius: 12px;
+    padding: 12px 20px;
+    border-radius: 24px;
     background: rgba(var(--primary-rgb), 0.1);
     color: var(--primary-color);
-    font-size: 1rem;
-    font-weight: lighter;
+    font-size: 0.95rem;
+    font-weight: 500;
     cursor: pointer;
     transition: all 0.25s ease;
     white-space: nowrap;
-    box-shadow: 0 3px 8px rgba(var(--primary-rgb), 0.15);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     position: relative;
     overflow: hidden;
-    border: none;
+    border: 1px solid rgba(var(--primary-rgb), 0.15);
+    letter-spacing: 0.01em;
 }
 
 .genre-pill:hover {
-    background: rgba(var(--primary-rgb), 0.15);
-    transform: translateY(-3px);
-    box-shadow: 0 5px 12px rgba(var(--primary-rgb), 0.25);
+    background: rgba(var(--primary-rgb), 0.18);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    border-color: rgba(var(--primary-rgb), 0.25);
 }
 
 .genre-pill:active {
@@ -67,18 +69,21 @@
 }
 
 .genre-count {
-    margin-left: 8px;
+    margin-left: 10px;
     background: rgba(var(--primary-rgb), 0.2);
-    border-radius: 12px;
-    padding: 3px 10px;
+    border-radius: 16px;
+    padding: 4px 12px;
     font-size: 0.8rem;
-    font-weight: 600;
+    font-weight: 700;
+    line-height: 1;
 }
 
 .genre-pill.selected {
     background: var(--primary-color);
     color: white;
-    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.4);
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.35);
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
 }
 
 .genre-pill.selected .genre-count {
@@ -531,6 +536,22 @@
 }
 
 /* Mobile Responsive Styles */
+@media (min-width: 1024px) {
+    .genre-list {
+        gap: 14px;
+    }
+    
+    .genre-pill {
+        padding: 13px 22px;
+        font-size: 1rem;
+    }
+    
+    .genre-count {
+        padding: 4px 13px;
+        font-size: 0.85rem;
+    }
+}
+
 @media (max-width: 768px) {
     .genre-navigation {
         padding: 1.25rem;
