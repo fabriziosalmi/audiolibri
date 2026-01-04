@@ -427,6 +427,47 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Generate and display genre navigation list
         generateGenreNavigation(books);
+        
+        // Update footer stats
+        updateFooterStats(books);
+    }
+    
+    /**
+     * Update footer with library statistics
+     * @param {Object[]} books - Array of all audiobook objects
+     * @returns {void}
+     */
+    function updateFooterStats(books) {
+        const totalBooks = books.length;
+        
+        // Count unique authors
+        const uniqueAuthors = new Set();
+        books.forEach(book => {
+            if (book.author && book.author !== 'Unknown Author') {
+                uniqueAuthors.add(book.author);
+            }
+        });
+        
+        // Calculate total hours
+        let totalDurationInSeconds = 0;
+        books.forEach(book => {
+            if (book.duration) {
+                totalDurationInSeconds += book.duration;
+            }
+        });
+        const totalHours = Math.floor(totalDurationInSeconds / 3600);
+        
+        // Update footer stats
+        const footerStats = document.getElementById('library-stats');
+        if (footerStats) {
+            footerStats.textContent = `${totalBooks.toLocaleString()} audiolibri • ${uniqueAuthors.size.toLocaleString()} autori • ${totalHours.toLocaleString()}+ ore di ascolto`;
+        }
+        
+        // Update current year
+        const currentYear = document.getElementById('current-year');
+        if (currentYear) {
+            currentYear.textContent = new Date().getFullYear();
+        }
     }
 
     // Helper function to uppercase categories/genres
