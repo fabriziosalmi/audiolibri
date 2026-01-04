@@ -40,6 +40,26 @@
     outline-offset: 2px;
 }
 
+/* CSS Variables for RGB values */
+:root {
+    --primary-rgb: 74, 108, 247;
+    --accent-rgb: 16, 185, 129;
+    --card-background-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --primary-rgb: 252, 134, 134;
+        --accent-rgb: 3, 218, 198;
+        --card-background-rgb: 18, 18, 18;
+    }
+}
+
+/* Prevent FOUC */
+body {
+    visibility: visible;
+}
+
 /* High contrast focus for dark mode */
 @media (prefers-color-scheme: dark) {
     *:focus {

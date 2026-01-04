@@ -1,3 +1,4 @@
+import sys
 import json
 import os
 import time
@@ -30,17 +31,17 @@ console = Console()
 
 # Configuration settings
 CONFIG = {
-    'output_dir': 'audiobooks',
+    'output_dir': os.environ.get('AUDIOBOOKS_OUTPUT_DIR', 'audiobooks'),
     'metadata_file': 'audiobooks.json',
     'audio_format': 'mp3',
     'bitrate': '64k',
     'checkpoint_file': 'checkpoint.json',
     'max_retries': 3,
     'recursive_depth': 2,  # How deep to go when traversing channels/playlists
-    'max_workers': 4,      # Number of parallel workers for downloading
+    'max_workers': int(os.environ.get('MAX_WORKERS', '4')),      # Number of parallel workers for downloading
     'min_duration': 0,     # Minimum duration in seconds (0 = no filter)
     'max_duration': 0,     # Maximum duration in seconds (0 = no filter)
-    'rate_limit': 1,       # Minimum seconds between requests
+    'rate_limit': float(os.environ.get('RATE_LIMIT', '1')),       # Minimum seconds between requests
     'extract_description': True,  # Extract transcript from video description
     'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
 }

@@ -19,23 +19,25 @@ const ASSETS_TO_CACHE = [
 ];
 
 // Install event - cache essential assets
+const DEBUG = false; // Set to true for development
+
 self.addEventListener('install', event => {
-  console.log('[ServiceWorker] Installing...');
+  if (DEBUG) console.log('[ServiceWorker] Installing...');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('[ServiceWorker] Caching app shell');
+        if (DEBUG) console.log('[ServiceWorker] Caching app shell');
         // Use cache.add for individual files to avoid failing if one file is missing
         return Promise.allSettled(
           ASSETS_TO_CACHE.map(url => 
             cache.add(url).catch(err => {
-              console.warn(`[ServiceWorker] Failed to cache ${url}:`, err);
+              if (DEBUG) console.warn(`[ServiceWorker] Failed to cache ${url}:`, err);
             })
           )
         );
       })
       .then(() => {
-        console.log('[ServiceWorker] Skip waiting');
+        if (DEBUG) console.log('[ServiceWorker] Skip waiting');
         return self.skipWaiting();
       })
   );
@@ -43,7 +45,7 @@ self.addEventListener('install', event => {
 
 // Activate event - clean up old caches
 self.addEventListener('activate', event => {
-  console.log('[ServiceWorker] Activating...');
+  if (DEBUG) console.log('[ServiceWorker] Activating...');
   const cacheAllowlist = [CACHE_NAME];
   event.waitUntil(
     caches.keys()
@@ -51,14 +53,14 @@ self.addEventListener('activate', event => {
         return Promise.all(
           cacheNames.map(cacheName => {
             if (cacheAllowlist.indexOf(cacheName) === -1) {
-              console.log('[ServiceWorker] Deleting old cache:', cacheName);
+              if (DEBUG) console.log('[ServiceWorker] Deleting old cache:', cacheName);
               return caches.delete(cacheName);
             }
           })
         );
       })
       .then(() => {
-        console.log('[ServiceWorker] Claiming clients');
+        if (DEBUG) console.log('[ServiceWorker] Claiming clients');
         return self.clients.claim();
       })
   );
@@ -132,7 +134,7 @@ self.addEventListener('fetch', event => {
           
           return response;
         }).catch(error => {
-          console.error('[ServiceWorker] Fetch failed:', error);
+          if (DEBUG) console.error('[ServiceWorker] Fetch failed:', error);
           throw error;
         });
       })
