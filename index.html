@@ -88,31 +88,12 @@
     <link rel="stylesheet" href="tailwind-styles.css">
     <link rel="stylesheet" href="mobile-navigation.css">
     <link rel="stylesheet" href="mobile-fixes.css">
+    <link rel="stylesheet" href="dynamic-components.css">
     <!-- Mobile optimization libraries -->
     <link rel="stylesheet" href="tailwind-mobile.css">
     <link rel="stylesheet" href="tailwind-grid-components.css">
     <link rel="stylesheet" href="tailwind-nav-components.css">
     <link rel="stylesheet" href="tailwind-modern-ios.css">
-    
-    <!-- Add CSS variables for RGB values -->
-    <style>
-        :root {
-            --primary-rgb: 74, 108, 247;
-            --accent-rgb: 16, 185, 129;
-            --card-background-rgb: 255, 255, 255;
-        }
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --primary-rgb: 252, 134, 134;
-                --accent-rgb: 3, 218, 198;
-                --card-background-rgb: 18, 18, 18;
-            }
-        }
-        /* Prevent FOUC */
-        body {
-            visibility: visible;
-        }
-    </style>
     
     <!-- Preload critical CSS to prevent FOUC -->
     <link rel="preload" href="styles.css" as="style">
@@ -225,7 +206,6 @@
         </footer>
     </div>
     
-    <script src="audiobooks.js"></script> <!-- Your JSON data converted to a JS variable -->
     <script src="app.js"></script>
     <script src="mobile-navigation.js"></script> <!-- Enhanced mobile navigation script -->
     <script src="mobile-enhancements.js"></script> <!-- Additional mobile UI enhancements -->

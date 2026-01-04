@@ -20,7 +20,23 @@ document.addEventListener('DOMContentLoaded', () => {
         volume: 100
     };
     let updateInterval;
-    let prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    // Load theme preference from localStorage, fallback to system preference
+    const savedTheme = localStorage.getItem('prefersDarkMode');
+    let prefersDarkMode = savedTheme !== null 
+        ? savedTheme === 'true' 
+        : window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    /**
+     * Sanitize text to prevent XSS attacks
+     * @param {string} text - The text to sanitize
+     * @returns {string} Sanitized text
+     */
+    function sanitizeText(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
     
     // WCAG: Create aria-live region for announcements
     const announceRegion = document.createElement('div');
@@ -31,6 +47,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(announceRegion);
     
     // Function to announce messages to screen readers
+    /**
+     * Announce a message to screen readers via aria-live region
+     * @param {string} message - The message to announce
+     * @returns {void}
+     */
     function announceToScreenReader(message) {
         announceRegion.textContent = message;
         // Clear after announcement to avoid repetition
@@ -66,11 +87,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('search');
     const searchButton = document.getElementById('search-button');
     
+    // Debounce timer for search input
+    let searchDebounceTimer = null;
+    
     // Add event listeners for search
     searchButton.addEventListener('click', performSearch);
     searchInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
+            // Clear any pending debounced search
+            if (searchDebounceTimer) {
+                clearTimeout(searchDebounceTimer);
+                searchDebounceTimer = null;
+            }
             performSearch();
+        }
+    });
+    
+    // Add debounced search on input (optional - searches as you type)
+    searchInput.addEventListener('input', function() {
+        if (searchDebounceTimer) {
+            clearTimeout(searchDebounceTimer);
+        }
+        // Only auto-search if there are at least 3 characters
+        const searchTerm = this.value.trim();
+        if (searchTerm.length >= 3) {
+            searchDebounceTimer = setTimeout(() => {
+                performSearch();
+            }, 500); // 500ms delay
         }
     });
     
@@ -121,6 +164,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         prefersDarkMode = newTheme;
         
+        // Save preference to localStorage
+        localStorage.setItem('prefersDarkMode', newTheme);
+        
         // Update aria-label for theme toggle
         themeToggle.setAttribute('aria-label', 
             prefersDarkMode ? 'Cambia al tema chiaro' : 'Cambia al tema scuro'
@@ -133,85 +179,192 @@ document.addEventListener('DOMContentLoaded', () => {
         prefersDarkMode ? 'Cambia al tema chiaro' : 'Cambia al tema scuro'
     );
     
-    // Load the audiobook data from augmented.json
-    fetch('augmented.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Convert the JSON object to an array of audiobooks
-            audiobooks = Object.entries(data).map(([id, book]) => {
-                return {
-                    id: id,
-                    title: book.real_title || book.title || 'Unknown Title',
-                    author: book.real_author || 'Unknown Author',
-                    description: book.real_synopsis || book.description || 'No description available.',
-                    genre: book.real_genre || '',  // Add the genre from augmented data
-                    coverImage: book.thumbnail || 'https://via.placeholder.com/400x225?text=No+Cover+Available',
-                    audioUrl: book.audio_file || '',
-                    duration: book.duration || 0,
-                    formattedDuration: formatDuration(book.duration || 0),
-                    url: book.url || '',
-                    channel: book.channel || '',
-                    channelUrl: book.channel_url || '',
-                    videoId: extractVideoId(book.url || ''),
-                    categories: book.real_genre ? [book.real_genre] : (book.categories || []),  // Use genre as category if available
-                    tags: book.tags || [],
-                    uploadDate: book.upload_date || ''
-                };
-            }).filter(book => book.title !== 'Unknown Title' && book.videoId); // Filter out entries without titles and video IDs
+    // Cache configuration
+    const CACHE_VERSION = '1.0';
+    const CACHE_KEY = 'audiobooksData';
+    const CACHE_VERSION_KEY = 'audiobooksDataVersion';
+    const CACHE_TIMESTAMP_KEY = 'audiobooksDataTimestamp';
+    const CACHE_EXPIRY_HOURS = 24; // Cache expires after 24 hours
+    
+    // Function to check if cache is valid
+    function isCacheValid() {
+        try {
+            const cachedVersion = localStorage.getItem(CACHE_VERSION_KEY);
+            const cachedTimestamp = localStorage.getItem(CACHE_TIMESTAMP_KEY);
             
-            // Calculate and display library statistics
-            updateLibraryStats(audiobooks);
+            if (!cachedVersion || !cachedTimestamp) return false;
+            if (cachedVersion !== CACHE_VERSION) return false;
             
-            if (audiobooks.length > 0) {
-                // Small delay to show the loading state
-                setTimeout(() => {
-                    // Select a random book as the initial book
-                    const randomIndex = Math.floor(Math.random() * audiobooks.length);
-                    currentBook = audiobooks[randomIndex];
-                    displayBook(currentBook);
-                }, 500);
-            } else {
-                document.getElementById('current-audiobook').innerHTML = 
-                    `<div class="error-message">
-                        <div class="error-icon">!</div>
-                        <p>Nessun audiolibro trovato nella libreria.</p>
-                        <small>Please check your data source and try again.</small>
-                    </div>`;
-            }
-        })
-        .catch(error => {
-            console.error('Error loading audiobooks:', error);
-            const errorContainer = document.getElementById('current-audiobook');
-            errorContainer.innerHTML = 
-                `<div class="error-message" role="alert">
-                    <div class="error-icon" aria-hidden="true">!</div>
-                    <p>Errore nel caricamento della libreria di audiolibri.</p>
-                    <small id="error-details"></small>
-                    <small>Controlla la connessione e riprova più tardi.</small>
-                    <button id="retry-button" class="control-button" type="button" style="margin-top: 1rem;">
-                        Riprova
-                    </button>
-                </div>`;
+            const cacheAge = Date.now() - parseInt(cachedTimestamp);
+            const maxAge = CACHE_EXPIRY_HOURS * 60 * 60 * 1000;
             
-            // Safely set error message using textContent to prevent XSS
-            const errorDetails = document.getElementById('error-details');
-            if (errorDetails && error) {
-                errorDetails.textContent = `Dettagli: ${error.message || 'Unknown error'}`;
+            return cacheAge < maxAge;
+        } catch (e) {
+            return false;
+        }
+    }
+    
+    // Function to load data from cache
+    function loadFromCache() {
+        try {
+            const cachedData = localStorage.getItem(CACHE_KEY);
+            if (cachedData) {
+                return JSON.parse(cachedData);
             }
-            
-            // Add retry functionality
-            const retryButton = document.getElementById('retry-button');
-            if (retryButton) {
-                retryButton.addEventListener('click', () => {
-                    location.reload();
-                });
+        } catch (e) {
+            console.error('Error loading from cache:', e);
+        }
+        return null;
+    }
+    
+    // Function to save data to cache
+    function saveToCache(data) {
+        try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+            localStorage.setItem(CACHE_VERSION_KEY, CACHE_VERSION);
+            localStorage.setItem(CACHE_TIMESTAMP_KEY, Date.now().toString());
+        } catch (e) {
+            console.warn('Could not save to cache:', e);
+            // If localStorage is full, clear old data and try again
+            if (e.name === 'QuotaExceededError') {
+                try {
+                    localStorage.removeItem(CACHE_KEY);
+                    localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+                    localStorage.setItem(CACHE_VERSION_KEY, CACHE_VERSION);
+                    localStorage.setItem(CACHE_TIMESTAMP_KEY, Date.now().toString());
+                } catch (e2) {
+                    console.error('Still could not save to cache after clearing:', e2);
+                }
             }
-        });
+        }
+    }
+    
+    // Function to process raw data into audiobooks array
+    function processAudiobooksData(data) {
+        return Object.entries(data).map(([id, book]) => {
+            return {
+                id: id,
+                title: book.real_title || book.title || 'Unknown Title',
+                author: book.real_author || 'Unknown Author',
+                description: book.real_synopsis || book.description || 'No description available.',
+                genre: book.real_genre || '',
+                coverImage: book.thumbnail || 'https://via.placeholder.com/400x225?text=No+Cover+Available',
+                audioUrl: book.audio_file || '',
+                duration: book.duration || 0,
+                formattedDuration: formatDuration(book.duration || 0),
+                url: book.url || '',
+                channel: book.channel || '',
+                channelUrl: book.channel_url || '',
+                videoId: extractVideoId(book.url || ''),
+                categories: book.real_genre ? [book.real_genre] : (book.categories || []),
+                tags: book.tags || [],
+                uploadDate: book.upload_date || ''
+            };
+        }).filter(book => book.title !== 'Unknown Title' && book.videoId);
+    }
+    
+    // Load the audiobook data - try cache first, then fetch
+    async function loadAudiobooksData() {
+        // Check if we have valid cached data
+        if (isCacheValid()) {
+            const cachedData = loadFromCache();
+            if (cachedData) {
+                // Use cached data immediately
+                audiobooks = processAudiobooksData(cachedData);
+                updateLibraryStats(audiobooks);
+                
+                if (audiobooks.length > 0) {
+                    setTimeout(() => {
+                        const randomIndex = Math.floor(Math.random() * audiobooks.length);
+                        currentBook = audiobooks[randomIndex];
+                        displayBook(currentBook);
+                    }, 300);
+                }
+                
+                // Optionally fetch fresh data in background for next time
+                fetchFreshData(true);
+                return;
+            }
+        }
+        
+        // No valid cache, fetch fresh data
+        fetchFreshData(false);
+    }
+    
+    // Function to fetch fresh data from server
+    function fetchFreshData(isBackgroundUpdate) {
+        fetch('augmented.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Save to cache for next time
+                saveToCache(data);
+                
+                // Only update UI if this isn't a background update
+                if (!isBackgroundUpdate) {
+                    // Convert the JSON object to an array of audiobooks
+                    audiobooks = processAudiobooksData(data);
+                    
+                    // Calculate and display library statistics
+                    updateLibraryStats(audiobooks);
+                    
+                    if (audiobooks.length > 0) {
+                        // Small delay to show the loading state
+                        setTimeout(() => {
+                            // Select a random book as the initial book
+                            const randomIndex = Math.floor(Math.random() * audiobooks.length);
+                            currentBook = audiobooks[randomIndex];
+                            displayBook(currentBook);
+                        }, 500);
+                    } else {
+                        document.getElementById('current-audiobook').innerHTML = 
+                            `<div class="error-message">
+                                <div class="error-icon">!</div>
+                                <p>Nessun audiolibro trovato nella libreria.</p>
+                                <small>Please check your data source and try again.</small>
+                            </div>`;
+                    }
+                }
+            })
+            .catch(error => {
+                // Only show error if this wasn't a background update
+                if (!isBackgroundUpdate) {
+                    console.error('Error loading audiobooks:', error);
+                    const errorContainer = document.getElementById('current-audiobook');
+                    errorContainer.innerHTML = 
+                        `<div class="error-message" role="alert">
+                            <div class="error-icon" aria-hidden="true">!</div>
+                            <p>Errore nel caricamento della libreria di audiolibri.</p>
+                            <small id="error-details"></small>
+                            <small>Controlla la connessione e riprova più tardi.</small>
+                            <button id="retry-button" class="control-button" type="button" style="margin-top: 1rem;">
+                                Riprova
+                            </button>
+                        </div>`;
+                    
+                    // Safely set error message using textContent to prevent XSS
+                    const errorDetails = document.getElementById('error-details');
+                    if (errorDetails && error) {
+                        errorDetails.textContent = `Dettagli: ${error.message || 'Unknown error'}`;
+                    }
+                    
+                    // Add retry functionality
+                    const retryButton = document.getElementById('retry-button');
+                    if (retryButton) {
+                        retryButton.addEventListener('click', () => {
+                            location.reload();
+                        });
+                    }
+                }
+            });
+    }
+    
+    // Start loading data
+    loadAudiobooksData();
         
     // Function to calculate and display library stats
     function updateLibraryStats(books) {
@@ -355,9 +508,6 @@ document.addEventListener('DOMContentLoaded', () => {
             genreList.appendChild(genrePill);
         });
         
-        // Add CSS styles for genre navigation
-        addGenreNavigationStyles();
-        
         // Add scroll detection for mobile navigation
         initializeMobileNavigation();
     }
@@ -383,285 +533,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Add CSS styles for genre navigation
-    function addGenreNavigationStyles() {
-        // Check if styles are already added
-        if (document.getElementById('genre-nav-styles')) return;
-        
-        const styleElement = document.createElement('style');
-        styleElement.id = 'genre-nav-styles';
-        styleElement.textContent = `
-            .genre-navigation {
-                margin: 20px 0;
-                padding: 1.5rem;
-                background: #12121200;
-                border-radius: 16px;
-                box-shadow: none;
-                border: 0px solid var(--border-color);
-                transition: all 0.3s ease;
-            }
-            
-            .genre-title {
-                font-size: 1.25rem;
-                margin-bottom: 1.25rem;
-                color: var(--header-color);
-                font-weight: 600;
-                position: relative;
-                padding-bottom: 0.75rem;
-            }
-            
-            .genre-title::after {
-                content: '';
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                width: 50px;
-                height: 3px;
-                background: var(--primary-color);
-                border-radius: 3px;
-            }
-            
-            .genre-list {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 12px;
-                align-items: center;
-            }
-            
-            .genre-pill {
-                display: flex;
-                align-items: center;
-                padding: 10px 16px;
-                border-radius: 12px;
-                background: rgba(var(--primary-rgb), 0.1);
-                color: var(--primary-color);
-                font-size: 1rem;
-                font-weight: lighter;
-                cursor: pointer;
-                transition: all 0.25s ease;
-                white-space: nowrap;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-                position: relative;
-                overflow: hidden;
-            }
-            
-            .genre-pill:hover {
-                background: rgba(var(--primary-rgb), 0.15);
-                transform: translateY(-3px);
-                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-            }
-            
-            .genre-pill:active {
-                transform: translateY(-1px);
-            }
-            
-            .genre-count {
-                margin-left: 8px;
-                background: rgba(var(--primary-rgb), 0.2);
-                border-radius: 12px;
-                padding: 3px 10px;
-                font-size: 0.8rem;
-                font-weight: 600;
-            }
-            
-            .genre-pill.selected {
-                background: var(--primary-color);
-                color: white;
-                border-color: var(--primary-color);
-                box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
-            }
-            
-            .genre-pill.selected .genre-count {
-                background: rgba(255, 255, 255, 0.25);
-                color: white;
-            }
-            
-            /* Genre View Styles */
-            .genre-view {
-                padding: 1.5rem;
-            }
-            
-            .genre-view-header {
-                display: flex;
-                align-items: center;
-                margin-bottom: 1.5rem;
-                flex-wrap: wrap;
-                gap: 12px;
-            }
-            
-            .genre-view-title {
-                font-size: 1.5rem;
-                color: white;
-                margin: 0;
-                text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-            }
-            
-            .genre-count-large {
-                margin-left: auto;
-                background: rgba(255,255,255,0.2);
-                color: white;
-                padding: 5px 12px;
-                border-radius: 999px;
-                font-size: 0.9rem;
-            }
-            
-            .back-button {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                padding: 8px 16px;
-                background: rgba(0,0,0,0.4);
-                border-radius: 999px;
-                color: white;
-                border: 1px solid rgba(255,255,255,0.2);
-                font-size: 0.9rem;
-                cursor: pointer;
-                transition: all 0.2s ease;
-            }
-            
-            .back-button:hover {
-                background: rgba(0,0,0,0.6);
-                box-shadow: 0 3px 8px rgba(0,0,0,0.3);
-            }
-            
-            .back-icon::before {
-                content: "←";
-                margin-right: 4px;
-            }
-            
-            .audiobooks-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-                gap: 20px;
-            }
-            
-            .book-card {
-                background: var(--card-background);
-                border-radius: 12px;
-                overflow: hidden;
-                cursor: pointer;
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-                box-shadow: var(--card-shadow);
-                border: 1px solid var(--border-color);
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-            }
-            
-            .book-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 12px 20px rgba(0,0,0,0.15);
-            }
-            
-            .book-card-cover {
-                height: 160px;
-                background-size: cover;
-                background-position: center;
-                position: relative;
-            }
-            
-            .card-badge {
-                position: absolute;
-                padding: 4px 10px;
-                border-radius: 999px;
-                font-size: 0.7rem;
-                font-weight: 600;
-                color: white;
-            }
-            
-            .audio-badge {
-                top: 10px;
-                left: 10px;
-                background: var(--accent-color);
-            }
-            
-            .duration-badge {
-                bottom: 10px;
-                right: 10px;
-                background: rgba(0,0,0,0.7);
-            }
-            
-            .book-card-details {
-                padding: 15px;
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-            }
-            
-            .book-card-title {
-                margin: 0 0 8px 0;
-                font-size: 0.95rem;
-                color: var(--text-color);
-                line-height: 1.3;
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-            }
-            
-            .book-card-author {
-                margin: 0;
-                font-size: 0.85rem;
-                color: var(--secondary-text);
-                font-weight: 500;
-            }
-            
-            @media (max-width: 768px) {
-                .genre-navigation {
-                    padding: 1.25rem;
-                }
-                
-                .genre-pill {
-                    padding: 8px 14px;
-                    font-size: 0.85rem;
-                }
-                
-                .audiobooks-grid {
-                    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-                    gap: 15px;
-                }
-                
-                .genre-view {
-                    padding: 1rem;
-                }
-                
-                .genre-view-header {
-                    margin-bottom: 1rem;
-                }
-                
-                .genre-view-title {
-                    font-size: 1.25rem;
-                }
-            }
-        `;
-        
-        document.head.appendChild(styleElement);
-    }
-    
-    // Add specific styles for genre pills to remove borders
-    function updateGenrePillStyles() {
-        // Check if the styles already exist
-        if (document.getElementById('genre-pill-border-fix')) return;
-        
-        const styleElement = document.createElement('style');
-        styleElement.id = 'genre-pill-border-fix';
-        styleElement.textContent = `
-            .genre-pill {
-                border: none !important;
-                box-shadow: 0 3px 8px rgba(var(--primary-rgb), 0.15);
-            }
-            
-            .genre-pill:hover {
-                box-shadow: 0 5px 12px rgba(var(--primary-rgb), 0.25);
-            }
-            
-            .genre-pill.selected {
-                box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.4);
-            }
-        `;
-        
-        document.head.appendChild(styleElement);
-    }
     
     // Count how many books are in a specific genre
     function countBooksInGenre(books, genre) {
@@ -732,7 +603,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // New function to display genre books in a grid view card
+    /**
+     * Display a grid of books for a specific genre
+     * @param {string} genre - The genre/category name
+     * @param {Object[]} genreBooks - Array of audiobook objects in this genre
+     * @returns {void}
+     */
     function displayGenreBooksGrid(genre, genreBooks) {
+        // Announce genre selection to screen readers
+        announceToScreenReader(`${capitalizeCategory(genre)}: ${genreBooks.length} audiolibri trovati`);
+        
         // Remove any existing genre grid card first
         const existingCard = document.getElementById('genre-books-grid-card');
         if (existingCard) {
@@ -797,6 +677,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const index = parseInt(this.dataset.index);
                 if (!isNaN(index) && index >= 0 && index < genreBooks.length) {
                     currentBook = genreBooks[index];
+                    announceToScreenReader(`Selezionato: ${currentBook.title} di ${currentBook.author}`);
                     displayBook(currentBook);
                     
                     // No need to scroll now that the player is below the grid
@@ -835,9 +716,6 @@ document.addEventListener('DOMContentLoaded', () => {
         booksGridElement.addEventListener('scroll', () => {
             updateScrollButtonsVisibility(booksGridElement, scrollLeftButton, scrollRightButton);
         });
-        
-        // Add CSS styles for the grid card
-        addGenreGridStyles();
     }
     
     // Helper function to update scroll button visibility
@@ -857,240 +735,6 @@ document.addEventListener('DOMContentLoaded', () => {
             rightButton.classList.remove('hidden');
         }
     }
-    
-    // Add styles for the genre grid card
-    function addGenreGridStyles() {
-        // Check if styles already exist
-        if (document.getElementById('genre-grid-styles')) return;
-        
-        const styleElement = document.createElement('style');
-        styleElement.id = 'genre-grid-styles';
-        styleElement.textContent = `
-            .genre-books-grid-card {
-                background: var(--card-background);
-                border-radius:
-                0px;
-                padding:
-                1.5rem;
-                margin-bottom: 1.2rem;
-                box-shadow: none;
-                border: 0px solid var(--border-color);
-                transition:
-                all 0.3s ease;
-            }
-            
-            .genre-grid-header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 1.5rem;
-            }
-            
-            .genre-grid-title-area {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                flex-wrap: wrap;
-            }
-            
-            .genre-grid-title {
-                font-size: 1.5rem;
-                margin: 0;
-                color: var(--header-color);
-            }
-            
-            .genre-count-badge {
-                background: rgba(var(--primary-rgb), 0.1);
-                color: var(--primary-color);
-                padding: 5px 12px;
-                border-radius: 999px;
-                font-size: 0.85rem;
-                font-weight: 500;
-            }
-            
-            /* Horizontal scrolling container */
-            .books-grid-container {
-                position: relative;
-                display: flex;
-                align-items: center;
-                width: 100%;
-            }
-            
-            .books-grid {
-                display: flex;
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                scroll-behavior: smooth;
-                -webkit-overflow-scrolling: touch;
-                padding: 10px 0;
-                gap: 16px;
-                scrollbar-width: none; /* Firefox */
-                -ms-overflow-style: none; /* IE and Edge */
-            }
-            
-            /* Hide scrollbar for Chrome, Safari and Opera */
-            .books-grid::-webkit-scrollbar {
-                display: none;
-            }
-            
-            /* Scroll buttons */
-            .scroll-button {
-                position: absolute;
-                z-index: 10;
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                background: var(--card-background);
-                color: var(--primary-color);
-                border: 1px solid rgba(var(--primary-rgb), 0.3);
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                transition: all 0.2s ease;
-                opacity: 0.9;
-            }
-            
-            .scroll-button:hover {
-                background: rgba(var(--primary-rgb), 0.1);
-                transform: scale(1.1);
-                opacity: 1;
-            }
-            
-            .scroll-button.hidden {
-                opacity: 0;
-                visibility: hidden;
-                transform: scale(0.8);
-            }
-            
-            .scroll-left {
-                left: -10px;
-            }
-            
-            .scroll-right {
-                right: -10px;
-            }
-            
-            .arrow-left-icon, .arrow-right-icon {
-                font-size: 1.2rem;
-                font-weight: 700;
-            }
-            
-            .book-grid-item {
-                flex: 0 0 180px;
-                background: rgba(var(--card-background-rgb), 0.5);
-                border: 1px solid var(--border-color);
-                border-radius: 12px;
-                overflow: hidden;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-            }
-            
-            .book-grid-item:hover {
-                transform: translateY(-8px);
-                box-shadow: 0 12px 20px rgba(0,0,0,0.1);
-            }
-            
-            .book-grid-cover {
-                height: 120px;
-                background-size: cover;
-                background-position: center;
-                position: relative;
-            }
-            
-            .book-grid-duration {
-                position: absolute;
-                bottom: 8px;
-                right: 8px;
-                background: rgba(0,0,0,0.75);
-                color: white;
-                padding: 3px 8px;
-                border-radius: 4px;
-                font-size: 0.75rem;
-            }
-            
-            .book-grid-details {
-                padding: 12px;
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-            }
-            
-            .book-grid-title {
-                margin: 0 0 6px 0;
-                font-size: 0.95rem;
-                font-weight: 600;
-                color: var(--text-color);
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-                line-height: 1.3;
-            }
-            
-            .book-grid-author {
-                margin: 0;
-                font-size: 0.8rem;
-                color: var(--secondary-text);
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
-            
-            /* Animation classes */
-            .fade-in {
-                animation: fadeIn 0.4s ease forwards;
-            }
-            
-            .fade-out {
-                animation: fadeOut 0.3s ease forwards;
-            }
-            
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(10px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-            
-            @keyframes fadeOut {
-                from { opacity: 1; transform: translateY(0); }
-                to { opacity: 0; transform: translateY(10px); }
-            }
-            
-            @media (max-width: 768px) {
-                .genre-books-grid-card {
-                    padding: 1rem;
-                    margin: 1rem 0;
-                }
-                
-                .genre-grid-title {
-                    font-size: 1.25rem;
-                }
-                
-                .book-grid-item {
-                    flex: 0 0 140px;
-                }
-                
-                .book-grid-cover {
-                    height: 100px;
-                }
-                
-                .scroll-button {
-                    width: 36px;
-                    height: 36px;
-                }
-                
-                .arrow-left-icon, .arrow-right-icon {
-                    font-size: 1rem;
-                }
-            }
-        `;
-        
-        document.head.appendChild(styleElement);
-    }
 
     function resetPlayerState() {
         playerState = {
@@ -1101,6 +745,19 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
     
+    /**
+     * Display an audiobook with its metadata, player, and controls
+     * @param {Object} book - The audiobook object to display
+     * @param {string} book.title - Title of the audiobook
+     * @param {string} book.author - Author name
+     * @param {string} book.coverImage - URL to cover image
+     * @param {string} book.description - Book description
+     * @param {string} [book.videoId] - YouTube video ID (optional)
+     * @param {string} [book.audioUrl] - Direct audio URL (optional)
+     * @param {string[]} [book.categories] - Array of genre categories
+     * @param {string} [book.formattedDuration] - Formatted duration string
+     * @returns {void}
+     */
     function displayBook(book) {
         // WCAG: Announce book change to screen readers
         announceToScreenReader(`Ora in riproduzione: ${book.title} di ${book.author}`);
@@ -1273,6 +930,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    /**
+     * Initialize player controls for YouTube video player
+     * Sets up play/pause, seek, progress bar, and volume controls
+     * @param {Object} book - The audiobook object being played
+     * @returns {void}
+     */
     function setupPlayerControls(book) {
         const playPauseButton = document.getElementById('play-pause');
         const rewindButton = document.getElementById('rewind-button');
@@ -1366,35 +1029,61 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Initialize YouTube player
     window.onYouTubeIframeAPIReady = function() {
-        // The API will call this function when it's ready
-        if (currentBook && currentBook.videoId) {
-            loadYouTubeVideo(currentBook.videoId);
+        try {
+            // The API will call this function when it's ready
+            if (currentBook && currentBook.videoId) {
+                loadYouTubeVideo(currentBook.videoId);
+            }
+        } catch (error) {
+            console.error('YouTube API initialization failed:', error);
+            showYouTubeError('Errore durante l\'inizializzazione del lettore video');
         }
     };
     
+    /**
+     * Load and initialize a YouTube video player
+     * @param {string} videoId - The YouTube video ID
+     * @returns {void}
+     */
     function loadYouTubeVideo(videoId) {
-        // Clear previous player
-        if (youtubePlayer) {
-            youtubePlayer.destroy();
-        }
-        
-        // Create a new player
-        youtubePlayer = new YT.Player('youtube-player', {
-            height: '180',
-            width: '320',
-            videoId: videoId,
-            playerVars: {
-                'playsinline': 1,
-                'autoplay': 1,
-                'controls': 0, // Hide default controls
-                'rel': 0,
-                'modestbranding': 1
-            },
-            events: {
-                'onReady': onPlayerReady,
-                'onStateChange': onPlayerStateChange
+        try {
+            // Check if YouTube API is available
+            if (typeof YT === 'undefined' || typeof YT.Player === 'undefined') {
+                showYouTubeError('L\'API di YouTube non è disponibile. Controlla la connessione.');
+                return;
             }
-        });
+            
+            // Clear previous player
+            if (youtubePlayer) {
+                try {
+                    youtubePlayer.destroy();
+                } catch (e) {
+                    console.warn('Could not destroy previous player:', e);
+                }
+            }
+            
+            // Create a new player
+            youtubePlayer = new YT.Player('youtube-player', {
+                height: '180',
+                width: '320',
+                videoId: videoId,
+                playerVars: {
+                    'playsinline': 1,
+                    'autoplay': 1,
+                    'controls': 0, // Hide default controls
+                    'rel': 0,
+                    'modestbranding': 1
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange,
+                    'onError': onPlayerError
+                }
+            });
+        } catch (error) {
+            console.error('Error loading YouTube video:', error);
+            showYouTubeError('Impossibile caricare il video. Riprova più tardi.');
+        }
     }
     
     function onPlayerReady(event) {
@@ -1407,6 +1096,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Update player state
         playerState.isPlaying = true;
         playerState.duration = event.target.getDuration();
+        
+        // Announce to screen readers
+        announceToScreenReader('Riproduzione avviata');
         
         // Update UI
         document.getElementById('play-pause').innerHTML = '<i class="pause-icon"></i>';
@@ -1423,12 +1115,62 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.data === YT.PlayerState.PLAYING) {
             playPauseButton.innerHTML = '<i class="pause-icon"></i>';
             playerState.isPlaying = true;
-        } else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
+            announceToScreenReader('Riproduzione in corso');
+        } else if (event.data === YT.PlayerState.PAUSED) {
             playPauseButton.innerHTML = '<i class="play-icon"></i>';
             playerState.isPlaying = false;
+            announceToScreenReader('Riproduzione in pausa');
+        } else if (event.data === YT.PlayerState.ENDED) {
+            playPauseButton.innerHTML = '<i class="play-icon"></i>';
+            playerState.isPlaying = false;
+            announceToScreenReader('Riproduzione terminata');
         }
     }
     
+    function onPlayerError(event) {
+        // Handle YouTube player errors
+        const errorMessages = {
+            2: 'Richiesta non valida. Controlla l\'URL del video.',
+            5: 'Errore del lettore HTML5.',
+            100: 'Video non trovato o rimosso.',
+            101: 'Il proprietario del video non consente la riproduzione incorporata.',
+            150: 'Il proprietario del video non consente la riproduzione incorporata.'
+        };
+        
+        const errorCode = event.data;
+        const errorMessage = errorMessages[errorCode] || 'Errore sconosciuto durante la riproduzione.';
+        
+        console.error('YouTube Player Error:', errorCode, errorMessage);
+        showYouTubeError(errorMessage);
+    }
+    
+    function showYouTubeError(message) {
+        const playerContainer = document.getElementById('youtube-player');
+        if (playerContainer) {
+            playerContainer.innerHTML = `
+                <div style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    height: 180px;
+                    background: rgba(0,0,0,0.1);
+                    border-radius: 8px;
+                    padding: 1rem;
+                    text-align: center;
+                ">
+                    <span style="font-size: 2rem; margin-bottom: 0.5rem;">⚠️</span>
+                    <p style="margin: 0; color: var(--text-color); font-size: 0.9rem;">${message}</p>
+                </div>
+            `;
+        }
+    }
+    
+    /**
+     * Perform search across audiobooks by title, author, and description
+     * Minimum 3 characters required, debounced at 500ms
+     * @returns {void}
+     */
     function performSearch() {
         const searchTerm = searchInput.value.trim();
         
@@ -1513,7 +1255,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // Function to display search results
+    /**
+     * Display search results in a paginated grid
+     * @param {string} searchTerm - The search query string (will be sanitized)
+     * @param {Object[]} results - Array of matching audiobook objects
+     * @returns {void}
+     */
     function displaySearchResults(searchTerm, results) {
+        // Announce search results to screen readers
+        announceToScreenReader(`${results.length} audiolibri trovati per "${searchTerm}"`);
+        
         // Remove any existing search results card first
         const existingCard = document.getElementById('search-results-card');
         if (existingCard) {
@@ -1539,11 +1290,14 @@ document.addEventListener('DOMContentLoaded', () => {
         searchResultsCard.id = 'search-results-card';
         searchResultsCard.className = 'search-results-card fade-in';
         
+        // Sanitize search term for display
+        const sanitizedSearchTerm = sanitizeText(searchTerm);
+        
         // Create header with search info
         searchResultsCard.innerHTML = `
             <div class="search-results-header">
                 <div class="search-info">
-                    <h2 class="search-title">Risultati per "${searchTerm}"</h2>
+                    <h2 class="search-title">Risultati per "${sanitizedSearchTerm}"</h2>
                     <span class="results-count">${results.length} audiolibri trovati</span>
                 </div>
                 <button class="back-button" id="search-back-button">
@@ -1660,191 +1414,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Render the first page of results
         renderPage(currentPage);
-        
-        // Add CSS styles for search results
-        addSearchResultsStyles();
-    }
-    
-    // Add CSS styles for search results
-    function addSearchResultsStyles() {
-        // Check if styles are already added
-        if (document.getElementById('search-results-styles')) return;
-        
-        const styleElement = document.createElement('style');
-        styleElement.id = 'search-results-styles';
-        styleElement.textContent = `
-            .search-results-card {
-                margin: 20px 0;
-                padding: 1.5rem;
-                background: var(--card-background);
-                border-radius: 16px;
-                box-shadow: var(--card-shadow);
-                border: 1px solid var(--border-color);
-                transition: all 0.3s ease;
-                margin-bottom: 30px; /* Add more space below search results */
-            }
-            
-            .search-results-header {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                margin-bottom: 1.5rem;
-                flex-wrap: wrap;
-                gap: 12px;
-            }
-            
-            .search-info {
-                display: flex;
-                flex-direction: column;
-                gap: 4px;
-            }
-            
-            .search-title {
-                font-size: 1.5rem;
-                color: var(--header-color);
-                margin: 0;
-                font-weight: 600;
-            }
-            
-            .results-count {
-                color: var(--secondary-text);
-                font-size: 0.9rem;
-            }
-            
-            .back-button {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                padding: 8px 16px;
-                background: rgba(var(--primary-rgb), 0.1);
-                border-radius: 999px;
-                color: var(--primary-color);
-                border: 1px solid rgba(var(--primary-rgb), 0.2);
-                font-size: 0.9rem;
-                cursor: pointer;
-                transition: all 0.2s ease;
-            }
-            
-            .back-button:hover {
-                background: rgba(var(--primary-rgb), 0.2);
-                box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-            }
-            
-            .back-icon::before {
-                content: "←";
-                margin-right: 4px;
-            }
-            
-            .audiobooks-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-                gap: 20px;
-                margin-bottom: 1.5rem;
-            }
-            
-            .pagination-controls {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 16px;
-                margin-top: 1.5rem;
-            }
-            
-            .pagination-button {
-                padding: 8px 16px;
-                background: rgba(var(--primary-rgb), 0.1);
-                border: 1px solid rgba(var(--primary-rgb), 0.2);
-                border-radius: 999px;
-                color: var(--primary-color);
-                cursor: pointer;
-                transition: all 0.2s ease;
-                display: flex;
-                align-items: center;
-                gap: 6px;
-            }
-            
-            .pagination-button:hover:not([disabled]) {
-                background: rgba(var(--primary-rgb), 0.2);
-                box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-            }
-            
-            .pagination-button[disabled] {
-                opacity: 0.5;
-                cursor: not-allowed;
-            }
-            
-            .page-indicator {
-                color: var(--secondary-text);
-                font-size: 0.9rem;
-            }
-            
-            .prev-icon::before {
-                content: "←";
-            }
-            
-            .next-icon::before {
-                content: "→";
-            }
-            
-            .no-results {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                padding: 3rem;
-                text-align: center;
-            }
-            
-            .no-results h3 {
-                margin: 1rem 0 0.5rem;
-                color: var(--header-color);
-            }
-            
-            .no-results p {
-                color: var(--secondary-text);
-                margin-bottom: 1.5rem;
-            }
-            
-            .search-icon {
-                display: inline-block;
-                width: 60px;
-                height: 60px;
-                background-color: rgba(var(--primary-rgb), 0.1);
-                border-radius: 50%;
-                position: relative;
-            }
-            
-            .search-icon::before {
-                content: "🔍";
-                font-size: 2rem;
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-            }
-            
-            @media (max-width: 768px) {
-                .search-results-card {
-                    padding: 1rem;
-                }
-                
-                .search-title {
-                    font-size: 1.25rem;
-                }
-                
-                .audiobooks-grid {
-                    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-                    gap: 15px;
-                }
-                
-                .pagination-button {
-                    padding: 6px 12px;
-                    font-size: 0.85rem;
-                }
-            }
-        `;
-        
-        document.head.appendChild(styleElement);
     }
     
     function formatTimeDisplay(seconds) {
@@ -2130,4 +1699,74 @@ document.addEventListener('DOMContentLoaded', () => {
     if (config.enableChangelog) {
         initializeChangelog();
     }
+    
+    // Cleanup on page unload to prevent memory leaks
+    window.addEventListener('beforeunload', () => {
+        if (updateInterval) {
+            clearInterval(updateInterval);
+        }
+        if (youtubePlayer && youtubePlayer.destroy) {
+            youtubePlayer.destroy();
+        }
+    });
+    
+    // Keyboard shortcuts for player controls
+    document.addEventListener('keydown', (e) => {
+        // Don't trigger if user is typing in an input field
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+            return;
+        }
+        
+        const playPauseButton = document.getElementById('play-pause');
+        const rewindButton = document.getElementById('rewind-button');
+        const forwardButton = document.getElementById('forward-button');
+        
+        switch(e.key) {
+            case ' ': // Spacebar - play/pause
+                e.preventDefault();
+                if (playPauseButton) playPauseButton.click();
+                announceToScreenReader(playerState.isPlaying ? 'Pausa' : 'Riproduci');
+                break;
+            case 'ArrowLeft': // Left arrow - rewind 10s
+                e.preventDefault();
+                if (rewindButton) rewindButton.click();
+                announceToScreenReader('Riavvolgi 10 secondi');
+                break;
+            case 'ArrowRight': // Right arrow - forward 10s
+                e.preventDefault();
+                if (forwardButton) forwardButton.click();
+                announceToScreenReader('Avanza 10 secondi');
+                break;
+            case 'ArrowUp': // Up arrow - volume up
+                e.preventDefault();
+                const volumeSlider = document.getElementById('volume-slider');
+                if (volumeSlider) {
+                    const newVolume = Math.min(100, parseInt(volumeSlider.value) + 10);
+                    volumeSlider.value = newVolume;
+                    volumeSlider.dispatchEvent(new Event('input'));
+                    announceToScreenReader(`Volume: ${newVolume}%`);
+                }
+                break;
+            case 'ArrowDown': // Down arrow - volume down
+                e.preventDefault();
+                const volumeSliderDown = document.getElementById('volume-slider');
+                if (volumeSliderDown) {
+                    const newVolume = Math.max(0, parseInt(volumeSliderDown.value) - 10);
+                    volumeSliderDown.value = newVolume;
+                    volumeSliderDown.dispatchEvent(new Event('input'));
+                    announceToScreenReader(`Volume: ${newVolume}%`);
+                }
+                break;
+            case 'm': // M - mute/unmute
+                e.preventDefault();
+                const volumeSliderMute = document.getElementById('volume-slider');
+                if (volumeSliderMute) {
+                    const isMuted = volumeSliderMute.value === '0';
+                    volumeSliderMute.value = isMuted ? playerState.volume : 0;
+                    volumeSliderMute.dispatchEvent(new Event('input'));
+                    announceToScreenReader(isMuted ? 'Audio attivato' : 'Audio disattivato');
+                }
+                break;
+        }
+    });
 });

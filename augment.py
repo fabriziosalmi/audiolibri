@@ -17,7 +17,7 @@ CONFIG = {
     'input_file': 'audiobooks.json',
     'output_file': 'augmented.json',
     'checkpoint_file': 'augment_checkpoint.json',
-    'api_url': 'http://localhost:1234/v1/chat/completions',
+    'api_url': os.environ.get('LLM_API_URL', 'http://localhost:1234/v1/chat/completions'),
     'batch_size': 10,  # Process this many items before saving checkpoint
     'rate_limit': 1.0,  # Time in seconds to wait between API calls
 }
