@@ -293,12 +293,24 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Function to fetch fresh data from server
     function fetchFreshData(isBackgroundUpdate) {
+        // Try loading augmented.json first, then fall back to audiobooks.json
         fetch('augmented.json')
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 return response.json();
+            })
+            .catch(error => {
+                // If augmented.json fails, try audiobooks.json as fallback
+                console.warn('Failed to load augmented.json, trying audiobooks.json fallback:', error);
+                return fetch('audiobooks.json')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    });
             })
             .then(data => {
                 // Save to cache for next time
