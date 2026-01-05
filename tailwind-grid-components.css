@@ -3,6 +3,7 @@
 
 .tw-grid {
   display: grid;
+  display: flex;
 }
 
 /* Grid di base */
