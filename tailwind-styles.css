@@ -274,6 +274,7 @@
 /* Classi per la griglia */
 .tw-grid {
   display: grid;
+  display: flex;
 }
 
 .tw-grid-cols-1 {
