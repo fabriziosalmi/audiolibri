@@ -240,6 +240,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // Function to process raw data into audiobooks array
+    // This function handles both augmented.json (with real_* fields) and audiobooks.json (with basic fields)
+    // The fallback logic ensures the app works with either data source
     function processAudiobooksData(data) {
         return Object.entries(data).map(([id, book]) => {
             return {
@@ -293,12 +295,29 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Function to fetch fresh data from server
     function fetchFreshData(isBackgroundUpdate) {
+        // Try loading augmented.json first, then fall back to audiobooks.json
         fetch('augmented.json')
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 return response.json();
+            })
+            .catch(error => {
+                // If augmented.json fails, try audiobooks.json as fallback
+                console.warn('Failed to load augmented.json, trying audiobooks.json fallback:', error.message || error);
+                return fetch('audiobooks.json')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Fallback failed - audiobooks.json HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .catch(fallbackError => {
+                        // Both files failed to load
+                        console.error('Both augmented.json and audiobooks.json failed to load');
+                        throw new Error(`Failed to load audiobooks data: ${fallbackError.message || fallbackError}`);
+                    });
             })
             .then(data => {
                 // Save to cache for next time
