@@ -305,13 +305,18 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => {
                 // If augmented.json fails, try audiobooks.json as fallback
-                console.warn('Failed to load augmented.json, trying audiobooks.json fallback:', error);
+                console.warn('Failed to load augmented.json, trying audiobooks.json fallback:', error.message || error);
                 return fetch('audiobooks.json')
                     .then(response => {
                         if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
+                            throw new Error(`Fallback failed - audiobooks.json HTTP error! status: ${response.status}`);
                         }
                         return response.json();
+                    })
+                    .catch(fallbackError => {
+                        // Both files failed to load
+                        console.error('Both augmented.json and audiobooks.json failed to load');
+                        throw new Error(`Failed to load audiobooks data: ${fallbackError.message || fallbackError}`);
                     });
             })
             .then(data => {
