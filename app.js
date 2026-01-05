@@ -240,6 +240,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // Function to process raw data into audiobooks array
+    // This function handles both augmented.json (with real_* fields) and audiobooks.json (with basic fields)
+    // The fallback logic ensures the app works with either data source
     function processAudiobooksData(data) {
         return Object.entries(data).map(([id, book]) => {
             return {
