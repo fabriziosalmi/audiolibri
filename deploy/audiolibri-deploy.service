@@ -1,0 +1,12 @@
+[Unit]
+Description=Deploy audiolibri.org (resilient git pull + validate + rollback)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# Runs as root; deploy.sh drops to www-data for git operations.
+ExecStart=/var/www/audiolibri.org/deploy.sh
+Nice=10
+# A failed deploy already rolls itself back, so don't hard-fail the unit.
+SuccessExitStatus=0 1

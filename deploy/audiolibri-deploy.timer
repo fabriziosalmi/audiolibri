@@ -1,0 +1,14 @@
+[Unit]
+Description=Auto-deploy audiolibri.org on a schedule
+
+[Timer]
+# First run shortly after boot, then every 5 minutes.
+OnBootSec=2min
+OnUnitActiveSec=5min
+# Catch up if the machine was off when a run was due.
+Persistent=true
+# Avoid every-host-at-once stampedes (harmless here, good hygiene).
+RandomizedDelaySec=30
+
+[Install]
+WantedBy=timers.target
