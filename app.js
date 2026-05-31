@@ -293,12 +293,27 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Function to fetch fresh data from server
     function fetchFreshData(isBackgroundUpdate) {
+        // Try augmented.json first, then fall back to audiobooks.json (parity with production)
         fetch('augmented.json')
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 return response.json();
+            })
+            .catch(error => {
+                console.warn('augmented.json failed, trying audiobooks.json fallback:', error.message || error);
+                return fetch('audiobooks.json')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Fallback failed - audiobooks.json HTTP status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .catch(fallbackError => {
+                        console.error('Both augmented.json and audiobooks.json failed to load');
+                        throw new Error(`Failed to load audiobooks data: ${fallbackError.message || fallbackError}`);
+                    });
             })
             .then(data => {
                 // Save to cache for next time
@@ -1509,237 +1524,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return (match && match[2].length === 11) ? match[2] : null;
     }
     
-    
-    // Cleanup on page unload to prevent memory leaks
-    window.addEventListener('beforeunload', () => {
-        if (updateInterval) {
-            clearInterval(updateInterval);
-        }
-        if (youtubePlayer && youtubePlayer.destroy) {
-            youtubePlayer.destroy();
-        }
-    });
-        
-        // Check if user preference for collapsing is stored
-        const isCollapsed = localStorage.getItem('changelogCollapsed') === 'true';
-        if (isCollapsed) {
-            changelogCard.classList.add('collapsed');
-            changelogToggle.querySelector('.collapse-icon').textContent = '+';
-            changelogToggle.setAttribute('aria-expanded', 'false');
-        } else {
-            changelogToggle.setAttribute('aria-expanded', 'true');
-        }
-        
-        // Toggle changelog visibility with enhanced accessibility
-        changelogToggle.addEventListener('click', () => {
-            toggleChangelog();
-        });
-        
-        // WCAG: Add keyboard support for changelog toggle
-        changelogToggle.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                toggleChangelog();
-            }
-        });
-        
-        function toggleChangelog() {
-            const wasCollapsed = changelogCard.classList.contains('collapsed');
-            changelogCard.classList.toggle('collapsed');
-            const isNowCollapsed = changelogCard.classList.contains('collapsed');
-            
-            // Update localStorage
-            localStorage.setItem('changelogCollapsed', isNowCollapsed);
-            
-            // Update visual indicator
-            changelogToggle.querySelector('.collapse-icon').textContent = isNowCollapsed ? '+' : '−';
-            
-            // Update ARIA attributes
-            changelogToggle.setAttribute('aria-expanded', !isNowCollapsed);
-            
-            // Announce to screen readers
-            announceToScreenReader(
-                isNowCollapsed ? 'Aggiornamenti nascosti' : 'Aggiornamenti mostrati'
-            );
-        }
-        
-        // Load changelog data with accessibility
-        document.getElementById('changelog-content').innerHTML = `
-            <div class="loading-spinner small" aria-hidden="true"></div>
-            <p>Caricamento aggiornamenti...</p>
-        `;
-        
-        // Try loading the changelog data
-        fetchChangelog();
-    }
-
-    function fetchChangelog() {
-        // Set a timeout for the fetch
-        const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Timeout')), 8000)
-        );
-        
-        // Fetch with timeout handling
-        Promise.race([
-            fetch(config.changelogPath),
-            timeoutPromise
-        ])
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Network response was not ok: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (!data || !data.entries || !Array.isArray(data.entries)) {
-                throw new Error('Invalid data format');
-            }
-            displayChangelog(data);
-        })
-        .catch(error => {
-            console.error('Error loading changelog:', error);
-            document.getElementById('changelog-content').innerHTML = `
-                <div class="error-message small">
-                    <p>Impossibile caricare gli aggiornamenti: ${error.message || 'Unknown error'}</p>
-                    <button id="retry-changelog" class="control-button small">Riprova</button>
-                </div>
-            `;
-            
-            // Add retry button functionality
-            document.getElementById('retry-changelog')?.addEventListener('click', () => {
-                document.getElementById('changelog-content').innerHTML = `
-                    <div class="loading-spinner small"></div>
-                    <p>Caricamento aggiornamenti...</p>
-                `;
-                fetchChangelog();
-            });
-        });
-    }
-
-    function displayChangelog(data) {
-        const changelogContent = document.getElementById('changelog-content');
-        const entries = data.entries.slice(0, config.maxChangelogEntries); // Limit number of entries
-        
-        if (!entries || entries.length === 0) {
-            changelogContent.innerHTML = '<p>Nessun aggiornamento disponibile.</p>';
-            return;
-        }
-        
-        let html = '';
-        entries.forEach(entry => {
-            const date = new Date(entry.date);
-            const formattedDate = date.toLocaleDateString('it-IT', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            });
-            
-            html += `
-                <div class="changelog-entry">
-                    <div class="changelog-date">${formattedDate}</div>
-                    <h3 class="changelog-title">${entry.title}</h3>
-                    <p class="changelog-description">${entry.description || ''}</p>
-                    ${renderChangelogItems(entry.changes)}
-                </div>
-            `;
-        });
-        
-        changelogContent.innerHTML = html;
-    }
-    
-    // Add the missing renderChangelogItems function
-    function renderChangelogItems(changes) {
-        if (!changes || !Array.isArray(changes) || changes.length === 0) {
-            return '';
-        }
-        
-        // Add a style tag for the changelog items
-        const styleTag = `
-        <style>
-            .changelog-items {
-                padding-left: 0;
-                list-style-type: none;
-                margin-top: 10px;
-            }
-            .changelog-items li {
-                margin-bottom: 6px;
-                display: flex;
-                align-items: flex-start;
-            }
-            .change-icon {
-                display: inline-block;
-                width: 22px;
-                text-align: center;
-                margin-right: 10px;
-            }
-            .change-content {
-                font-size: 0.9em;
-                line-height: 1.4;
-                flex: 1;
-                padding-top: 2px;
-            }
-            .change-type-feature .change-content {
-                color: var(--accent-color, #10b981);
-            }
-            .change-type-fix .change-content {
-                color: var(--fix-color, #f59e0b);
-            }
-        </style>`;
-        
-        let html = styleTag + '<ul class="changelog-items">';
-        changes.forEach(item => {
-            // Check if item is a string or has a type property
-            if (typeof item === 'string') {
-                html += `
-                    <li>
-                        <span class="change-icon">•</span>
-                        <span class="change-content">${item}</span>
-                    </li>
-                `;
-            } else if (item && typeof item === 'object') {
-                const type = item.type || 'other';
-                const content = item.text || item.content || '';
-                html += `
-                    <li class="change-type-${type.toLowerCase()}">
-                        ${getChangeTypeIcon(type)}
-                        <span class="change-content">${content}</span>
-                    </li>
-                `;
-            }
-        });
-        html += '</ul>';
-        
-        return html;
-    }
-
-    // Helper function to get appropriate icon for change types
-    function getChangeTypeIcon(type) {
-        const lowerType = type.toLowerCase();
-        switch (lowerType) {
-            case 'feature':
-            case 'new':
-                return '<span class="change-icon">✨</span>';
-            case 'fix':
-            case 'bugfix':
-                return '<span class="change-icon">🐛</span>';
-            case 'improvement':
-            case 'enhance':
-                return '<span class="change-icon">⚡️</span>';
-            case 'security':
-                return '<span class="change-icon">🔒</span>';
-            case 'deprecate':
-            case 'deprecated':
-                return '<span class="change-icon">⚠️</span>';
-            case 'remove':
-            case 'removed':
-                return '<span class="change-icon">🗑️</span>';
-            case 'docs':
-            case 'documentation':
-                return '<span class="change-icon">📝</span>';
-            default:
-                return '<span class="change-icon">•</span>';
-        }
-    }
     
     // Cleanup on page unload to prevent memory leaks
     window.addEventListener('beforeunload', () => {
