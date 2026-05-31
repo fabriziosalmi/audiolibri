@@ -1,15 +1,8 @@
-const CACHE_NAME = 'audiolibri-cache-v3';
+const CACHE_NAME = 'audiolibri-cache-v4';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
-  '/styles.css',
-  '/tailwind-styles.css',
-  '/mobile-navigation.css',
-  '/mobile-fixes.css',
-  '/tailwind-mobile.css',
-  '/tailwind-grid-components.css',
-  '/tailwind-nav-components.css',
-  '/tailwind-modern-ios.css',
+  '/app.css',
   '/app.js',
   '/mobile-navigation.js',
   '/mobile-enhancements.js',
