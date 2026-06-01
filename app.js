@@ -133,6 +133,14 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('scroll', onScroll, { passive: true });
         onScroll();
     }
+
+    // Main-nav: Home resets to the top and closes any open search / genre view.
+    document.querySelector('[data-nav="home"]')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('search-results-card')?.remove();
+        document.getElementById('genre-books-grid-card')?.remove();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
     
     function toggleTheme() {
         const newTheme = !prefersDarkMode;
@@ -284,6 +292,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return pool[Math.floor(Math.random() * pool.length)];
     }
 
+    // Run a search from the ?search= query param (the static pages' search form posts here).
+    function runSearchFromUrl() {
+        const q = new URLSearchParams(location.search).get('search');
+        if (q && q.trim()) {
+            searchInput.value = q.trim();
+            performSearch();
+        }
+    }
+
     // Load the audiobook data - try cache first, then fetch
     async function loadAudiobooksData() {
         // Check if we have valid cached data
@@ -298,6 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     setTimeout(() => {
                         currentBook = pickFeaturedBook();
                         displayBook(currentBook);
+                        runSearchFromUrl();
                     }, 300);
                 }
                 
@@ -355,6 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             // Popular title as the initial hero (more likely live + recognizable)
                             currentBook = pickFeaturedBook();
                             displayBook(currentBook);
+                            runSearchFromUrl();
                         }, 500);
                     } else {
                         document.getElementById('current-audiobook').innerHTML = 

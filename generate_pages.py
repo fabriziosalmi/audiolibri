@@ -3,15 +3,16 @@
 generate_pages.py — build crawlable static pages for audiolibri.org.
 
 The site is a client-rendered SPA, so search engines and AI answer engines
-see only the loading spinner. This generator pre-renders static HTML so the
-~1793 titles become indexable, each with schema.org structured data:
+see only the loading spinner. This generator pre-renders static HTML (committed
+to the repo, CDN-cacheable) so the ~1793 titles become indexable, each with
+schema.org structured data. All pages share the same header/footer chrome as
+the SPA (unified look); search submits to /?search= which the SPA executes.
 
     /audiolibro/<slug>-<id>/   one page per audiobook (Audiobook + FAQ + crumbs)
     /genere/<slug>/            one hub per genre (ItemList)
-    /autore/<slug>/            one hub per author with >= 2 titles (ItemList)
-    /sitemap.xml, /robots.txt
-
-Pages are committed to the repo so a CDN (Fastly/Cloudflare) can cache them.
+    /autore/<slug>/            one hub per author (>= 2 titles) (ItemList)
+    /generi/  /autori/         index pages (destinations for the main nav)
+    /sitemap.xml  /robots.txt
 
 Usage:
     python3 generate_pages.py            # build everything
@@ -34,10 +35,25 @@ e = html.escape
 
 FONTS = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
          '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
-         '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&'
+         '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&'
          'family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">')
 
-# Detect YouTube's 120x90 grey placeholder (deleted videos) and swap to a gradient cover.
+SEARCH_SVG = ('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" '
+              'viewBox="0 0 16 16" aria-hidden="true"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 '
+              '1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 '
+              '1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>')
+GITHUB_SVG = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" '
+              'aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 '
+              '0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 '
+              '1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 '
+              '0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 '
+              '1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 '
+              '3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 '
+              '8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>')
+THEME_SVG = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" '
+             'cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor" stroke="none"/></svg>')
+
+# Grey-placeholder fallback for deleted videos, shared by hubs/indexes.
 FALLBACK_SCRIPT = """<script>
 document.querySelectorAll('.nf-card-img').forEach(function(img){
   function fb(){var c=img.closest('.nf-card-cover');if(c)c.classList.add('is-fallback');}
@@ -97,43 +113,11 @@ def book_slug(b) -> str:
 
 def meta_description(text: str, limit: int = 155) -> str:
     text = " ".join((text or "").split())
-    if len(text) <= limit:
-        return text
-    return text[:limit].rsplit(" ", 1)[0] + "…"
-
-
-def head(title, description, canonical, image, og_type="website", extra_ld=()):
-    ld = "".join('<script type="application/ld+json">\n'
-                 + json.dumps(o, ensure_ascii=False, indent=2) + "\n</script>\n" for o in extra_ld)
-    img = f'<meta property="og:image" content="{e(image)}">\n<meta name="twitter:image" content="{e(image)}">' if image else ""
-    return f"""<!DOCTYPE html>
-<html lang="it">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{e(title)}</title>
-<meta name="description" content="{e(description)}">
-<meta name="robots" content="index, follow, max-image-preview:large">
-<link rel="canonical" href="{e(canonical)}">
-<meta name="theme-color" content="#000000">
-<meta property="og:type" content="{og_type}">
-<meta property="og:site_name" content="Audiolibri.org">
-<meta property="og:locale" content="it_IT">
-<meta property="og:title" content="{e(title)}">
-<meta property="og:description" content="{e(description)}">
-<meta property="og:url" content="{e(canonical)}">
-{img}
-<meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="/icons/favicon.ico">
-{FONTS}
-<link rel="stylesheet" href="/app.css">
-{ld}</head>"""
+    return text if len(text) <= limit else text[:limit].rsplit(" ", 1)[0] + "…"
 
 
 PAGE_CSS = """<style>
-.bp-wrap { max-width: 1100px; margin: 0 auto; padding: clamp(1rem,4vw,2.5rem); }
-.bp-top { display:flex; align-items:center; gap:.6rem; margin-bottom:2rem; }
-.bp-top a { font-weight:800; font-size:1.2rem; text-decoration:none; background:linear-gradient(90deg,var(--primary-color),var(--accent-color));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent; }
+.bp-wrap { max-width: 980px; margin: 0 auto; padding: clamp(1rem,3vw,2rem) 0 0; }
 .bp-crumbs { font-size:var(--text-sm); color:var(--secondary-text); margin-bottom:1.25rem; }
 .bp-crumbs a { color:var(--secondary-text); text-decoration:none; }
 .bp-crumbs a:hover { color:var(--primary-color); }
@@ -153,7 +137,89 @@ PAGE_CSS = """<style>
 .bp-grid { display:flex; flex-wrap:wrap; gap:var(--space-4); margin-top:1.5rem; }
 .bp-lead { font-size:var(--text-lg); color:var(--secondary-text); max-width:70ch; }
 .bp-back { display:inline-block; margin-top:2.5rem; color:var(--primary-color); text-decoration:none; font-weight:600; }
+.index-grid { display:flex; flex-wrap:wrap; gap:var(--space-3); margin-top:1.5rem; }
+.index-item { display:inline-flex; align-items:center; gap:.6rem; padding:.6rem 1.1rem; border:1px solid var(--border-color); border-radius:var(--radius-pill); text-decoration:none; color:var(--text-color); font-weight:600; transition:background-color .2s,border-color .2s,transform .2s; }
+.index-item:hover { background:var(--hover-overlay); border-color:var(--secondary-text); transform:translateY(-1px); }
+.index-count { color:var(--secondary-text); font-weight:500; font-size:var(--text-sm); }
 </style>"""
+
+
+def head(title, description, canonical, image, og_type="website", extra_ld=()):
+    ld = "".join('<script type="application/ld+json">\n'
+                 + json.dumps(o, ensure_ascii=False, indent=2) + "\n</script>\n" for o in extra_ld)
+    img = (f'<meta property="og:image" content="{e(image)}">\n'
+           f'<meta name="twitter:image" content="{e(image)}">') if image else ""
+    return f"""<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{e(title)}</title>
+<meta name="description" content="{e(description)}">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<link rel="canonical" href="{e(canonical)}">
+<meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="light dark">
+<meta property="og:type" content="{og_type}">
+<meta property="og:site_name" content="Audiolibri.org">
+<meta property="og:locale" content="it_IT">
+<meta property="og:title" content="{e(title)}">
+<meta property="og:description" content="{e(description)}">
+<meta property="og:url" content="{e(canonical)}">
+{img}
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/icons/favicon.ico">
+{FONTS}
+<link rel="stylesheet" href="/app.css">
+{ld}{PAGE_CSS}
+</head>"""
+
+
+def header_html():
+    return f"""<header class="site-bar is-scrolled" role="banner">
+  <h1 class="site-brand"><a href="/" aria-label="Audiolibri.org — home"><img src="/audiobooks_transparent.png" alt="" width="32" height="32"><span>audiolibri.org</span></a></h1>
+  <nav class="main-nav" aria-label="Navigazione principale">
+    <a href="/" class="nav-link">Home</a>
+    <a href="/generi/" class="nav-link">Generi</a>
+    <a href="/autori/" class="nav-link">Autori</a>
+  </nav>
+  <form class="search-container" role="search" action="/" method="get">
+    <label for="s" class="sr-only">Cerca audiolibri per titolo, autore o lettore</label>
+    <input type="search" id="s" name="search" class="tw-input" placeholder="Cerca per titolo, autore o lettore" autocomplete="off">
+    <button class="tw-button" type="submit" aria-label="Cerca">{SEARCH_SVG}<span class="tw-hidden xs:tw-inline">Cerca</span></button>
+  </form>
+</header>"""
+
+
+def footer_html():
+    return f"""<footer class="site-footer" role="contentinfo">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="footer-brand-name">audiolibri.org</span>
+      <p>La più grande collezione di audiolibri italiani gratuiti.</p>
+    </div>
+    <div class="footer-cols">
+      <nav class="footer-links" aria-label="Collegamenti">
+        <a class="footer-link" href="/generi/">Generi</a>
+        <a class="footer-link" href="/autori/">Autori</a>
+        <a class="footer-link" href="https://github.com/fabriziosalmi/audiolibri/blob/main/ACCESSIBILITY.md" target="_blank" rel="noopener noreferrer">Accessibilità</a>
+      </nav>
+      <div class="footer-actions">
+        <a class="ghost-btn" href="https://github.com/fabriziosalmi/audiolibri" target="_blank" rel="noopener noreferrer" aria-label="Codice sorgente su GitHub">{GITHUB_SVG}<span>GitHub</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-base">
+    <p>© {date.today().year} Audiolibri.org · Realizzato con ❤️ per gli amanti della letteratura italiana</p>
+  </div>
+</footer>"""
+
+
+def shell(head_html, main_html, with_fallback=False):
+    return (head_html + '\n<body>\n<div class="container ios-safe-inset">\n'
+            + header_html() + "\n<main id=\"main-content\">\n" + main_html
+            + "\n</main>\n" + footer_html() + "\n</div>\n"
+            + (FALLBACK_SCRIPT if with_fallback else "") + "\n</body>\n</html>")
 
 
 def card_link(b) -> str:
@@ -232,13 +298,8 @@ def build_book_page(b: dict):
               'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" '
               'allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>') if embed else ""
 
-    body = f"""
-{PAGE_CSS}
-<body>
-<div class="bp-wrap">
-  <header class="bp-top"><img src="/audiobooks_transparent.png" alt="" width="36" height="36"><a href="/">audiolibri.org</a></header>
-  <nav class="bp-crumbs" aria-label="Breadcrumb">{crumb_html}</nav>
-  <main>
+    main_html = f"""<div class="bp-wrap">
+    <nav class="bp-crumbs" aria-label="Breadcrumb">{crumb_html}</nav>
     <p class="bp-eyebrow">Audiolibro gratis</p>
     <h1 class="bp-title">{e(title)}</h1>
     <p class="bp-author">di <b><a href="/autore/{slugify(author)}/">{e(author)}</a></b></p>
@@ -247,13 +308,10 @@ def build_book_page(b: dict):
     <section class="bp-synopsis"><h2>Trama</h2><p>{e(synopsis)}</p></section>
     <section class="bp-faqs"><h2>Domande frequenti</h2>{faq_html}</section>
     <a class="bp-back" href="/">← Tutta la libreria</a>
-  </main>
-</div>
-</body>
-</html>"""
+  </div>"""
     page_title = f"{title} — audiolibro gratis di {author} | Audiolibri.org"
-    return rel_dir, head(page_title, description, canonical, cover, "article",
-                         (audiobook, breadcrumb, faqpage)) + body
+    head_html = head(page_title, description, canonical, cover, "article", (audiobook, breadcrumb, faqpage))
+    return rel_dir, shell(head_html, main_html)
 
 
 def build_hub(kind, label, items, slug):
@@ -262,14 +320,11 @@ def build_hub(kind, label, items, slug):
     if kind == "genere":
         h1 = f"Audiolibri {label.lower()}"
         lead = f"Tutti gli audiolibri del genere {label.lower()} da ascoltare gratis: {len(items)} titoli."
-        crumb_mid = ""
         page_title = f"Audiolibri {label} gratis — {len(items)} titoli | Audiolibri.org"
     else:
         h1 = f"Audiolibri di {label}"
         lead = f"Tutti gli audiolibri di {label} da ascoltare gratis: {len(items)} titoli."
-        crumb_mid = ""
         page_title = f"Audiolibri di {label} gratis | Audiolibri.org"
-    description = meta_description(lead)
 
     itemlist = {"@context": "https://schema.org", "@type": "ItemList", "name": h1, "numberOfItems": len(items),
                 "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": f"{SITE}/audiolibro/{book_slug(b)}/", "name": title_of(b)}
@@ -278,23 +333,47 @@ def build_hub(kind, label, items, slug):
                   "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
                                       {"@type": "ListItem", "position": 2, "name": h1, "item": canonical}]}
     grid = "".join(card_link(b) for b in items)
-    body = f"""
-{PAGE_CSS}
-<body>
-<div class="bp-wrap">
-  <header class="bp-top"><img src="/audiobooks_transparent.png" alt="" width="36" height="36"><a href="/">audiolibri.org</a></header>
-  <nav class="bp-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <span>{e(h1)}</span></nav>
-  <main>
+    main_html = f"""<div class="bp-wrap">
+    <nav class="bp-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/{ 'generi' if kind=='genere' else 'autori' }/">{ 'Generi' if kind=='genere' else 'Autori' }</a> › <span>{e(h1)}</span></nav>
     <h1 class="bp-title">{e(h1)}</h1>
     <p class="bp-lead">{e(lead)}</p>
     <div class="bp-grid">{grid}</div>
     <a class="bp-back" href="/">← Tutta la libreria</a>
-  </main>
-</div>
-{FALLBACK_SCRIPT}
-</body>
-</html>"""
-    return rel_dir, head(page_title, description, canonical, "", "website", (itemlist, breadcrumb)) + body
+  </div>"""
+    head_html = head(page_title, meta_description(lead), canonical, "", "website", (itemlist, breadcrumb))
+    return rel_dir, shell(head_html, main_html, with_fallback=True)
+
+
+def build_index(kind, entries):
+    """entries: list of (label, slug, count). kind in {generi, autori}."""
+    rel_dir = kind
+    canonical = f"{SITE}/{rel_dir}/"
+    if kind == "generi":
+        h1, sub = "Generi", "genere"
+        lead = f"Esplora gli audiolibri italiani gratuiti per genere — {len(entries)} categorie."
+    else:
+        h1, sub = "Autori", "autore"
+        lead = f"Esplora gli audiolibri italiani gratuiti per autore — {len(entries)} autori."
+    page_title = f"{h1} — audiolibri italiani gratuiti | Audiolibri.org"
+
+    items = "".join(
+        f'<a class="index-item" href="/{sub}/{slug}/">{e(label)}<span class="index-count">{count}</span></a>'
+        for label, slug, count in entries)
+    itemlist = {"@context": "https://schema.org", "@type": "ItemList", "name": h1, "numberOfItems": len(entries),
+                "itemListElement": [{"@type": "ListItem", "position": i + 1, "name": label, "url": f"{SITE}/{sub}/{slug}/"}
+                                    for i, (label, slug, count) in enumerate(entries)]}
+    breadcrumb = {"@context": "https://schema.org", "@type": "BreadcrumbList",
+                  "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
+                                      {"@type": "ListItem", "position": 2, "name": h1, "item": canonical}]}
+    main_html = f"""<div class="bp-wrap">
+    <nav class="bp-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <span>{e(h1)}</span></nav>
+    <h1 class="bp-title">{h1}</h1>
+    <p class="bp-lead">{e(lead)}</p>
+    <div class="index-grid">{items}</div>
+    <a class="bp-back" href="/">← Tutta la libreria</a>
+  </div>"""
+    head_html = head(page_title, meta_description(lead), canonical, "", "website", (itemlist, breadcrumb))
+    return rel_dir, shell(head_html, main_html)
 
 
 def write(rel_dir, page):
@@ -308,8 +387,7 @@ def build_sitemap(paths):
     urls = f"  <url><loc>{SITE}/</loc><lastmod>{TODAY}</lastmod></url>\n"
     urls += "".join(f"  <url><loc>{SITE}/{p}</loc><lastmod>{TODAY}</lastmod></url>\n" for p in paths)
     return ('<?xml version="1.0" encoding="UTF-8"?>\n'
-            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-            + urls + "</urlset>\n")
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls + "</urlset>\n")
 
 
 def main():
@@ -330,34 +408,37 @@ def main():
         rel_dir, page = build_book_page(b)
         paths.append(write(rel_dir, page))
 
-    genres = {}
-    authors = {}
+    genres, authors = {}, {}
     for b in valid:
         g = genre_of(b)
         if g:
             genres.setdefault(g, []).append(b)
         authors.setdefault(author_of(b), []).append(b)
 
-    for g, items in genres.items():
+    genre_entries = []
+    for g, items in sorted(genres.items(), key=lambda kv: len(kv[1]), reverse=True):
         items.sort(key=lambda b: b.get("view_count") or 0, reverse=True)
         rel_dir, page = build_hub("genere", g.capitalize(), items, slugify(g))
         paths.append(write(rel_dir, page))
+        genre_entries.append((g.capitalize(), slugify(g), len(items)))
 
-    author_hubs = 0
-    for a, items in authors.items():
+    author_entries = []
+    for a, items in sorted(authors.items(), key=lambda kv: len(kv[1]), reverse=True):
         if len(items) < 2 or a == "Autore sconosciuto":
             continue
         items.sort(key=lambda b: b.get("view_count") or 0, reverse=True)
         rel_dir, page = build_hub("autore", a, items, slugify(a))
         paths.append(write(rel_dir, page))
-        author_hubs += 1
+        author_entries.append((a, slugify(a), len(items)))
+
+    paths.append(write(*build_index("generi", genre_entries)))
+    paths.append(write(*build_index("autori", sorted(author_entries, key=lambda x: x[0].lower()))))
 
     (ROOT / "sitemap.xml").write_text(build_sitemap(paths), encoding="utf-8")
-    (ROOT / "robots.txt").write_text(
-        f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n", encoding="utf-8")
+    (ROOT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n", encoding="utf-8")
 
-    print(f"books={len(valid)}  genre_hubs={len(genres)}  author_hubs={author_hubs}  "
-          f"sitemap_urls={len(paths) + 1}")
+    print(f"books={len(valid)}  genre_hubs={len(genre_entries)}  author_hubs={len(author_entries)}  "
+          f"indexes=2  sitemap_urls={len(paths) + 1}")
 
 
 if __name__ == "__main__":

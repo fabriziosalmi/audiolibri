@@ -8,6 +8,7 @@
 <meta name="robots" content="index, follow, max-image-preview:large">
 <link rel="canonical" href="https://audiolibri.org/audiolibro/liberty-bar-ugz9q3eghsA/">
 <meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="light dark">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Audiolibri.org">
 <meta property="og:locale" content="it_IT">
@@ -18,7 +19,7 @@
 <meta name="twitter:image" content="https://i.ytimg.com/vi/ugz9q3eghsA/maxresdefault.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/icons/favicon.ico">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/app.css">
 <script type="application/ld+json">
 {
@@ -133,11 +134,8 @@
   ]
 }
 </script>
-</head>
 <style>
-.bp-wrap { max-width: 1100px; margin: 0 auto; padding: clamp(1rem,4vw,2.5rem); }
-.bp-top { display:flex; align-items:center; gap:.6rem; margin-bottom:2rem; }
-.bp-top a { font-weight:800; font-size:1.2rem; text-decoration:none; background:linear-gradient(90deg,var(--primary-color),var(--accent-color));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent; }
+.bp-wrap { max-width: 980px; margin: 0 auto; padding: clamp(1rem,3vw,2rem) 0 0; }
 .bp-crumbs { font-size:var(--text-sm); color:var(--secondary-text); margin-bottom:1.25rem; }
 .bp-crumbs a { color:var(--secondary-text); text-decoration:none; }
 .bp-crumbs a:hover { color:var(--primary-color); }
@@ -157,12 +155,30 @@
 .bp-grid { display:flex; flex-wrap:wrap; gap:var(--space-4); margin-top:1.5rem; }
 .bp-lead { font-size:var(--text-lg); color:var(--secondary-text); max-width:70ch; }
 .bp-back { display:inline-block; margin-top:2.5rem; color:var(--primary-color); text-decoration:none; font-weight:600; }
+.index-grid { display:flex; flex-wrap:wrap; gap:var(--space-3); margin-top:1.5rem; }
+.index-item { display:inline-flex; align-items:center; gap:.6rem; padding:.6rem 1.1rem; border:1px solid var(--border-color); border-radius:var(--radius-pill); text-decoration:none; color:var(--text-color); font-weight:600; transition:background-color .2s,border-color .2s,transform .2s; }
+.index-item:hover { background:var(--hover-overlay); border-color:var(--secondary-text); transform:translateY(-1px); }
+.index-count { color:var(--secondary-text); font-weight:500; font-size:var(--text-sm); }
 </style>
+</head>
 <body>
+<div class="container ios-safe-inset">
+<header class="site-bar is-scrolled" role="banner">
+  <h1 class="site-brand"><a href="/" aria-label="Audiolibri.org — home"><img src="/audiobooks_transparent.png" alt="" width="32" height="32"><span>audiolibri.org</span></a></h1>
+  <nav class="main-nav" aria-label="Navigazione principale">
+    <a href="/" class="nav-link">Home</a>
+    <a href="/generi/" class="nav-link">Generi</a>
+    <a href="/autori/" class="nav-link">Autori</a>
+  </nav>
+  <form class="search-container" role="search" action="/" method="get">
+    <label for="s" class="sr-only">Cerca audiolibri per titolo, autore o lettore</label>
+    <input type="search" id="s" name="search" class="tw-input" placeholder="Cerca per titolo, autore o lettore" autocomplete="off">
+    <button class="tw-button" type="submit" aria-label="Cerca"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg><span class="tw-hidden xs:tw-inline">Cerca</span></button>
+  </form>
+</header>
+<main id="main-content">
 <div class="bp-wrap">
-  <header class="bp-top"><img src="/audiobooks_transparent.png" alt="" width="36" height="36"><a href="/">audiolibri.org</a></header>
-  <nav class="bp-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/genere/romanzo/">Romanzo</a> › <span>Liberty Bar</span></nav>
-  <main>
+    <nav class="bp-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/genere/romanzo/">Romanzo</a> › <span>Liberty Bar</span></nav>
     <p class="bp-eyebrow">Audiolibro gratis</p>
     <h1 class="bp-title">Liberty Bar</h1>
     <p class="bp-author">di <b><a href="/autore/georges-simenon/">Georges Simenon</a></b></p>
@@ -171,7 +187,30 @@
     <section class="bp-synopsis"><h2>Trama</h2><p>Georges Simenon presenta nel romanzo l&#x27;ispettore Maigret in missione sulla Costa Azzurra per investigare l&#x27;omicidio di un australiano, rivelando così i misteri e le complicità nascoste di un mondo fatto di apparenze e segreti. Con la sua caratteristica precisione e intuizione, Maigret svela i legami tra le persone apparentemente distanti, portando alla luce una verità che sembra nascosta tra le ombre del posto.</p></section>
     <section class="bp-faqs"><h2>Domande frequenti</h2><details class="bp-faq"><summary>L&#x27;audiolibro di «Liberty Bar» è gratis?</summary><p>Sì. «Liberty Bar» è disponibile gratuitamente su Audiolibri.org, in streaming, senza registrazione.</p></details><details class="bp-faq"><summary>Chi legge l&#x27;audiolibro?</summary><p>La lettura è a cura di Martina Sollazzi.</p></details><details class="bp-faq"><summary>Quanto dura?</summary><p>La durata è di circa 1 h 4 min.</p></details><details class="bp-faq"><summary>Dove posso ascoltarlo?</summary><p>Puoi ascoltarlo direttamente in questa pagina, oppure nella libreria completa su https://audiolibri.org.</p></details></section>
     <a class="bp-back" href="/">← Tutta la libreria</a>
-  </main>
+  </div>
+</main>
+<footer class="site-footer" role="contentinfo">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="footer-brand-name">audiolibri.org</span>
+      <p>La più grande collezione di audiolibri italiani gratuiti.</p>
+    </div>
+    <div class="footer-cols">
+      <nav class="footer-links" aria-label="Collegamenti">
+        <a class="footer-link" href="/generi/">Generi</a>
+        <a class="footer-link" href="/autori/">Autori</a>
+        <a class="footer-link" href="https://github.com/fabriziosalmi/audiolibri/blob/main/ACCESSIBILITY.md" target="_blank" rel="noopener noreferrer">Accessibilità</a>
+      </nav>
+      <div class="footer-actions">
+        <a class="ghost-btn" href="https://github.com/fabriziosalmi/audiolibri" target="_blank" rel="noopener noreferrer" aria-label="Codice sorgente su GitHub"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg><span>GitHub</span></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-base">
+    <p>© 2026 Audiolibri.org · Realizzato con ❤️ per gli amanti della letteratura italiana</p>
+  </div>
+</footer>
 </div>
+
 </body>
 </html>
