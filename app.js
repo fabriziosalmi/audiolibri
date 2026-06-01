@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 author: book.real_author || 'Unknown Author',
                 description: book.real_synopsis || book.description || 'No description available.',
                 genre: book.real_genre || '',
-                coverImage: book.thumbnail || 'https://via.placeholder.com/400x225?text=No+Cover+Available',
+                coverImage: book.thumbnail || '',
                 audioUrl: book.audio_file || '',
                 duration: book.duration || 0,
                 formattedDuration: formatDuration(book.duration || 0),
@@ -1179,6 +1179,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 height: '180',
                 width: '320',
                 videoId: videoId,
+                host: 'https://www.youtube-nocookie.com',
                 playerVars: {
                     'playsinline': 1,
                     'autoplay': 1,
