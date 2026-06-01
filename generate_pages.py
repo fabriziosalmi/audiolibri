@@ -131,6 +131,9 @@ PAGE_CSS = """<style>
 .bp-title { font-family:var(--font-display); font-size:clamp(2rem,5vw,3.2rem); font-weight:600; line-height:1.05; margin:.3rem 0 .4rem; color:var(--header-color); -webkit-text-fill-color:var(--header-color); background:none; }
 .bp-author { font-size:var(--text-lg); color:var(--secondary-text); margin:0 0 1rem; }
 .bp-author b { color:var(--text-color); } .bp-author a { color:inherit; }
+.bp-series { font-size:var(--text-sm); margin:-.4rem 0 1rem; color:var(--secondary-text); }
+.bp-series a { color:var(--primary-color); text-decoration:none; font-weight:600; }
+.bp-series a:hover { text-decoration:underline; }
 .bp-chips { display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:1.5rem; }
 .bp-chip { padding:.25rem .8rem; border-radius:var(--radius-pill); background:rgba(var(--primary-rgb),.1); color:var(--primary-color); font-size:var(--text-xs); font-weight:600; text-decoration:none; }
 .bp-player { aspect-ratio:16/9; width:100%; max-width:760px; border:0; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--card-shadow); margin-bottom:2rem; background:#000; }
@@ -252,7 +255,7 @@ def card_link(b) -> str:
 </a>"""
 
 
-def build_book_page(b: dict, related=()):
+def build_book_page(b: dict, related=(), in_series=False):
     vid = video_id(b)
     title, author, genre = display_title_of(b), author_of(b), genre_of(b)
     synopsis = (b.get("real_synopsis") or b.get("description") or "").strip()
@@ -294,9 +297,19 @@ def build_book_page(b: dict, related=()):
     if likes: stats.append({"@type": "InteractionCounter", "interactionType": "https://schema.org/LikeAction", "userInteractionCount": likes})
     if stats: audiobook["interactionStatistic"] = stats
 
+    series_name = (b.get("series") or "").strip()
+    part = b.get("part")
+    series_slug = slugify(series_name) if (in_series and series_name) else ""
+    if series_slug:
+        audiobook["partOfSeries"] = {"@type": "BookSeries", "name": series_name, "url": f"{SITE}/serie/{series_slug}/"}
+        if part is not None:
+            audiobook["position"] = part
+
     crumbs = [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"}]
     if genre_label:
-        crumbs.append({"@type": "ListItem", "position": 2, "name": genre_label, "item": f"{SITE}/genere/{slugify(genre)}/"})
+        crumbs.append({"@type": "ListItem", "position": len(crumbs) + 1, "name": genre_label, "item": f"{SITE}/genere/{slugify(genre)}/"})
+    if series_slug:
+        crumbs.append({"@type": "ListItem", "position": len(crumbs) + 1, "name": series_name, "item": f"{SITE}/serie/{series_slug}/"})
     crumbs.append({"@type": "ListItem", "position": len(crumbs) + 1, "name": title, "item": canonical})
     breadcrumb = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": crumbs}
     faqpage = {"@context": "https://schema.org", "@type": "FAQPage",
@@ -314,7 +327,11 @@ def build_book_page(b: dict, related=()):
         related_cards = "".join(card_link(rb) for rb in related)
         related_html = f'<section class="bp-related"><h2>Da ascoltare dopo</h2><div class="bp-grid">{related_cards}</div></section>'
     faq_html = "".join(f'<details class="bp-faq"><summary>{e(q)}</summary><p>{e(a)}</p></details>' for q, a in faq)
-    crumb_html = '<a href="/">Home</a>' + (f' › <a href="/genere/{slugify(genre)}/">{e(genre_label)}</a>' if genre_label else '') + f' › <span>{e(title)}</span>'
+    crumb_html = ('<a href="/">Home</a>'
+                  + (f' › <a href="/genere/{slugify(genre)}/">{e(genre_label)}</a>' if genre_label else '')
+                  + (f' › <a href="/serie/{series_slug}/">{e(series_name)}</a>' if series_slug else '')
+                  + f' › <span>{e(title)}</span>')
+    series_link_html = f'\n    <p class="bp-series">Parte di <a href="/serie/{series_slug}/">«{e(series_name)}»</a></p>' if series_slug else ''
     player = (f'<iframe class="bp-player" src="{e(embed)}" title="Audiolibro: {e(title)}" loading="lazy" '
               'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" '
               'allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>') if embed else ""
@@ -323,7 +340,7 @@ def build_book_page(b: dict, related=()):
     <nav class="bp-crumbs" aria-label="Breadcrumb">{crumb_html}</nav>
     <p class="bp-eyebrow">Audiolibro gratis</p>
     <h1 class="bp-title">{e(title)}</h1>
-    <p class="bp-author">di <b><a href="/autore/{slugify(author)}/">{e(author)}</a></b></p>
+    <p class="bp-author">di <b><a href="/autore/{slugify(author)}/">{e(author)}</a></b></p>{series_link_html}
     <div class="bp-chips">{chips}</div>
     {player}
     <section class="bp-synopsis"><h2>Trama</h2><p>{e(synopsis)}</p></section>
@@ -366,16 +383,47 @@ def build_hub(kind, label, items, slug):
     return rel_dir, shell(head_html, main_html, with_fallback=True)
 
 
+def build_series(name, chapters):
+    """A multi-part audiobook: one page listing its chapters in reading order."""
+    chapters = sorted(chapters, key=lambda b: b.get("part") or 0)
+    slug = slugify(name)
+    rel_dir = f"serie/{slug}"
+    canonical = f"{SITE}/{rel_dir}/"
+    lead = f"Tutti i {len(chapters)} capitoli di «{name}» da ascoltare gratis, in ordine."
+    page_title = f"{name} — audiolibro completo gratis, {len(chapters)} capitoli | Audiolibri.org"
+    itemlist = {"@context": "https://schema.org", "@type": "ItemList", "name": name, "numberOfItems": len(chapters),
+                "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": f"{SITE}/audiolibro/{book_slug(b)}/", "name": display_title_of(b)}
+                                    for i, b in enumerate(chapters)]}
+    breadcrumb = {"@context": "https://schema.org", "@type": "BreadcrumbList",
+                  "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
+                                      {"@type": "ListItem", "position": 2, "name": "Serie", "item": f"{SITE}/serie/"},
+                                      {"@type": "ListItem", "position": 3, "name": name, "item": canonical}]}
+    grid = "".join(card_link(b) for b in chapters)
+    main_html = f"""<div class="bp-wrap">
+    <nav class="bp-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/serie/">Serie</a> › <span>{e(name)}</span></nav>
+    <p class="bp-eyebrow">Audiolibro a puntate</p>
+    <h1 class="bp-title">{e(name)}</h1>
+    <p class="bp-lead">{e(lead)}</p>
+    <div class="bp-grid">{grid}</div>
+    <a class="bp-back" href="/serie/">← Tutte le serie</a>
+  </div>"""
+    head_html = head(page_title, meta_description(lead), canonical, "", "website", (itemlist, breadcrumb))
+    return rel_dir, shell(head_html, main_html, with_fallback=True)
+
+
 def build_index(kind, entries):
-    """entries: list of (label, slug, count). kind in {generi, autori}."""
+    """entries: list of (label, slug, count). kind in {generi, autori, serie}."""
     rel_dir = kind
     canonical = f"{SITE}/{rel_dir}/"
     if kind == "generi":
         h1, sub = "Generi", "genere"
         lead = f"Esplora gli audiolibri italiani gratuiti per genere — {len(entries)} categorie."
-    else:
+    elif kind == "autori":
         h1, sub = "Autori", "autore"
         lead = f"Esplora gli audiolibri italiani gratuiti per autore — {len(entries)} autori."
+    else:  # serie
+        h1, sub = "Serie", "serie"
+        lead = f"Audiolibri a puntate, da ascoltare capitolo per capitolo — {len(entries)} serie."
     page_title = f"{h1} — audiolibri italiani gratuiti | Audiolibri.org"
 
     items = "".join(
@@ -448,18 +496,29 @@ def main():
             genres.setdefault(g, []).append(b)
         authors.setdefault(author_of(b), []).append(b)
 
+    # Multi-part series (>=2 chapters sharing a series name) get their own page.
+    series_map = {}
+    for b in valid:
+        s = (b.get("series") or "").strip()
+        if s and b.get("part") is not None:
+            series_map.setdefault(s, []).append(b)
+    series_map = {s: ch for s, ch in series_map.items() if len(ch) >= 2}
+    multi_series = set(series_map)
+
     if len(sys.argv) > 1 and sys.argv[1] != "all":
         vid = sys.argv[1]
         if vid not in books:
             sys.exit(f"id {vid} not found")
         b = books[vid]
-        rel_dir, page = build_book_page(b, related_for(b, authors, genres))
+        rel_dir, page = build_book_page(b, related_for(b, authors, genres),
+                                        in_series=(b.get("series") in multi_series))
         print("wrote", write(rel_dir, page))
         return
 
     paths = []
     for b in valid:
-        rel_dir, page = build_book_page(b, related_for(b, authors, genres))
+        rel_dir, page = build_book_page(b, related_for(b, authors, genres),
+                                        in_series=(b.get("series") in multi_series))
         paths.append(write(rel_dir, page))
 
     genre_entries = []
@@ -478,14 +537,22 @@ def main():
         paths.append(write(rel_dir, page))
         author_entries.append((a, slugify(a), len(items)))
 
+    series_entries = []
+    for name, chapters in sorted(series_map.items(), key=lambda kv: len(kv[1]), reverse=True):
+        rel_dir, page = build_series(name, chapters)
+        paths.append(write(rel_dir, page))
+        series_entries.append((name, slugify(name), len(chapters)))
+
     paths.append(write(*build_index("generi", genre_entries)))
     paths.append(write(*build_index("autori", sorted(author_entries, key=lambda x: x[0].lower()))))
+    if series_entries:
+        paths.append(write(*build_index("serie", sorted(series_entries, key=lambda x: x[0].lower()))))
 
     (ROOT / "sitemap.xml").write_text(build_sitemap(paths), encoding="utf-8")
     (ROOT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n", encoding="utf-8")
 
     print(f"books={len(valid)}  genre_hubs={len(genre_entries)}  author_hubs={len(author_entries)}  "
-          f"indexes=2  sitemap_urls={len(paths) + 1}")
+          f"series={len(series_entries)}  indexes={2 + (1 if series_entries else 0)}  sitemap_urls={len(paths) + 1}")
 
 
 if __name__ == "__main__":
