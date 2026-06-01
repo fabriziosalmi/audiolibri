@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
         volume: 100
     };
     let updateInterval;
+    let heroErrorRetries = 0;
     
     // Load theme preference from localStorage, fallback to system preference
     const savedTheme = localStorage.getItem('prefersDarkMode');
@@ -275,6 +276,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }).filter(book => book.title !== 'Unknown Title' && book.videoId);
     }
     
+    // Pick the initial hero from the most-viewed titles — more likely to be a
+    // live video and a recognizable classic than a fully random pick over 1793.
+    function pickFeaturedBook() {
+        if (!audiobooks.length) return null;
+        const pool = [...audiobooks].sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0)).slice(0, 80);
+        return pool[Math.floor(Math.random() * pool.length)];
+    }
+
     // Load the audiobook data - try cache first, then fetch
     async function loadAudiobooksData() {
         // Check if we have valid cached data
@@ -287,8 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 if (audiobooks.length > 0) {
                     setTimeout(() => {
-                        const randomIndex = Math.floor(Math.random() * audiobooks.length);
-                        currentBook = audiobooks[randomIndex];
+                        currentBook = pickFeaturedBook();
                         displayBook(currentBook);
                     }, 300);
                 }
@@ -344,9 +352,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (audiobooks.length > 0) {
                         // Small delay to show the loading state
                         setTimeout(() => {
-                            // Select a random book as the initial book
-                            const randomIndex = Math.floor(Math.random() * audiobooks.length);
-                            currentBook = audiobooks[randomIndex];
+                            // Popular title as the initial hero (more likely live + recognizable)
+                            currentBook = pickFeaturedBook();
                             displayBook(currentBook);
                         }, 500);
                     } else {
@@ -1257,6 +1264,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.data === YT.PlayerState.PLAYING) {
             playPauseButton.innerHTML = '<i class="pause-icon"></i>';
             playerState.isPlaying = true;
+            heroErrorRetries = 0;
             announceToScreenReader('Riproduzione in corso');
         } else if (event.data === YT.PlayerState.PAUSED) {
             playPauseButton.innerHTML = '<i class="play-icon"></i>';
@@ -1283,6 +1291,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const errorMessage = errorMessages[errorCode] || 'Errore sconosciuto durante la riproduzione.';
         
         console.error('YouTube Player Error:', errorCode, errorMessage);
+
+        // Video removed / embedding disabled: silently advance to another featured
+        // title instead of leaving "video non disponibile" as the first impression.
+        const unavailable = [100, 101, 150].includes(errorCode);
+        if (unavailable && heroErrorRetries < 6 && audiobooks.length > 1) {
+            heroErrorRetries++;
+            const next = pickFeaturedBook();
+            if (next && next !== currentBook) {
+                currentBook = next;
+                displayBook(currentBook);
+                return;
+            }
+        }
         showYouTubeError(errorMessage);
     }
     
