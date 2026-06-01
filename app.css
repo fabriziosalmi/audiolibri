@@ -2809,7 +2809,9 @@ button:disabled {
     overflow-x: auto;
     scrollbar-width: none;
     scroll-behavior: smooth;
-    padding-bottom: 4px;
+    /* overflow-x:auto forces overflow-y clipping; top/bottom padding gives the
+       pill's hover lift, rounded top and focus ring room so they aren't cut. */
+    padding: 6px 0 4px;
 }
 .genre-list::-webkit-scrollbar { display: none; }
 /* keep pills at natural width so the row scrolls instead of squashing them */
