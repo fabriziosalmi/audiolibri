@@ -2790,7 +2790,7 @@ footer {
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform var(--dur) var(--ease-out);
+    transition: transform var(--dur) var(--ease-out), filter var(--dur);
 }
 .nf-card-cover.is-fallback .nf-card-img { display: none; }
 .nf-card-cover.is-fallback::after {
@@ -2924,3 +2924,15 @@ footer {
     .site-brand a span { display: none; }
     .site-bar #search-button span { display: none; }
 }
+
+/* ── 10. Micro-interactions ────────────────────────────────────────────────── */
+.home-rows.reveal .nf-row {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.55s var(--ease-out), transform 0.55s var(--ease-out);
+}
+.home-rows.reveal .nf-row.in-view {
+    opacity: 1;
+    transform: none;
+}
+.nf-card:hover .nf-card-img { filter: brightness(0.82); }

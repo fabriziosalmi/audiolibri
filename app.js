@@ -578,6 +578,21 @@ document.addEventListener('DOMContentLoaded', () => {
             window.addEventListener('resize', update);
             update();
         });
+
+        // Soft staggered reveal of rows as they enter the viewport (progressive
+        // enhancement: without JS/IO the rows are simply visible; skipped for reduced motion).
+        if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            mount.classList.add('reveal');
+            const io = new IntersectionObserver((entries, obs) => {
+                entries.forEach(en => {
+                    if (en.isIntersecting) { en.target.classList.add('in-view'); obs.unobserve(en.target); }
+                });
+            }, { rootMargin: '0px 0px -8% 0px' });
+            const revealRows = mount.querySelectorAll('.nf-row');
+            revealRows.forEach(r => io.observe(r));
+            // Safety net: never leave a row stuck hidden (e.g. after an in-page jump).
+            setTimeout(() => { io.disconnect(); revealRows.forEach(r => r.classList.add('in-view')); }, 4000);
+        }
     }
     
     /**
