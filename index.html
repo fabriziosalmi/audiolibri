@@ -107,36 +107,34 @@
         <!-- Skip to main content link for screen readers -->
         <a href="#main-content" class="skip-link" aria-label="Salta al contenuto principale">Salta al contenuto</a>
         
-        <header role="banner">
-            <div class="site-title-container tw-flex tw-flex-col tw-items-center tw-py-3 tw-px-2 sm:tw-py-4">
-                <h1 class="tw-flex tw-items-center tw-gap-2">
-                    <img src="audiobooks_transparent.png" alt="Logo di Audiolibri.org" class="header-logo" width="40" height="40"> 
-                    audiolibri.org
-                </h1>
-                <p class="site-tagline tw-text-sm">Esplora la più grande collezione di audiolibri italiani gratuiti</p>
-            </div>
-            
-            <div class="header-content tw-flex tw-flex-col tw-gap-4">
-                <div class="search-container tw-flex tw-justify-center tw-items-center tw-gap-2 tw-w-full tw-max-w-[650px] tw-mx-auto tw-px-2 sm:tw-px-4" role="search">
-                    <label for="search" class="sr-only">Cerca audiolibri per titolo, autore o lettore</label>
-                    <input 
-                        type="search" 
-                        id="search" 
-                        class="tw-input tw-mobile-input ios-touch-target tw-w-full" 
-                        placeholder="Cerca per titolo, autore o lettore" 
-                        aria-label="Cerca audiolibri per titolo, autore o lettore"
-                        autocomplete="off"
-                        spellcheck="false">
-                    <button id="search-button" class="tw-button mobile-button ios-button" type="button" aria-label="Avvia ricerca">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                        </svg>
-                        <span class="tw-hidden xs:tw-inline">CERCA</span>
-                    </button>
-                </div>
+        <header role="banner" id="site-header" class="site-bar">
+            <h1 class="site-brand">
+                <a href="/" aria-label="Audiolibri.org — home">
+                    <img src="audiobooks_transparent.png" alt="" class="header-logo" width="32" height="32">
+                    <span>audiolibri.org</span>
+                </a>
+            </h1>
+            <div class="search-container" role="search">
+                <label for="search" class="sr-only">Cerca audiolibri per titolo, autore o lettore</label>
+                <input
+                    type="search"
+                    id="search"
+                    class="tw-input ios-touch-target"
+                    placeholder="Cerca per titolo, autore o lettore"
+                    aria-label="Cerca audiolibri per titolo, autore o lettore"
+                    autocomplete="off"
+                    spellcheck="false">
+                <button id="search-button" class="tw-button ios-button" type="button" aria-label="Avvia ricerca">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg>
+                    <span class="tw-hidden xs:tw-inline">Cerca</span>
+                </button>
             </div>
         </header>
-        
+
+        <nav id="genre-navigation" class="genre-navigation" aria-label="Sfoglia per genere"></nav>
+
         <main id="main-content" role="main">
             <div class="single-card fade-in tw-card mobile-card ios-card">
                 <div class="audiobook-card tw-relative tw-flex tw-flex-col tw-min-h-[400px] sm:tw-min-h-[500px] tw-bg-cover tw-bg-center" id="current-audiobook" role="region" aria-label="Audiolibro corrente">
