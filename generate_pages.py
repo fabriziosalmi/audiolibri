@@ -182,7 +182,7 @@ def head(title, description, canonical, image, og_type="website", extra_ld=()):
 
 def header_html():
     return f"""<header class="site-bar is-scrolled" role="banner">
-  <h1 class="site-brand"><a href="/" aria-label="Audiolibri.org — home"><img src="/audiobooks_transparent.png" alt="" width="32" height="32"><span>audiolibri.org</span></a></h1>
+  <div class="site-brand"><a href="/" aria-label="Audiolibri.org — home"><img src="/audiobooks_transparent.png" alt="" width="32" height="32"><span>audiolibri.org</span></a></div>
   <nav class="main-nav" aria-label="Navigazione principale">
     <a href="/" class="nav-link">Home</a>
     <a href="/generi/" class="nav-link">Generi</a>
@@ -221,7 +221,7 @@ def footer_html():
 
 
 def shell(head_html, main_html, with_fallback=False):
-    return (head_html + '\n<body>\n<div class="container ios-safe-inset">\n'
+    return (head_html + '\n<body>\n<a href="#main-content" class="skip-link">Salta al contenuto</a>\n<div class="container ios-safe-inset">\n'
             + header_html() + "\n<main id=\"main-content\">\n" + main_html
             + "\n</main>\n" + footer_html() + "\n</div>\n"
             + (FALLBACK_SCRIPT if with_fallback else "") + "\n</body>\n</html>")
