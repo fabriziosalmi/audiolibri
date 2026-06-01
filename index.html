@@ -150,63 +150,34 @@
             <section id="home-rows" class="home-rows" aria-label="Sfoglia la libreria"></section>
         </main>
         
-        <footer class="tw-text-center tw-mt-8 sm:tw-mt-12 tw-pt-6 sm:tw-pt-8 tw-pb-6 sm:tw-pb-8 tw-border-t tw-border-border ios-bottom-safe" role="contentinfo">
-            <!-- Primary Actions -->
-            <div class="footer-actions tw-flex tw-items-center tw-gap-3 sm:tw-gap-4 tw-justify-center tw-flex-wrap tw-px-4 tw-mb-6">
-                <button 
-                    id="theme-toggle" 
-                    class="tw-bg-transparent tw-text-text tw-border tw-border-border tw-py-2 sm:tw-py-2.5 tw-px-4 sm:tw-px-5 tw-text-sm sm:tw-text-base tw-inline-flex tw-items-center tw-gap-2 tw-rounded-full tw-transition-all tw-duration-200 hover:tw-bg-hover-overlay tap-highlight-none" 
-                    aria-label="Cambia tema da chiaro a scuro"
-                    type="button">
-                    <span class="theme-icon tw-text-base sm:tw-text-lg" aria-hidden="true">🌓</span>
-                    <span id="theme-label" class="tw-font-medium">Cambia Tema</span>
-                </button>
-                <a 
-                    href="https://github.com/fabriziosalmi/audiolibri" 
-                    class="source-code-link tw-flex tw-items-center tw-gap-2 tw-no-underline tw-text-inherit tw-border tw-border-border tw-py-2 sm:tw-py-2.5 tw-px-4 sm:tw-px-5 tw-rounded-full tw-text-sm sm:tw-text-base tw-font-medium tw-transition-all tw-duration-200 hover:tw-bg-hover-overlay" 
-                    aria-label="Visualizza il codice sorgente su GitHub (si apre in una nuova finestra)"
-                    target="_blank"
-                    rel="noopener noreferrer">
-                    <span class="source-icon tw-text-base sm:tw-text-lg" aria-hidden="true">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" focusable="false">
-                            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
-                        </svg>
-                    </span>
-                    <span>GitHub</span>
-                </a>
+        <footer class="site-footer ios-bottom-safe" role="contentinfo">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <span class="footer-brand-name">audiolibri.org</span>
+                    <p>La più grande collezione di audiolibri italiani gratuiti.</p>
+                </div>
+                <div class="footer-cols">
+                    <nav class="footer-links" aria-label="Collegamenti">
+                        <a class="footer-link" href="https://github.com/fabriziosalmi/audiolibri/blob/main/README.md" target="_blank" rel="noopener noreferrer">Documentazione</a>
+                        <a class="footer-link" href="https://github.com/fabriziosalmi/audiolibri/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">Contribuisci</a>
+                        <a class="footer-link" href="https://github.com/fabriziosalmi/audiolibri/blob/main/ACCESSIBILITY.md" target="_blank" rel="noopener noreferrer">Accessibilità</a>
+                        <a class="footer-link" href="https://github.com/fabriziosalmi/audiolibri/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">Licenza</a>
+                    </nav>
+                    <div class="footer-actions">
+                        <button id="theme-toggle" class="ghost-btn" type="button" aria-label="Cambia tema chiaro/scuro">
+                            <span class="theme-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor" stroke="none"/></svg></span>
+                            <span id="theme-label">Cambia tema</span>
+                        </button>
+                        <a class="ghost-btn" href="https://github.com/fabriziosalmi/audiolibri" target="_blank" rel="noopener noreferrer" aria-label="Codice sorgente su GitHub (nuova finestra)">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+                            <span>GitHub</span>
+                        </a>
+                    </div>
+                </div>
             </div>
-
-            <!-- Footer Links -->
-            <nav class="footer-links tw-flex tw-items-center tw-gap-4 sm:tw-gap-6 tw-justify-center tw-flex-wrap tw-px-4 tw-mb-4" aria-label="Collegamenti footer">
-                <a href="https://github.com/fabriziosalmi/audiolibri/blob/main/README.md" 
-                   class="footer-link tw-text-secondary-text hover:tw-text-text tw-text-sm sm:tw-text-base tw-transition-colors tw-duration-200"
-                   target="_blank"
-                   rel="noopener noreferrer">Documentazione</a>
-                <a href="https://github.com/fabriziosalmi/audiolibri/blob/main/CONTRIBUTING.md" 
-                   class="footer-link tw-text-secondary-text hover:tw-text-text tw-text-sm sm:tw-text-base tw-transition-colors tw-duration-200"
-                   target="_blank"
-                   rel="noopener noreferrer">Contribuisci</a>
-                <a href="https://github.com/fabriziosalmi/audiolibri/blob/main/ACCESSIBILITY.md" 
-                   class="footer-link tw-text-secondary-text hover:tw-text-text tw-text-sm sm:tw-text-base tw-transition-colors tw-duration-200"
-                   target="_blank"
-                   rel="noopener noreferrer">Accessibilità</a>
-                <a href="https://github.com/fabriziosalmi/audiolibri/blob/main/LICENSE" 
-                   class="footer-link tw-text-secondary-text hover:tw-text-text tw-text-sm sm:tw-text-base tw-transition-colors tw-duration-200"
-                   target="_blank"
-                   rel="noopener noreferrer">Licenza</a>
-            </nav>
-
-            <!-- Footer Info -->
-            <div class="footer-info tw-text-secondary-text tw-px-4">
-                <p class="tw-text-sm sm:tw-text-base tw-mb-2 tw-leading-relaxed">
-                    <span class="tw-font-semibold tw-text-text">Audiolibri.org</span> — La più grande collezione di audiolibri italiani gratuiti
-                </p>
-                <p class="tw-text-xs sm:tw-text-sm tw-opacity-80">
-                    © <span id="current-year">2026</span> Audiolibri.org • Realizzato con ❤️ per gli amanti della letteratura italiana
-                </p>
-                <p class="tw-text-xs sm:tw-text-sm tw-opacity-70 tw-mt-2">
-                    <span id="library-stats">Caricamento statistiche...</span>
-                </p>
+            <div class="footer-base">
+                <p>© <span id="current-year">2026</span> Audiolibri.org · Realizzato con ❤️ per gli amanti della letteratura italiana</p>
+                <p id="library-stats">Caricamento statistiche…</p>
             </div>
         </footer>
     </div>
