@@ -2720,6 +2720,11 @@ body:has(#genre-books-grid-card) .home-rows { display: none; }
 .genre-viewport .nf-row-arrow { top: 0; bottom: 4px; width: 48px; color: var(--header-color); }
 .genre-viewport .nf-row-arrow svg { filter: drop-shadow(0 1px 2px var(--background-color)); }
 
+/* "Tutti i generi" pill: a primary-tinted link to the full /generi/ index. */
+.genre-pill-all { gap: var(--space-1); color: var(--primary-color); text-decoration: none; border-color: rgba(var(--primary-rgb), 0.45); }
+.genre-pill-all:hover { background: rgba(var(--primary-rgb), 0.08); border-color: var(--primary-color); }
+.genre-all-arrow { font-weight: 700; }
+
 @media (prefers-reduced-motion: no-preference) {
     html { scroll-behavior: smooth; }
 }
