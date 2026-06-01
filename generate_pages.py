@@ -104,6 +104,13 @@ def title_of(b):  return (b.get("real_title") or b.get("title") or "Audiolibro")
 def author_of(b): return (b.get("real_author") or "Autore sconosciuto").strip()
 def genre_of(b):  return (b.get("real_genre") or (b.get("categories") or [""])[0] or "").strip()
 
+# Display title disambiguates multi-part series ("Figlia del mare — Capitolo 12").
+# IMPORTANT: book_slug() uses title_of() (the series name), NOT this — so adding a
+# part suffix changes the visible/<title>/<h1> text but never the page URL.
+def display_title_of(b):
+    pd = (b.get("part_display") or "").strip()
+    return f"{title_of(b)} — {pd}" if pd else title_of(b)
+
 
 def book_slug(b) -> str:
     vid = video_id(b)
@@ -229,7 +236,7 @@ def shell(head_html, main_html, with_fallback=False):
 
 def card_link(b) -> str:
     vid = video_id(b)
-    t, a = title_of(b), author_of(b)
+    t, a = display_title_of(b), author_of(b)
     hue = sum(ord(c) for c in (vid or t)) % 360
     thumb = f"https://i.ytimg.com/vi/{vid}/mqdefault.jpg" if vid else b.get("thumbnail", "")
     initial = e((t or "?").strip()[:1].upper())
@@ -247,7 +254,7 @@ def card_link(b) -> str:
 
 def build_book_page(b: dict, related=()):
     vid = video_id(b)
-    title, author, genre = title_of(b), author_of(b), genre_of(b)
+    title, author, genre = display_title_of(b), author_of(b), genre_of(b)
     synopsis = (b.get("real_synopsis") or b.get("description") or "").strip()
     channel = (b.get("channel") or "").strip()
     dur, views, likes = b.get("duration") or 0, b.get("view_count") or 0, b.get("like_count") or 0
@@ -342,7 +349,7 @@ def build_hub(kind, label, items, slug):
         page_title = f"Audiolibri di {label} gratis | Audiolibri.org"
 
     itemlist = {"@context": "https://schema.org", "@type": "ItemList", "name": h1, "numberOfItems": len(items),
-                "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": f"{SITE}/audiolibro/{book_slug(b)}/", "name": title_of(b)}
+                "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": f"{SITE}/audiolibro/{book_slug(b)}/", "name": display_title_of(b)}
                                     for i, b in enumerate(items)]}
     breadcrumb = {"@context": "https://schema.org", "@type": "BreadcrumbList",
                   "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
