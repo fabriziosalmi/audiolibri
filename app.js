@@ -693,8 +693,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return acc;
         }, {});
 
-        // Filter genres with at least 10 items
-        const filteredGenres = Object.keys(genreCounts).filter(genre => genreCounts[genre] >= 10);
+        // Strip shows the top ~10 genres by popularity; the full list (with
+        // counts) lives on /generi/, reachable via the "Tutti i generi" pill.
+        const filteredGenres = Object.keys(genreCounts)
+            .filter(genre => genreCounts[genre] >= 10)
+            .sort((a, b) => genreCounts[b] - genreCounts[a])
+            .slice(0, 10);
 
         // First, create or check for the genre navigation container
         let genreNavContainer = document.getElementById('genre-navigation');
@@ -744,10 +748,7 @@ document.addEventListener('DOMContentLoaded', () => {
             genrePill.className = 'genre-pill tw-pill snap-start tap-highlight-none';
             genrePill.dataset.genre = genre;
             genrePill.setAttribute('role', 'listitem');
-            genrePill.innerHTML = `
-                <span class="genre-name text-truncate">${capitalizeCategory(genre)}</span>
-                <span class="genre-count tw-flex tw-items-center tw-justify-center" aria-label="${genreCounts[genre]} audiolibri">${genreCounts[genre]}</span>
-            `;
+            genrePill.innerHTML = `<span class="genre-name">${capitalizeCategory(genre)}</span>`;
             
             // Add click event listener
             genrePill.addEventListener('click', function() {
@@ -756,7 +757,15 @@ document.addEventListener('DOMContentLoaded', () => {
             
             genreList.appendChild(genrePill);
         });
-        
+
+        // "All genres" pill → the static /generi/ index (full list + counts).
+        const allPill = document.createElement('a');
+        allPill.className = 'genre-pill genre-pill-all';
+        allPill.href = '/generi/';
+        allPill.setAttribute('role', 'listitem');
+        allPill.innerHTML = `<span class="genre-name">Tutti i generi</span><span class="genre-all-arrow" aria-hidden="true">→</span>`;
+        genreList.appendChild(allPill);
+
         // Reveal edge arrows / wire wheel + click scrolling, same as the home rows.
         wireScrollAffordance(genreNavContainer.querySelector('.nf-row-viewport'));
     }
