@@ -2936,3 +2936,5 @@ footer {
     transform: none;
 }
 .nf-card:hover .nf-card-img { filter: brightness(0.82); }
+
+.search-grid { display: flex; flex-wrap: wrap; gap: var(--space-4); }

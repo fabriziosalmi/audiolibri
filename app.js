@@ -1515,25 +1515,34 @@ document.addEventListener('DOMContentLoaded', () => {
             // Get the search results container
             const resultsContainer = document.getElementById('search-results');
             
-            // Create the grid of book cards
+            // Create the grid of result cards (same look as the home rows)
+            const esc = (s) => sanitizeText(String(s == null ? '' : s));
             resultsContainer.innerHTML = `
-                <div class="audiobooks-grid">
-                    ${booksToDisplay.map(book => `
-                        <div class="book-card" data-book-id="${book.id}">
-                            <div class="book-card-cover" style="background-image: url('${book.coverImage}');"></div>
-                            <div class="book-card-details">
-                                <h3 class="book-card-title">${book.title}</h3>
-                                <p class="book-card-author">${book.author}</p>
-                            </div>
-                        </div>
-                    `).join('')}
+                <div class="search-grid">
+                    ${booksToDisplay.map(book => {
+                        const hue = [...String(book.id)].reduce((h, c) => h + c.charCodeAt(0), 0) % 360;
+                        const thumb = book.videoId ? `https://i.ytimg.com/vi/${book.videoId}/mqdefault.jpg` : book.coverImage;
+                        const initial = esc((book.title || '?').trim().charAt(0).toUpperCase());
+                        return `
+                        <button type="button" class="nf-card" data-id="${esc(book.id)}" aria-label="${esc(book.title)} di ${esc(book.author)}">
+                            <span class="nf-card-cover" style="--cover-hue:${hue}" data-initial="${initial}">
+                                <img class="nf-card-img" loading="lazy" alt="" src="${thumb}">
+                                <span class="nf-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+                                <span class="nf-card-duration">${esc(book.formattedDuration)}</span>
+                            </span>
+                            <span class="nf-card-body">
+                                <span class="nf-card-title">${esc(book.title)}</span>
+                                <span class="nf-card-author">${esc(book.author)}</span>
+                            </span>
+                        </button>`;
+                    }).join('')}
                 </div>
             `;
             
-            // Add click event listeners to book cards
-            document.querySelectorAll('.book-card').forEach(card => {
+            // Add click event listeners to result cards
+            resultsContainer.querySelectorAll('.nf-card').forEach(card => {
                 card.addEventListener('click', function() {
-                    const bookId = this.getAttribute('data-book-id');
+                    const bookId = this.dataset.id;
                     const selectedBook = audiobooks.find(book => book.id === bookId);
                     if (selectedBook) {
                         if (currentBook) {
@@ -1551,16 +1560,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
             
+            // Grey-placeholder fallback for deleted videos (same as the rows)
+            resultsContainer.querySelectorAll('.nf-card-img').forEach(img => {
+                const fb = () => img.closest('.nf-card-cover')?.classList.add('is-fallback');
+                if (img.complete) { if (!img.naturalWidth || img.naturalWidth <= 120) fb(); }
+                img.addEventListener('error', fb);
+                img.addEventListener('load', () => { if (img.naturalWidth <= 120) fb(); });
+            });
+
             // Update pagination controls
             const paginationControls = document.getElementById('pagination-controls');
             if (totalPages > 1) {
                 paginationControls.innerHTML = `
                     <button class="pagination-button" ${page === 1 ? 'disabled' : ''} id="prev-page-button">
-                        <span class="prev-icon"></span> Previous
+                        <span class="prev-icon"></span> Precedente
                     </button>
-                    <span class="page-indicator">Page ${page} of ${totalPages}</span>
+                    <span class="page-indicator">Pagina ${page} di ${totalPages}</span>
                     <button class="pagination-button" ${page === totalPages ? 'disabled' : ''} id="next-page-button">
-                        Next <span class="next-icon"></span>
+                        Successiva <span class="next-icon"></span>
                     </button>
                 `;
                 
