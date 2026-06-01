@@ -493,28 +493,33 @@ document.addEventListener('DOMContentLoaded', () => {
         const esc = (s) => sanitizeText(String(s == null ? '' : s));
         const playOverlay = '<span class="nf-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>';
 
-        mount.innerHTML = rows.map((row, ri) => `
+        const chevron = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
+        mount.innerHTML = rows.map((row) => `
             <section class="nf-row" aria-label="${esc(row.title)}">
                 <h3 class="nf-row-title">${esc(row.title)}</h3>
-                <div class="nf-row-scroller">
-                    ${row.books.map(b => {
-                        const hue = [...String(b.id)].reduce((h, c) => h + c.charCodeAt(0), 0) % 360;
-                        const thumb = b.videoId ? `https://i.ytimg.com/vi/${b.videoId}/mqdefault.jpg` : b.coverImage;
-                        const initial = esc((b.title || '?').trim().charAt(0).toUpperCase());
-                        return `
-                        <button type="button" class="nf-card" data-id="${esc(b.id)}" aria-label="${esc(b.title)} di ${esc(b.author)}">
-                            <span class="nf-card-cover" style="--cover-hue:${hue}" data-initial="${initial}">
-                                <img class="nf-card-img" loading="lazy" alt="" src="${thumb}">
-                                ${playOverlay}
-                                <span class="nf-card-duration">${esc(b.formattedDuration)}</span>
-                            </span>
-                            <span class="nf-card-body">
-                                <span class="nf-card-title">${esc(b.title)}</span>
-                                <span class="nf-card-author">${esc(b.author)}</span>
-                            </span>
-                        </button>
-                        `;
-                    }).join('')}
+                <div class="nf-row-viewport">
+                    <button type="button" class="nf-row-arrow nf-row-arrow--left" aria-label="Scorri indietro" tabindex="-1">${chevron('m15 18-6-6 6-6')}</button>
+                    <div class="nf-row-scroller">
+                        ${row.books.map(b => {
+                            const hue = [...String(b.id)].reduce((h, c) => h + c.charCodeAt(0), 0) % 360;
+                            const thumb = b.videoId ? `https://i.ytimg.com/vi/${b.videoId}/mqdefault.jpg` : b.coverImage;
+                            const initial = esc((b.title || '?').trim().charAt(0).toUpperCase());
+                            return `
+                            <button type="button" class="nf-card" data-id="${esc(b.id)}" aria-label="${esc(b.title)} di ${esc(b.author)}">
+                                <span class="nf-card-cover" style="--cover-hue:${hue}" data-initial="${initial}">
+                                    <img class="nf-card-img" loading="lazy" alt="" src="${thumb}">
+                                    ${playOverlay}
+                                    <span class="nf-card-duration">${esc(b.formattedDuration)}</span>
+                                </span>
+                                <span class="nf-card-body">
+                                    <span class="nf-card-title">${esc(b.title)}</span>
+                                    <span class="nf-card-author">${esc(b.author)}</span>
+                                </span>
+                            </button>
+                            `;
+                        }).join('')}
+                    </div>
+                    <button type="button" class="nf-row-arrow nf-row-arrow--right" aria-label="Scorri avanti" tabindex="-1">${chevron('m9 18 6-6-6-6')}</button>
                 </div>
             </section>
         `).join('');
@@ -541,6 +546,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             img.addEventListener('error', fallback);
             img.addEventListener('load', () => { if (img.naturalWidth <= 120) fallback(); });
+        });
+
+        // Row scroll affordance: reveal edge arrows/fades only when there's more to scroll.
+        mount.querySelectorAll('.nf-row-viewport').forEach(vp => {
+            const scroller = vp.querySelector('.nf-row-scroller');
+            const update = () => {
+                const max = scroller.scrollWidth - scroller.clientWidth - 1;
+                vp.classList.toggle('can-left', scroller.scrollLeft > 4);
+                vp.classList.toggle('can-right', scroller.scrollLeft < max);
+            };
+            const step = () => Math.max(240, scroller.clientWidth * 0.85);
+            vp.querySelector('.nf-row-arrow--left').addEventListener('click', () => scroller.scrollBy({ left: -step(), behavior: 'smooth' }));
+            vp.querySelector('.nf-row-arrow--right').addEventListener('click', () => scroller.scrollBy({ left: step(), behavior: 'smooth' }));
+            scroller.addEventListener('scroll', update, { passive: true });
+            window.addEventListener('resize', update);
+            update();
         });
     }
     
