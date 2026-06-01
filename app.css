@@ -2556,6 +2556,10 @@ button:disabled {
     gap: clamp(1.5rem, 3vw, 2.5rem);
     margin-top: clamp(1.5rem, 3vw, 2.5rem);
 }
+/* While a search-results or genre overlay is open, hide the home recommendation
+   rows so those views aren't cluttered by the home content below them. */
+body:has(#search-results-card) .home-rows,
+body:has(#genre-books-grid-card) .home-rows { display: none; }
 .nf-row { display: flex; flex-direction: column; gap: var(--space-3); }
 .nf-row-title {
     margin: 0;
