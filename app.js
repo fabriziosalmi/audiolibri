@@ -823,139 +823,68 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 500);
     }
 
-    // New function to display genre books in a grid view card
     /**
-     * Display a grid of books for a specific genre
+     * Display a paginated grid of books for a genre — same markup and look as
+     * the search results so the two views are unified.
      * @param {string} genre - The genre/category name
      * @param {Object[]} genreBooks - Array of audiobook objects in this genre
      * @returns {void}
      */
     function displayGenreBooksGrid(genre, genreBooks) {
-        // Announce genre selection to screen readers
         announceToScreenReader(`${capitalizeCategory(genre)}: ${genreBooks.length} audiolibri trovati`);
-        
-        // Remove any existing genre grid card first
-        const existingCard = document.getElementById('genre-books-grid-card');
-        if (existingCard) {
-            existingCard.remove();
-        }
-        
-        // Create a new card for the genre books grid
-        const genreGridCard = document.createElement('div');
-        genreGridCard.id = 'genre-books-grid-card';
-        genreGridCard.className = 'genre-books-grid-card fade-in';
-        
-        // Create header with genre info and navigation (without close button)
-        const genreHeader = `
-            <div class="genre-grid-header">
-                <div class="genre-grid-title-area">
-                    <h3 class="genre-grid-title">${capitalizeCategory(genre)}</h3>
-                    <span class="genre-count-badge">${genreBooks.length} audiolibri</span>
+
+        document.getElementById('genre-books-grid-card')?.remove();
+
+        const card = document.createElement('div');
+        card.id = 'genre-books-grid-card';
+        card.className = 'search-results-card fade-in';
+        card.innerHTML = `
+            <div class="search-results-header">
+                <div class="search-info">
+                    <h2 class="search-title">${sanitizeText(capitalizeCategory(genre))}</h2>
+                    <span class="results-count">${genreBooks.length} audiolibri</span>
                 </div>
-            </div>
-        `;
-        
-        // Create grid of book cards with scroll buttons
-        let booksGrid = `
-            <div class="books-grid-container">
-                <button class="scroll-button scroll-left" id="scroll-left" aria-label="Scroll left">
-                    <i class="arrow-left-icon">←</i>
-                </button>
-                <div class="books-grid" id="books-grid">`;
-        
-        genreBooks.forEach((book, index) => {
-            booksGrid += `
-                <div class="book-grid-item" data-index="${index}">
-                    <div class="book-grid-cover" style="background-image: url('${book.coverImage}')">
-                        <span class="book-grid-duration">${book.formattedDuration}</span>
-                    </div>
-                    <div class="book-grid-details">
-                        <h4 class="book-grid-title">${book.title}</h4>
-                        <p class="book-grid-author">${book.author}</p>
-                    </div>
-                </div>
-            `;
-        });
-        
-        booksGrid += `
-                </div>
-                <button class="scroll-button scroll-right" id="scroll-right" aria-label="Scroll right">
-                    <i class="arrow-right-icon">→</i>
+                <button class="ghost-btn" id="genre-back-button" type="button">
+                    <span class="back-icon"></span> Torna alla home
                 </button>
             </div>
+            <div class="search-results-container" id="genre-results"></div>
+            <div class="pagination-controls" id="genre-pagination"></div>
         `;
-        
-        // Combine header and grid
-        genreGridCard.innerHTML = genreHeader + booksGrid;
-        
-        // Insert the new card BEFORE the current audiobook card
+
         const currentAudiobookCard = document.getElementById('current-audiobook');
-        currentAudiobookCard.parentNode.insertBefore(genreGridCard, currentAudiobookCard);
-        
-        // Add event listeners for book selection
-        document.querySelectorAll('.book-grid-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const index = parseInt(this.dataset.index);
-                if (!isNaN(index) && index >= 0 && index < genreBooks.length) {
-                    currentBook = genreBooks[index];
-                    addRecent(currentBook.id);
-                    announceToScreenReader(`Selezionato: ${currentBook.title} di ${currentBook.author}`);
-                    displayBook(currentBook);
-                    
-                    // No need to scroll now that the player is below the grid
-                    // Just update the active state in the grid
-                    document.querySelectorAll('.book-grid-item').forEach(gridItem => {
-                        gridItem.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                }
-            });
+        currentAudiobookCard.parentNode.insertBefore(card, currentAudiobookCard);
+
+        document.getElementById('genre-back-button').addEventListener('click', () => {
+            card.remove();
+            document.querySelectorAll('.genre-pill').forEach(p => p.classList.remove('selected'));
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
-        
-        // Add scroll button functionality
-        const scrollLeftButton = document.getElementById('scroll-left');
-        const scrollRightButton = document.getElementById('scroll-right');
-        const booksGridElement = document.getElementById('books-grid');
-        
-        // Initially check if scrolling is needed and hide buttons if not
-        setTimeout(() => {
-            updateScrollButtonsVisibility(booksGridElement, scrollLeftButton, scrollRightButton);
-        }, 100);
-        
-        scrollLeftButton.addEventListener('click', () => {
-            // Scroll left by a specific amount (3 items)
-            const itemWidth = booksGridElement.querySelector('.book-grid-item').offsetWidth + 20; // width + margin
-            booksGridElement.scrollBy({ left: -itemWidth * 3, behavior: 'smooth' });
-        });
-        
-        scrollRightButton.addEventListener('click', () => {
-            // Scroll right by a specific amount (3 items)
-            const itemWidth = booksGridElement.querySelector('.book-grid-item').offsetWidth + 20; // width + margin
-            booksGridElement.scrollBy({ left: itemWidth * 3, behavior: 'smooth' });
-        });
-        
-        // Update button visibility on scroll
-        booksGridElement.addEventListener('scroll', () => {
-            updateScrollButtonsVisibility(booksGridElement, scrollLeftButton, scrollRightButton);
-        });
-    }
-    
-    // Helper function to update scroll button visibility
-    function updateScrollButtonsVisibility(scrollContainer, leftButton, rightButton) {
-        // Show/hide left button based on scroll position
-        if (scrollContainer.scrollLeft <= 20) {
-            leftButton.classList.add('hidden');
-        } else {
-            leftButton.classList.remove('hidden');
+
+        const perPage = 24;
+        const totalPages = Math.ceil(genreBooks.length / perPage);
+        let page = 1;
+
+        function renderGenrePage(p) {
+            const slice = genreBooks.slice((p - 1) * perPage, (p - 1) * perPage + perPage);
+            const container = document.getElementById('genre-results');
+            container.innerHTML = `<div class="search-grid">${slice.map(nfCardHTML).join('')}</div>`;
+            wireResultCards(container);
+
+            const pag = document.getElementById('genre-pagination');
+            if (totalPages > 1) {
+                pag.innerHTML = `
+                    <button class="pagination-button" ${p === 1 ? 'disabled' : ''} id="genre-prev-button"><span class="prev-icon"></span> Precedente</button>
+                    <span class="page-indicator">Pagina ${p} di ${totalPages}</span>
+                    <button class="pagination-button" ${p === totalPages ? 'disabled' : ''} id="genre-next-button">Successiva <span class="next-icon"></span></button>
+                `;
+                document.getElementById('genre-prev-button')?.addEventListener('click', () => { if (page > 1) { page--; renderGenrePage(page); } });
+                document.getElementById('genre-next-button')?.addEventListener('click', () => { if (page < totalPages) { page++; renderGenrePage(page); } });
+            } else {
+                pag.innerHTML = '';
+            }
         }
-        
-        // Show/hide right button based on whether there's more content to scroll
-        const maxScrollLeft = scrollContainer.scrollWidth - scrollContainer.clientWidth - 20;
-        if (scrollContainer.scrollLeft >= maxScrollLeft) {
-            rightButton.classList.add('hidden');
-        } else {
-            rightButton.classList.remove('hidden');
-        }
+        renderGenrePage(1);
     }
 
     function resetPlayerState() {
@@ -1453,6 +1382,56 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Function to display search results
     /**
+     * Build the markup for a single Netflix-style result card (shared by the
+     * search results and the genre/author grid so they stay identical).
+     * @param {Object} book - audiobook object
+     * @returns {string} HTML string for one .nf-card button
+     */
+    function nfCardHTML(book) {
+        const esc = (s) => sanitizeText(String(s == null ? '' : s));
+        const hue = [...String(book.id)].reduce((h, c) => h + c.charCodeAt(0), 0) % 360;
+        const thumb = book.videoId ? `https://i.ytimg.com/vi/${book.videoId}/mqdefault.jpg` : book.coverImage;
+        const initial = esc((book.title || '?').trim().charAt(0).toUpperCase());
+        return `
+            <button type="button" class="nf-card" data-id="${esc(book.id)}" aria-label="${esc(book.title)} di ${esc(book.author)}">
+                <span class="nf-card-cover" style="--cover-hue:${hue}" data-initial="${initial}">
+                    <img class="nf-card-img" loading="lazy" alt="" src="${thumb}">
+                    <span class="nf-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+                    <span class="nf-card-duration">${esc(book.formattedDuration)}</span>
+                </span>
+                <span class="nf-card-body">
+                    <span class="nf-card-title">${esc(book.title)}</span>
+                    <span class="nf-card-author">${esc(book.author)}</span>
+                </span>
+            </button>`;
+    }
+
+    /**
+     * Wire card clicks + deleted-thumbnail fallback for an .nf-card grid.
+     * @param {HTMLElement} container - element containing the .nf-card buttons
+     * @returns {void}
+     */
+    function wireResultCards(container) {
+        container.querySelectorAll('.nf-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const book = audiobooks.find(b => b.id === card.dataset.id);
+                if (!book) return;
+                if (currentBook) previousBooks.push(currentBook);
+                currentBook = book;
+                addRecent(book.id);
+                displayBook(book);
+                document.getElementById('current-audiobook')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+        container.querySelectorAll('.nf-card-img').forEach(img => {
+            const fb = () => img.closest('.nf-card-cover')?.classList.add('is-fallback');
+            if (img.complete) { if (!img.naturalWidth || img.naturalWidth <= 120) fb(); }
+            img.addEventListener('error', fb);
+            img.addEventListener('load', () => { if (img.naturalWidth <= 120) fb(); });
+        });
+    }
+
+    /**
      * Display search results in a paginated grid
      * @param {string} searchTerm - The search query string (will be sanitized)
      * @param {Object[]} results - Array of matching audiobook objects
@@ -1534,59 +1513,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Get the search results container
             const resultsContainer = document.getElementById('search-results');
             
-            // Create the grid of result cards (same look as the home rows)
-            const esc = (s) => sanitizeText(String(s == null ? '' : s));
-            resultsContainer.innerHTML = `
-                <div class="search-grid">
-                    ${booksToDisplay.map(book => {
-                        const hue = [...String(book.id)].reduce((h, c) => h + c.charCodeAt(0), 0) % 360;
-                        const thumb = book.videoId ? `https://i.ytimg.com/vi/${book.videoId}/mqdefault.jpg` : book.coverImage;
-                        const initial = esc((book.title || '?').trim().charAt(0).toUpperCase());
-                        return `
-                        <button type="button" class="nf-card" data-id="${esc(book.id)}" aria-label="${esc(book.title)} di ${esc(book.author)}">
-                            <span class="nf-card-cover" style="--cover-hue:${hue}" data-initial="${initial}">
-                                <img class="nf-card-img" loading="lazy" alt="" src="${thumb}">
-                                <span class="nf-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-                                <span class="nf-card-duration">${esc(book.formattedDuration)}</span>
-                            </span>
-                            <span class="nf-card-body">
-                                <span class="nf-card-title">${esc(book.title)}</span>
-                                <span class="nf-card-author">${esc(book.author)}</span>
-                            </span>
-                        </button>`;
-                    }).join('')}
-                </div>
-            `;
-            
-            // Add click event listeners to result cards
-            resultsContainer.querySelectorAll('.nf-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    const bookId = this.dataset.id;
-                    const selectedBook = audiobooks.find(book => book.id === bookId);
-                    if (selectedBook) {
-                        if (currentBook) {
-                            previousBooks.push(currentBook);
-                        }
-                        currentBook = selectedBook;
-                        addRecent(selectedBook.id);
-                        displayBook(currentBook);
-
-                        // Scroll to the audiobook container element
-                        const audiobookContainer = document.getElementById('current-audiobook');
-                        if (audiobookContainer) {
-                            audiobookContainer.scrollIntoView({ behavior: 'smooth' });
-                        }
-                    }
-                });
-            });
-            
-            // Grey-placeholder fallback for deleted videos (same as the rows)
-            resultsContainer.querySelectorAll('.nf-card-img').forEach(img => {
-                const fb = () => img.closest('.nf-card-cover')?.classList.add('is-fallback');
-                if (img.complete) { if (!img.naturalWidth || img.naturalWidth <= 120) fb(); }
-                img.addEventListener('error', fb);
-                img.addEventListener('load', () => { if (img.naturalWidth <= 120) fb(); });
-            });
+            // Grid of result cards (shared markup + wiring with the genre view).
+            resultsContainer.innerHTML = `<div class="search-grid">${booksToDisplay.map(nfCardHTML).join('')}</div>`;
+            wireResultCards(resultsContainer);
 
             // Update pagination controls
             const paginationControls = document.getElementById('pagination-controls');
