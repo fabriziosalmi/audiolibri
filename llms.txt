@@ -1,0 +1,19 @@
+# Audiolibri.org
+
+> La più grande collezione di audiolibri italiani gratuiti: migliaia di titoli (romanzi, racconti, fiabe, poesia, filosofia e altro) in streaming, in lingua italiana, senza registrazione né costi.
+
+Audiolibri.org è un progetto open source che cataloga audiolibri liberamente ascoltabili in italiano. Ogni titolo ha una pagina dedicata (`/audiolibro/<slug>/`) con trama, durata, genere, lettore e player, oltre a dati strutturati schema.org (Audiobook, FAQPage, BreadcrumbList). I contenuti sono raggruppati per genere e per autore.
+
+## Pagine principali
+- [Home](https://audiolibri.org/): libreria completa con ricerca e righe tematiche (Popolari, Novità, per genere e per voce)
+- [Generi](https://audiolibri.org/generi/): tutti gli audiolibri raggruppati per genere
+- [Autori](https://audiolibri.org/autori/): tutti gli audiolibri raggruppati per autore
+
+## Risorse
+- [Sitemap](https://audiolibri.org/sitemap.xml): elenco completo di tutte le pagine indicizzabili
+- [Codice sorgente](https://github.com/fabriziosalmi/audiolibri): progetto open source su GitHub
+
+## Note
+- Tutti gli audiolibri sono gratuiti, in italiano e ascoltabili in streaming senza registrazione.
+- Lingua dei contenuti: italiano (it-IT).
+- Ogni pagina di un titolo espone i metadati come schema.org Audiobook (autore, durata, genere, lettore).
