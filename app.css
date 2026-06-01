@@ -2921,3 +2921,63 @@ button:disabled:hover {
 .nf-card:hover .nf-card-img { filter: brightness(0.82); }
 
 .search-grid { display: flex; flex-wrap: wrap; gap: var(--space-4); }
+
+/* ── 11. Header main nav (row 1) + genre strip (row 2) ─────────────────────── */
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    margin-left: var(--space-6);
+    margin-right: auto;
+}
+.nav-link {
+    position: relative;
+    text-decoration: none;
+    color: var(--secondary-text);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    transition: color var(--dur);
+}
+.nav-link:hover, .nav-link:focus-visible { color: var(--text-color); }
+.nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0;
+    height: 2px;
+    background: var(--primary-color);
+    transition: width var(--dur);
+}
+.nav-link:hover::after { width: 100%; }
+@media (max-width: 720px) { .main-nav { display: none; } }
+
+/* Genre strip = header row 2: one scrollable line (no wrapping on desktop) */
+.genre-navigation {
+    margin: var(--space-2) 0 0;
+    padding: var(--space-2) 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+}
+.genre-list {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+    padding-bottom: 4px;
+}
+.genre-list::-webkit-scrollbar { display: none; }
+/* keep pills at natural width so the row scrolls instead of squashing them */
+.genre-list .genre-pill { flex-shrink: 0; }
+
+@media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+}
+
+/* Restore a consistent horizontal gutter: .ios-safe-inset's env() padding
+   collapses to 0 off-notch devices, which zeroed the container's 2rem. */
+.container.ios-safe-inset {
+    padding-left: max(var(--space-6), env(safe-area-inset-left));
+    padding-right: max(var(--space-6), env(safe-area-inset-right));
+}
