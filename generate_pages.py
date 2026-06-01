@@ -159,6 +159,7 @@ def head(title, description, canonical, image, og_type="website", extra_ld=()):
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>{e(title)}</title>
 <meta name="description" content="{e(description)}">
 <meta name="robots" content="index, follow, max-image-preview:large">
