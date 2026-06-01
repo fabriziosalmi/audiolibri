@@ -2012,36 +2012,6 @@ button:disabled:hover {
 
 
 /* ── 4. Mobile overrides (genre nav / categories) ──────────────────────────── */
-/* Mobile Categories Navigation Styles */
-.mobile-categories-container {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding: 10px 0;
-    margin-bottom: 15px;
-    position: relative;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
-    scroll-behavior: smooth; /* Smooth scrolling for better UX */
-    /* Add physics-based scrolling for iOS */
-    -webkit-overflow-scrolling: touch;
-    /* Prevent text selection during swipe */
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
-}
-
-@media (max-width: 480px) {
-    .mobile-categories-container {
-        padding: 8px 0;
-        margin-bottom: 12px;
-    }
-}
-
-.mobile-categories-container::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
-}
-
 /* Style the mobile genre navigation */
 @media (max-width: 768px) {
     .genre-navigation {
@@ -2135,43 +2105,6 @@ button:disabled:hover {
         }
     }
     
-    /* Make mobile scrolling indicator */
-    .mobile-categories-container::after {
-        content: '';
-        position: absolute;
-        right: 0;
-        top: 0;
-        height: 100%;
-        width: 30px;
-        background: linear-gradient(to right, transparent, rgba(var(--card-background-rgb), 0.95));
-        pointer-events: none;
-        opacity: 0.8;
-    }
-    
-    @media (max-width: 480px) {
-        .mobile-categories-container::after {
-            width: 20px;
-        }
-    }
-    
-    /* Add left gradient for scroll indication when not at start */
-    .mobile-categories-container.scrolled-right::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: 100%;
-        width: 30px;
-        background: linear-gradient(to left, transparent, rgba(var(--card-background-rgb), 0.95));
-        pointer-events: none;
-        opacity: 0.8;
-    }
-    
-    @media (max-width: 480px) {
-        .mobile-categories-container.scrolled-right::before {
-            width: 20px;
-        }
-    }
 }
 
 /* Active state for category selection */
@@ -2179,74 +2112,6 @@ button:disabled:hover {
     background: var(--primary-color) !important;
     color: white !important;
 }
-
-/* Enhanced Mobile Navigation Controls */
-.mobile-nav-control {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 20;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-
-.mobile-nav-control span {
-    font-size: 18px;
-    line-height: 1;
-}
-
-.left-nav {
-    left: 5px;
-}
-
-.right-nav {
-    right: 5px;
-}
-
-.mobile-nav-control.visible {
-    opacity: 0.8;
-    pointer-events: auto;
-}
-
-.mobile-nav-control:hover {
-    opacity: 1;
-    transform: translateY(-50%) scale(1.1);
-}
-
-.mobile-nav-control:active {
-    transform: translateY(-50%) scale(0.95);
-}
-
-/* Hide gradients when no scrolling needed */
-.mobile-categories-container.no-scroll-needed::after,
-.mobile-categories-container.no-scroll-needed::before {
-    display: none;
-}
-
-/* Touch feedback styles */
-.mobile-categories-container.touching {
-    cursor: grabbing;
-}
-
-/* Hide navigation controls on smaller screens where they cause issues */
-@media (max-width: 480px) {
-    .mobile-nav-control {
-        display: none;
-    }
-}
-
 
 /* ── 4b. Mobile fixes (small-screen pill / grid tuning) ────────────────────── */
 /* Additional CSS fixes for mobile genre navigation buttons */
@@ -2296,11 +2161,6 @@ button:disabled:hover {
         scroll-padding: 0.5rem !important; /* Better scroll experience */
     }
     
-    /* Fix for multiple genre pills in a row */
-    .mobile-categories-container {
-        padding: 8px 4px !important;
-    }
-    
     /* Fix for the active state of genre pills */
     .genre-pill.active, .genre-pill.selected {
         box-shadow: 0 2px 5px rgba(var(--primary-rgb), 0.2) !important;
@@ -2336,16 +2196,6 @@ button:disabled:hover {
         gap: 3px !important; /* Further reduced gap */
         padding: 0 2px !important; /* Minimal padding */
     }
-}
-
-/* Fix for portrait mode container */
-.mobile-categories-container.portrait-mode {
-    padding: 6px 3px !important;
-}
-
-/* Fix the mobile navigation shadow rendering */
-.mobile-nav-control {
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15) !important;
 }
 
 /* Ottimizzazioni per lo schermo intero sui dispositivi mobili */

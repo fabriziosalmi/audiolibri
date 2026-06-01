@@ -171,12 +171,7 @@ function setupResponsiveBehaviors() {
     if (isIOS) {
         document.documentElement.classList.add('ios-device');
         document.body.classList.add('ios-body');
-        
-        // Aggiungi classi iOS specifiche ai contenitori
-        document.querySelectorAll('.mobile-categories-container').forEach(container => {
-            container.classList.add('ios-scroll', 'ios-momentum-scroll');
-        });
-        
+
         document.querySelectorAll('.genre-pill').forEach(pill => {
             pill.classList.add('tap-highlight-none', 'ios-touch-target');
         });
