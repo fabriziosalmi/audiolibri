@@ -2620,6 +2620,13 @@ body:has(#genre-books-grid-card) .home-rows { display: none; }
     gap: var(--space-5) var(--space-4);
 }
 .search-grid .nf-card { width: auto; }
+/* 170px min collapses to one full-width column on phones; force two. */
+@media (max-width: 600px) {
+    .search-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-4) var(--space-3);
+    }
+}
 
 /* ── 11. Header main nav (row 1) + genre strip (row 2) ─────────────────────── */
 .main-nav {
