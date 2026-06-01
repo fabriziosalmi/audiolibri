@@ -301,6 +301,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Recently-opened books, for the "Continua ad ascoltare" row.
+    const RECENTS_KEY = 'recentBooks';
+    function getRecentBookIds() {
+        try { return JSON.parse(localStorage.getItem(RECENTS_KEY) || '[]'); } catch (e) { return []; }
+    }
+    function addRecent(id) {
+        if (!id) return;
+        try {
+            const list = [id, ...getRecentBookIds().filter(x => x !== id)].slice(0, 18);
+            localStorage.setItem(RECENTS_KEY, JSON.stringify(list));
+        } catch (e) { /* storage full / unavailable */ }
+    }
+
     // Load the audiobook data - try cache first, then fetch
     async function loadAudiobooksData() {
         // Check if we have valid cached data
@@ -498,11 +511,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const mount = document.getElementById('home-rows');
         if (!mount || !books || !books.length) return;
 
-        const byViews = [...books].sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0));
-        const byRecent = [...books].sort((a, b) => String(b.uploadDate || '').localeCompare(String(a.uploadDate || '')));
+        const byId = new Map(books.map(b => [b.id, b]));
+
+        // Drop viral non-audiobook clips (very short + millions of views) from the home rows.
+        const isClip = (b) => (b.duration || 0) < 600 && (b.viewCount || 0) > 1000000;
+        const clean = books.filter(b => !isClip(b));
+
+        const byViews = [...clean].sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0));
+        const byRecent = [...clean].sort((a, b) => String(b.uploadDate || '').localeCompare(String(a.uploadDate || '')));
 
         // Top genres by count
-        const genreCounts = books.reduce((acc, b) => {
+        const genreCounts = clean.reduce((acc, b) => {
             (b.categories && b.categories.length ? b.categories : ['Altro']).forEach(g => {
                 const k = capitalizeCategory(g);
                 acc[k] = (acc[k] || 0) + 1;
@@ -515,14 +534,32 @@ document.addEventListener('DOMContentLoaded', () => {
             .slice(0, 5)
             .map(([g]) => g);
 
+        // Top voices/readers (channels) for dedicated rows
+        const channelCounts = clean.reduce((acc, b) => {
+            if (b.channel) acc[b.channel] = (acc[b.channel] || 0) + 1;
+            return acc;
+        }, {});
+        const topChannels = Object.entries(channelCounts)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 2)
+            .map(([c]) => c);
+
+        // "Continua ad ascoltare" from saved history
+        const recentBooks = getRecentBookIds().map(id => byId.get(id)).filter(Boolean);
+
         const rows = [
+            recentBooks.length >= 1 ? { title: 'Continua ad ascoltare', books: recentBooks.slice(0, 18) } : null,
             { title: 'Popolari', books: byViews.slice(0, 18) },
             { title: 'Aggiunti di recente', books: byRecent.slice(0, 18) },
             ...topGenres.map(g => ({
                 title: g,
-                books: books.filter(b => (b.categories || []).some(c => capitalizeCategory(c) === g)).slice(0, 18)
+                books: clean.filter(b => (b.categories || []).some(c => capitalizeCategory(c) === g)).slice(0, 18)
+            })),
+            ...topChannels.map(c => ({
+                title: `Voci · ${c}`,
+                books: clean.filter(b => b.channel === c).sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0)).slice(0, 18)
             }))
-        ].filter(r => r.books.length >= 4);
+        ].filter(r => r && r.books.length >= (r.title === 'Continua ad ascoltare' ? 1 : 4));
 
         const esc = (s) => sanitizeText(String(s == null ? '' : s));
         const playOverlay = '<span class="nf-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>';
@@ -559,12 +596,12 @@ document.addEventListener('DOMContentLoaded', () => {
         `).join('');
 
         // Wire card clicks → set as hero + scroll up
-        const byId = new Map(books.map(b => [b.id, b]));
         mount.querySelectorAll('.nf-card').forEach(card => {
             card.addEventListener('click', () => {
                 const book = byId.get(card.dataset.id);
                 if (book) {
                     currentBook = book;
+                    addRecent(book.id);
                     displayBook(book);
                     document.getElementById('current-audiobook')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
@@ -900,6 +937,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const index = parseInt(this.dataset.index);
                 if (!isNaN(index) && index >= 0 && index < genreBooks.length) {
                     currentBook = genreBooks[index];
+                    addRecent(currentBook.id);
                     announceToScreenReader(`Selezionato: ${currentBook.title} di ${currentBook.author}`);
                     displayBook(currentBook);
                     
@@ -1102,6 +1140,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Hero CTAs
         document.getElementById('hero-play')?.addEventListener('click', () => {
+            addRecent(book.id);
             document.getElementById('play-pause')?.click();
         });
         document.getElementById('hero-shuffle')?.addEventListener('click', () => {
@@ -1568,8 +1607,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             previousBooks.push(currentBook);
                         }
                         currentBook = selectedBook;
+                        addRecent(selectedBook.id);
                         displayBook(currentBook);
-                        
+
                         // Scroll to the audiobook container element
                         const audiobookContainer = document.getElementById('current-audiobook');
                         if (audiobookContainer) {
