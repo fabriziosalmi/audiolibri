@@ -141,6 +141,19 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('genre-books-grid-card')?.remove();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
+
+    // Desktop has no touch, so map vertical wheel to horizontal scroll over the
+    // genre strip. Only intercept while the strip can still scroll that way, so
+    // at the ends the page scrolls normally.
+    document.addEventListener('wheel', (e) => {
+        const strip = e.target.closest && e.target.closest('.genre-list');
+        if (!strip || strip.scrollWidth <= strip.clientWidth) return;
+        const max = strip.scrollWidth - strip.clientWidth;
+        if ((e.deltaY < 0 && strip.scrollLeft > 0) || (e.deltaY > 0 && strip.scrollLeft < max)) {
+            strip.scrollLeft += e.deltaY;
+            e.preventDefault();
+        }
+    }, { passive: false });
     
     function toggleTheme() {
         prefersDarkMode = !prefersDarkMode;
