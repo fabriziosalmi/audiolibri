@@ -122,7 +122,7 @@ PAGE_CSS = """<style>
 .bp-crumbs a { color:var(--secondary-text); text-decoration:none; }
 .bp-crumbs a:hover { color:var(--primary-color); }
 .bp-eyebrow { text-transform:uppercase; letter-spacing:.16em; font-size:var(--text-xs); font-weight:700; color:var(--primary-color); }
-.bp-title { font-family:var(--font-display); font-size:clamp(2rem,5vw,3.2rem); font-weight:600; line-height:1.05; margin:.3rem 0 .4rem; }
+.bp-title { font-family:var(--font-display); font-size:clamp(2rem,5vw,3.2rem); font-weight:600; line-height:1.05; margin:.3rem 0 .4rem; color:var(--header-color); -webkit-text-fill-color:var(--header-color); background:none; }
 .bp-author { font-size:var(--text-lg); color:var(--secondary-text); margin:0 0 1rem; }
 .bp-author b { color:var(--text-color); } .bp-author a { color:inherit; }
 .bp-chips { display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:1.5rem; }
@@ -138,6 +138,10 @@ PAGE_CSS = """<style>
 .bp-grid .nf-card { width:auto; }
 .bp-lead { font-size:var(--text-lg); color:var(--secondary-text); max-width:70ch; }
 .bp-back { display:inline-block; margin-top:2.5rem; color:var(--primary-color); text-decoration:none; font-weight:600; }
+a.bp-chip { text-decoration:none; transition:background-color .2s; }
+a.bp-chip:hover { background:rgba(var(--primary-rgb),.2); }
+.bp-related { margin-top:2.5rem; }
+.bp-related h2 { font-family:var(--font-display); font-size:var(--text-2xl); margin:0 0 .8rem; }
 .index-grid { display:flex; flex-wrap:wrap; gap:var(--space-3); margin-top:1.5rem; }
 .index-item { display:inline-flex; align-items:center; gap:.6rem; padding:.6rem 1.1rem; border:1px solid var(--border-color); border-radius:var(--radius-pill); text-decoration:none; color:var(--text-color); font-weight:600; transition:background-color .2s,border-color .2s,transform .2s; }
 .index-item:hover { background:var(--hover-overlay); border-color:var(--secondary-text); transform:translateY(-1px); }
@@ -241,7 +245,7 @@ def card_link(b) -> str:
 </a>"""
 
 
-def build_book_page(b: dict):
+def build_book_page(b: dict, related=()):
     vid = video_id(b)
     title, author, genre = title_of(b), author_of(b), genre_of(b)
     synopsis = (b.get("real_synopsis") or b.get("description") or "").strip()
@@ -291,8 +295,17 @@ def build_book_page(b: dict):
     faqpage = {"@context": "https://schema.org", "@type": "FAQPage",
                "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]}
 
-    chips = "".join(f'<span class="bp-chip">{e(x)}</span>' for x in
-                    [genre_label, human_duration(dur), (f"{views:,}".replace(",", ".") + " ascolti") if views else ""] if x)
+    chips = ""
+    if genre_label:
+        chips += f'<a class="bp-chip" href="/genere/{slugify(genre)}/">{e(genre_label)}</a>'
+    if dur:
+        chips += f'<span class="bp-chip">{e(human_duration(dur))}</span>'
+    if views:
+        chips += f'<span class="bp-chip">{e(f"{views:,}".replace(",", ".") + " ascolti")}</span>'
+    related_html = ""
+    if related:
+        related_cards = "".join(card_link(rb) for rb in related)
+        related_html = f'<section class="bp-related"><h2>Da ascoltare dopo</h2><div class="bp-grid">{related_cards}</div></section>'
     faq_html = "".join(f'<details class="bp-faq"><summary>{e(q)}</summary><p>{e(a)}</p></details>' for q, a in faq)
     crumb_html = '<a href="/">Home</a>' + (f' › <a href="/genere/{slugify(genre)}/">{e(genre_label)}</a>' if genre_label else '') + f' › <span>{e(title)}</span>'
     player = (f'<iframe class="bp-player" src="{e(embed)}" title="Audiolibro: {e(title)}" loading="lazy" '
@@ -308,6 +321,7 @@ def build_book_page(b: dict):
     {player}
     <section class="bp-synopsis"><h2>Trama</h2><p>{e(synopsis)}</p></section>
     <section class="bp-faqs"><h2>Domande frequenti</h2>{faq_html}</section>
+    {related_html}
     <a class="bp-back" href="/">← Tutta la libreria</a>
   </div>"""
     page_title = f"{title} — audiolibro gratis di {author} | Audiolibri.org"
@@ -391,30 +405,55 @@ def build_sitemap(paths):
             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls + "</urlset>\n")
 
 
+def related_for(b, authors, genres, limit=12):
+    """Pick related titles for a book page: same author first, then same genre."""
+    seen = {video_id(b)}
+    out = []
+
+    def add_from(pool):
+        for rb in sorted(pool, key=lambda x: x.get("view_count") or 0, reverse=True):
+            v = video_id(rb)
+            if v and v not in seen:
+                seen.add(v)
+                out.append(rb)
+                if len(out) >= limit:
+                    return True
+        return False
+
+    a = author_of(b)
+    if a and a != "Autore sconosciuto" and add_from(authors.get(a, [])):
+        return out
+    g = genre_of(b)
+    if g:
+        add_from(genres.get(g, []))
+    return out
+
+
 def main():
     books = json.loads(DATA.read_text())
-
-    if len(sys.argv) > 1 and sys.argv[1] != "all":
-        vid = sys.argv[1]
-        if vid not in books:
-            sys.exit(f"id {vid} not found")
-        rel_dir, page = build_book_page(books[vid])
-        print("wrote", write(rel_dir, page))
-        return
-
     valid = [b for b in books.values() if video_id(b)]
-    paths = []
 
-    for b in valid:
-        rel_dir, page = build_book_page(b)
-        paths.append(write(rel_dir, page))
-
+    # Group once: drives both the hub pages and the "related" lists on book pages.
     genres, authors = {}, {}
     for b in valid:
         g = genre_of(b)
         if g:
             genres.setdefault(g, []).append(b)
         authors.setdefault(author_of(b), []).append(b)
+
+    if len(sys.argv) > 1 and sys.argv[1] != "all":
+        vid = sys.argv[1]
+        if vid not in books:
+            sys.exit(f"id {vid} not found")
+        b = books[vid]
+        rel_dir, page = build_book_page(b, related_for(b, authors, genres))
+        print("wrote", write(rel_dir, page))
+        return
+
+    paths = []
+    for b in valid:
+        rel_dir, page = build_book_page(b, related_for(b, authors, genres))
+        paths.append(write(rel_dir, page))
 
     genre_entries = []
     for g, items in sorted(genres.items(), key=lambda kv: len(kv[1]), reverse=True):
