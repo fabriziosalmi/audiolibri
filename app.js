@@ -481,6 +481,24 @@ document.addEventListener('DOMContentLoaded', () => {
      * Build the Netflix-style stacked rows on the home view from existing data.
      * @param {Object[]} books - all processed audiobooks
      */
+    // Shared hover-arrow scroll affordance for horizontal strips (home rows + genre strip).
+    function wireScrollAffordance(vp) {
+        if (!vp) return;
+        const scroller = vp.querySelector('.nf-row-scroller') || vp.querySelector('.genre-list');
+        if (!scroller) return;
+        const update = () => {
+            const max = scroller.scrollWidth - scroller.clientWidth - 1;
+            vp.classList.toggle('can-left', scroller.scrollLeft > 4);
+            vp.classList.toggle('can-right', scroller.scrollLeft < max);
+        };
+        const step = () => Math.max(240, scroller.clientWidth * 0.85);
+        vp.querySelector('.nf-row-arrow--left')?.addEventListener('click', () => scroller.scrollBy({ left: -step(), behavior: 'smooth' }));
+        vp.querySelector('.nf-row-arrow--right')?.addEventListener('click', () => scroller.scrollBy({ left: step(), behavior: 'smooth' }));
+        scroller.addEventListener('scroll', update, { passive: true });
+        window.addEventListener('resize', update);
+        update();
+    }
+
     function renderHomeRows(books) {
         const mount = document.getElementById('home-rows');
         if (!mount || !books || !books.length) return;
@@ -594,20 +612,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Row scroll affordance: reveal edge arrows/fades only when there's more to scroll.
-        mount.querySelectorAll('.nf-row-viewport').forEach(vp => {
-            const scroller = vp.querySelector('.nf-row-scroller');
-            const update = () => {
-                const max = scroller.scrollWidth - scroller.clientWidth - 1;
-                vp.classList.toggle('can-left', scroller.scrollLeft > 4);
-                vp.classList.toggle('can-right', scroller.scrollLeft < max);
-            };
-            const step = () => Math.max(240, scroller.clientWidth * 0.85);
-            vp.querySelector('.nf-row-arrow--left').addEventListener('click', () => scroller.scrollBy({ left: -step(), behavior: 'smooth' }));
-            vp.querySelector('.nf-row-arrow--right').addEventListener('click', () => scroller.scrollBy({ left: step(), behavior: 'smooth' }));
-            scroller.addEventListener('scroll', update, { passive: true });
-            window.addEventListener('resize', update);
-            update();
-        });
+        mount.querySelectorAll('.nf-row-viewport').forEach(wireScrollAffordance);
 
         // Soft staggered reveal of rows as they enter the viewport (progressive
         // enhancement: without JS/IO the rows are simply visible; skipped for reduced motion).
@@ -713,14 +718,17 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Add title and list container with mobile-categories-container wrapper for mobile view
+        // Genre strip mirrors the home rows: a scroller flanked by edge arrows
+        // that appear on hover/when there's more to scroll (see wireScrollAffordance).
+        const chevron = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
         genreNavContainer.innerHTML = `
-            <div class="mobile-categories-container tw-mobile-scroll ios-momentum-scroll touch-manipulation">
-                <div class="genre-list tw-grid tw-grid-flow-col tw-gap-2 tw-snap-x" role="list" aria-label="Generi disponibili">
-                </div>
+            <div class="nf-row-viewport genre-viewport">
+                <button type="button" class="nf-row-arrow nf-row-arrow--left" aria-label="Scorri indietro" tabindex="-1">${chevron('m15 18-6-6 6-6')}</button>
+                <div class="genre-list" role="list" aria-label="Generi disponibili"></div>
+                <button type="button" class="nf-row-arrow nf-row-arrow--right" aria-label="Scorri avanti" tabindex="-1">${chevron('m9 18 6-6-6-6')}</button>
             </div>
         `;
-        
+
         const genreList = genreNavContainer.querySelector('.genre-list');
 
         // Generate navigation for filtered genres
@@ -742,32 +750,11 @@ document.addEventListener('DOMContentLoaded', () => {
             genreList.appendChild(genrePill);
         });
         
-        // Add scroll detection for mobile navigation
-        initializeMobileNavigation();
-    }
-    
-    // Handle mobile navigation scroll indicators
-    function initializeMobileNavigation() {
-        const mobileContainer = document.querySelector('.mobile-categories-container');
-        if (mobileContainer) {
-            // Add scroll event listener to show/hide gradients
-            mobileContainer.addEventListener('scroll', function() {
-                // Show left gradient when scrolled right
-                if (this.scrollLeft > 10) {
-                    this.classList.add('scrolled-right');
-                } else {
-                    this.classList.remove('scrolled-right');
-                }
-            });
-            
-            // Initial check
-            if (mobileContainer.scrollLeft > 10) {
-                mobileContainer.classList.add('scrolled-right');
-            }
-        }
+        // Reveal edge arrows / wire wheel + click scrolling, same as the home rows.
+        wireScrollAffordance(genreNavContainer.querySelector('.nf-row-viewport'));
     }
 
-    
+
     // Count how many books are in a specific genre
     function countBooksInGenre(books, genre) {
         return books.filter(book => 

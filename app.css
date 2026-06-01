@@ -2983,6 +2983,12 @@ button:disabled:hover {
 /* keep pills at natural width so the row scrolls instead of squashing them */
 .genre-list .genre-pill { flex-shrink: 0; }
 
+/* Genre strip reuses the home-row arrows, but it's a thin light strip — so the
+   chevrons need page-foreground colour (the row version is white-on-image). */
+.genre-viewport { padding: 0; }
+.genre-viewport .nf-row-arrow { top: 0; bottom: 4px; width: 48px; color: var(--header-color); }
+.genre-viewport .nf-row-arrow svg { filter: drop-shadow(0 1px 2px var(--background-color)); }
+
 @media (prefers-reduced-motion: no-preference) {
     html { scroll-behavior: smooth; }
 }
