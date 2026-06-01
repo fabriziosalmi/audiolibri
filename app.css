@@ -218,7 +218,7 @@
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
-.tw-mobile-scroll::-webkit-scrollbar { display: none; }
+.tw-mobile-scroll::-webkit-scrollbar { display: none; } /* l0git: ignore hidden_scrollbar reason: horizontal scroller; swipe + edge affordance replace the bar */
 .tw-mobile-scroll-item { scroll-snap-align: start; flex-shrink: 0; width: 160px; margin-right: 12px; }
 @media (min-width: 640px) {
     .tw-mobile-scroll-item { width: 192px; }
@@ -2143,7 +2143,7 @@ button:disabled {
 }
 
 .ios-scroll-x::-webkit-scrollbar {
-  display: none;
+  display: none; /* l0git: ignore hidden_scrollbar reason: horizontal scroller; swipe + edge affordance replace the bar */
 }
 
 /* Ottimizzazione dell'area di interazione tattile su iOS */
@@ -2429,7 +2429,7 @@ body:has(#genre-books-grid-card) .home-rows { display: none; }
     scrollbar-width: none;
     padding: 4px 2px 14px;
 }
-.nf-row-scroller::-webkit-scrollbar { display: none; }
+.nf-row-scroller::-webkit-scrollbar { display: none; } /* l0git: ignore hidden_scrollbar reason: home-row scroller; edge arrows replace the bar */
 
 .nf-row-viewport { position: relative; }
 .nf-row-arrow {
@@ -2710,7 +2710,7 @@ body:has(#genre-books-grid-card) .home-rows { display: none; }
        pill's hover lift, rounded top and focus ring room so they aren't cut. */
     padding: 6px 0 4px;
 }
-.genre-list::-webkit-scrollbar { display: none; }
+.genre-list::-webkit-scrollbar { display: none; } /* l0git: ignore hidden_scrollbar reason: genre strip scroller; edge arrows replace the bar */
 /* keep pills at natural width so the row scrolls instead of squashing them */
 .genre-list .genre-pill { flex-shrink: 0; }
 
