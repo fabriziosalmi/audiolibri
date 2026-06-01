@@ -229,23 +229,42 @@
 
 /* Enhanced Focus Indicators - WCAG 2.1 AA compliant */
 *:focus {
-    outline: 3px solid var(--focus-ring-light);
+    outline: 3px solid var(--focus-ring);
     outline-offset: 2px;
 }
 
-/* CSS Variables for RGB values */
+/* ── Color tokens ───────────────────────────────────────────────────────────
+   Light is the default (and the no-JS / FOUC fallback). System dark applies
+   unless the user forced light; an explicit [data-theme] (set by the toggle)
+   always wins. One warm coral + teal identity, consistent across both themes. */
 :root {
-    --primary-rgb: 74, 108, 247;
-    --accent-rgb: 16, 185, 129;
+    --primary-rgb: 184, 50, 74;
+    --accent-rgb: 12, 122, 110;
     --card-background-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-    :root {
-        --primary-rgb: 252, 134, 134;
-        --accent-rgb: 3, 218, 198;
-        --card-background-rgb: 18, 18, 18;
-    }
+    --background-color: #f5f7fa;
+    --text-color: #1a202c;
+    --card-background: #ffffff;
+    --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    --border-color: #e2e8f0;
+    --primary-color: #b8324a;
+    --primary-hover: #9e2a40;
+    --accent-color: #0c7a6e;
+    --accent-hover: #0a5f56;
+    --danger-color: #dc2626;
+    --danger-hover: #b91c1c;
+    --header-color: #111827;
+    --secondary-text: #4b5563;
+    --placeholder-bg: #f8fafc;
+    --meta-background: rgba(0, 0, 0, 0.75);
+    --search-border: #9ca3af;
+    --disabled-button: #9ca3af;
+    --loading-color: #b8324a;
+    --tag-bg: #d1d5db;
+    --tag-text: #374151;
+    --hover-overlay: rgba(0, 0, 0, 0.05);
+    --progress-bg: #e5e7eb;
+    --progress-fill: #b8324a;
+    --focus-ring: #b8324a;
 }
 
 /* Prevent FOUC */
@@ -256,7 +275,7 @@ body {
 /* High contrast focus for dark mode */
 @media (prefers-color-scheme: dark) {
     *:focus {
-        outline-color: var(--focus-ring-dark);
+        outline-color: var(--focus-ring);
     }
 }
 
@@ -266,13 +285,13 @@ body {
 }
 
 *:focus-visible {
-    outline: 3px solid var(--focus-ring-light);
+    outline: 3px solid var(--focus-ring);
     outline-offset: 2px;
 }
 
 @media (prefers-color-scheme: dark) {
     *:focus-visible {
-        outline-color: var(--focus-ring-dark);
+        outline-color: var(--focus-ring);
     }
 }
 
@@ -284,68 +303,66 @@ body {
     }
 }
 
-/* Enhanced color contrast ratios */
-:root {
-    /* Light theme colors - Enhanced for WCAG AA contrast */
-    --background-color: #f5f7fa;
-    --text-color: #1a202c; /* Darker for better contrast */
-    --card-background: #ffffff;
-    --card-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    --border-color: #e2e8f0;
-    --primary-color: #3b51d4; /* Darker for better contrast */
-    --primary-hover: #2a3cb8;
-    --accent-color: #047857; /* Darker green for better contrast */
-    --accent-hover: #065f46;
-    --danger-color: #dc2626; /* Better contrast red */
-    --danger-hover: #b91c1c;
-    --header-color: #111827; /* Much darker for better contrast */
-    --secondary-text: #4b5563; /* Darker for better contrast */
-    --placeholder-bg: #f8fafc;
-    --meta-background: rgba(0, 0, 0, 0.75); /* Higher opacity for readability */
-    --search-border: #9ca3af; /* Darker border for visibility */
-    --disabled-button: #9ca3af; /* Darker for better contrast */
-    --loading-color: #3b51d4;
-    --tag-bg: #d1d5db; /* Darker background */
-    --tag-text: #374151; /* Darker text */
-    --hover-overlay: rgba(0, 0, 0, 0.05);
-    --progress-bg: #e5e7eb;
-    --progress-fill: #3b51d4;
-    
-    /* Enhanced focus colors */
-    --focus-ring-light: #3b51d4;
-    --focus-ring-dark: #10b981;
-}
-
+/* Dark theme — explicit toggle, or OS preference unless the user forced light */
 @media (prefers-color-scheme: dark) {
-    :root {
-        /* Dark theme colors - Enhanced for WCAG AA contrast */
+    :root:not([data-theme="light"]) {
+        --primary-rgb: 255, 107, 107;
+        --accent-rgb: 78, 205, 196;
+        --card-background-rgb: 18, 18, 18;
         --background-color: #000000;
-        --text-color: #f1f5f9; /* Brighter for better contrast */
+        --text-color: #f1f5f9;
         --card-background: #121212;
-        --card-shadow: 0 10px 25px rgba(0,0,0,0.4);
-        --border-color: #404040; /* Lighter border for visibility */
-        --primary-color: #ff6b6b; /* Better contrast red */
+        --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        --border-color: #404040;
+        --primary-color: #ff6b6b;
         --primary-hover: #ff5252;
-        --accent-color: #4ecdc4; /* Better contrast cyan */
+        --accent-color: #4ecdc4;
         --accent-hover: #26a69a;
         --danger-color: #ff5252;
         --danger-hover: #f44336;
         --header-color: #ffffff;
-        --secondary-text: #b3b3b3; /* Lighter for better contrast */
+        --secondary-text: #b3b3b3;
         --placeholder-bg: #1e1e1e;
-        --meta-background: rgba(0, 0, 0, 0.85); /* Higher opacity for readability */
-        --search-border: #525252; /* Lighter border */
-        --disabled-button: #525252; /* Better contrast */
+        --meta-background: rgba(0, 0, 0, 0.85);
+        --search-border: #525252;
+        --disabled-button: #525252;
+        --loading-color: #ff6b6b;
+        --tag-bg: #404040;
+        --tag-text: #f1f5f9;
         --hover-overlay: rgba(255, 255, 255, 0.08);
-        --tag-bg: #404040; /* Lighter background */
-        --tag-text: #f1f5f9; /* Brighter text */
         --progress-bg: #404040;
         --progress-fill: #4ecdc4;
-        
-        /* Enhanced focus colors for dark mode */
-        --focus-ring-light: #ff6b6b;
-        --focus-ring-dark: #4ecdc4;
+        --focus-ring: #4ecdc4;
     }
+}
+:root[data-theme="dark"] {
+    --primary-rgb: 255, 107, 107;
+    --accent-rgb: 78, 205, 196;
+    --card-background-rgb: 18, 18, 18;
+    --background-color: #000000;
+    --text-color: #f1f5f9;
+    --card-background: #121212;
+    --card-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    --border-color: #404040;
+    --primary-color: #ff6b6b;
+    --primary-hover: #ff5252;
+    --accent-color: #4ecdc4;
+    --accent-hover: #26a69a;
+    --danger-color: #ff5252;
+    --danger-hover: #f44336;
+    --header-color: #ffffff;
+    --secondary-text: #b3b3b3;
+    --placeholder-bg: #1e1e1e;
+    --meta-background: rgba(0, 0, 0, 0.85);
+    --search-border: #525252;
+    --disabled-button: #525252;
+    --loading-color: #ff6b6b;
+    --tag-bg: #404040;
+    --tag-text: #f1f5f9;
+    --hover-overlay: rgba(255, 255, 255, 0.08);
+    --progress-bg: #404040;
+    --progress-fill: #4ecdc4;
+    --focus-ring: #4ecdc4;
 }
 
 * {
@@ -1175,7 +1192,7 @@ button:disabled:hover {
 
 .extend-session-btn:focus,
 .dismiss-btn:focus {
-    outline: 3px solid var(--focus-ring-light);
+    outline: 3px solid var(--focus-ring);
     outline-offset: 2px;
 }
 
@@ -1263,7 +1280,7 @@ button:disabled:hover {
 
 .primary-action:focus,
 .secondary-action:focus {
-    outline: 3px solid var(--focus-ring-light);
+    outline: 3px solid var(--focus-ring);
     outline-offset: 2px;
 }
 
@@ -1305,7 +1322,7 @@ button:disabled:hover {
 }
 
 #lang-select:focus {
-    outline: 3px solid var(--focus-ring-light);
+    outline: 3px solid var(--focus-ring);
     outline-offset: 2px;
 }
 
@@ -2788,7 +2805,7 @@ button:disabled:hover {
 .nf-card:hover .nf-card-cover { box-shadow: var(--shadow-lg); }
 .nf-card:hover .nf-card-img { transform: scale(1.06); }
 .nf-card:focus-visible { outline: none; }
-.nf-card:focus-visible .nf-card-cover { box-shadow: 0 0 0 3px var(--focus-ring-light), var(--shadow-lg); }
+.nf-card:focus-visible .nf-card-cover { box-shadow: 0 0 0 3px var(--focus-ring), var(--shadow-lg); }
 
 .nf-card-play {
     position: absolute;

@@ -143,51 +143,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     function toggleTheme() {
-        const newTheme = !prefersDarkMode;
-        
-        if (newTheme) {
-            // Switching to dark mode
-            document.documentElement.style.setProperty('--background-color', '#000000');
-            document.documentElement.style.setProperty('--text-color', '#f1f5f9');
-            document.documentElement.style.setProperty('--card-background', '#121212');
-            document.documentElement.style.setProperty('--card-shadow', '0 10px 25px rgba(0,0,0,0.4)');
-            document.documentElement.style.setProperty('--border-color', '#404040');
-            document.documentElement.style.setProperty('--header-color', '#ffffff');
-            document.documentElement.style.setProperty('--secondary-text', '#b3b3b3');
-            document.documentElement.style.setProperty('--placeholder-bg', '#1e1e1e');
-            document.documentElement.style.setProperty('--search-border', '#525252');
-            document.documentElement.style.setProperty('--primary-rgb', '255, 107, 107');
-            document.documentElement.style.setProperty('--accent-rgb', '78, 205, 196');
-            document.documentElement.style.setProperty('--card-background-rgb', '18, 18, 18');
-            themeLabel.textContent = 'Tema chiaro';
-            announceToScreenReader('Tema scuro attivato');
-        } else {
-            // Switching to light mode
-            document.documentElement.style.setProperty('--background-color', '#f5f7fa');
-            document.documentElement.style.setProperty('--text-color', '#1a202c');
-            document.documentElement.style.setProperty('--card-background', '#ffffff');
-            document.documentElement.style.setProperty('--card-shadow', '0 10px 25px rgba(0,0,0,0.05)');
-            document.documentElement.style.setProperty('--border-color', '#e2e8f0');
-            document.documentElement.style.setProperty('--header-color', '#111827');
-            document.documentElement.style.setProperty('--secondary-text', '#4b5563');
-            document.documentElement.style.setProperty('--placeholder-bg', '#f8fafc');
-            document.documentElement.style.setProperty('--search-border', '#9ca3af');
-            document.documentElement.style.setProperty('--primary-rgb', '59, 81, 212');
-            document.documentElement.style.setProperty('--accent-rgb', '4, 120, 87');
-            document.documentElement.style.setProperty('--card-background-rgb', '255, 255, 255');
-            themeLabel.textContent = 'Tema scuro';
-            announceToScreenReader('Tema chiaro attivato');
-        }
-        
-        prefersDarkMode = newTheme;
-        
-        // Save preference to localStorage
-        localStorage.setItem('prefersDarkMode', newTheme);
-        
-        // Update aria-label for theme toggle
-        themeToggle.setAttribute('aria-label', 
-            prefersDarkMode ? 'Cambia al tema chiaro' : 'Cambia al tema scuro'
-        );
+        prefersDarkMode = !prefersDarkMode;
+        document.documentElement.dataset.theme = prefersDarkMode ? 'dark' : 'light';
+        localStorage.setItem('prefersDarkMode', prefersDarkMode);
+        themeLabel.textContent = prefersDarkMode ? 'Tema chiaro' : 'Tema scuro';
+        themeToggle.setAttribute('aria-label', prefersDarkMode ? 'Passa al tema chiaro' : 'Passa al tema scuro');
+        announceToScreenReader(prefersDarkMode ? 'Tema scuro attivato' : 'Tema chiaro attivato');
     }
     
     // Initialize theme toggle text and aria-label
