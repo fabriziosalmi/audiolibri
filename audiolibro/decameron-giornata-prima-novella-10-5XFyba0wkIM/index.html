@@ -140,7 +140,7 @@
 .bp-crumbs a { color:var(--secondary-text); text-decoration:none; }
 .bp-crumbs a:hover { color:var(--primary-color); }
 .bp-eyebrow { text-transform:uppercase; letter-spacing:.16em; font-size:var(--text-xs); font-weight:700; color:var(--primary-color); }
-.bp-title { font-family:var(--font-display); font-size:clamp(2rem,5vw,3.2rem); font-weight:600; line-height:1.05; margin:.3rem 0 .4rem; }
+.bp-title { font-family:var(--font-display); font-size:clamp(2rem,5vw,3.2rem); font-weight:600; line-height:1.05; margin:.3rem 0 .4rem; color:var(--header-color); -webkit-text-fill-color:var(--header-color); background:none; }
 .bp-author { font-size:var(--text-lg); color:var(--secondary-text); margin:0 0 1rem; }
 .bp-author b { color:var(--text-color); } .bp-author a { color:inherit; }
 .bp-chips { display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:1.5rem; }
@@ -152,9 +152,14 @@
 .bp-faq { border-bottom:1px solid var(--border-color); padding:.9rem 0; }
 .bp-faq summary { cursor:pointer; font-weight:600; }
 .bp-faq p { color:var(--secondary-text); margin:.6rem 0 0; }
-.bp-grid { display:flex; flex-wrap:wrap; gap:var(--space-4); margin-top:1.5rem; }
+.bp-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:var(--space-5) var(--space-4); margin-top:1.5rem; }
+.bp-grid .nf-card { width:auto; }
 .bp-lead { font-size:var(--text-lg); color:var(--secondary-text); max-width:70ch; }
 .bp-back { display:inline-block; margin-top:2.5rem; color:var(--primary-color); text-decoration:none; font-weight:600; }
+a.bp-chip { text-decoration:none; transition:background-color .2s; }
+a.bp-chip:hover { background:rgba(var(--primary-rgb),.2); }
+.bp-related { margin-top:2.5rem; }
+.bp-related h2 { font-family:var(--font-display); font-size:var(--text-2xl); margin:0 0 .8rem; }
 .index-grid { display:flex; flex-wrap:wrap; gap:var(--space-3); margin-top:1.5rem; }
 .index-item { display:inline-flex; align-items:center; gap:.6rem; padding:.6rem 1.1rem; border:1px solid var(--border-color); border-radius:var(--radius-pill); text-decoration:none; color:var(--text-color); font-weight:600; transition:background-color .2s,border-color .2s,transform .2s; }
 .index-item:hover { background:var(--hover-overlay); border-color:var(--secondary-text); transform:translateY(-1px); }
@@ -182,10 +187,119 @@
     <p class="bp-eyebrow">Audiolibro gratis</p>
     <h1 class="bp-title">Decameron, Giornata prima, Novella 10</h1>
     <p class="bp-author">di <b><a href="/autore/giovanni-boccaccio/">Giovanni Boccaccio</a></b></p>
-    <div class="bp-chips"><span class="bp-chip">Racconto</span><span class="bp-chip">17 min</span><span class="bp-chip">4.960 ascolti</span></div>
+    <div class="bp-chips"><a class="bp-chip" href="/genere/racconto/">Racconto</a><span class="bp-chip">17 min</span><span class="bp-chip">4.960 ascolti</span></div>
     <iframe class="bp-player" src="https://www.youtube-nocookie.com/embed/5XFyba0wkIM" title="Audiolibro: Decameron, Giornata prima, Novella 10" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
     <section class="bp-synopsis"><h2>Trama</h2><p>La novella racconta la storia di un giovinetto che, dopo aver visto il corpo di una donna morta, si convince della fragilità della vita e decide di vivere per un anno in solitudine, lontano da ogni contatto umano. Durante questo periodo, attraverso sogni e visioni, il protagonista vive intensamente emozioni e passioni, arrivando a comprendere la natura effimera dell&#x27;esistenza. La narrazione esplora temi come l&#x27;isolamento, la passione e l&#x27;alternativa alla società.</p></section>
     <section class="bp-faqs"><h2>Domande frequenti</h2><details class="bp-faq"><summary>L&#x27;audiolibro di «Decameron, Giornata prima, Novella 10» è gratis?</summary><p>Sì. «Decameron, Giornata prima, Novella 10» è disponibile gratuitamente su Audiolibri.org, in streaming, senza registrazione.</p></details><details class="bp-faq"><summary>Chi legge l&#x27;audiolibro?</summary><p>La lettura è a cura di Audiolibri italiani.</p></details><details class="bp-faq"><summary>Quanto dura?</summary><p>La durata è di circa 17 min.</p></details><details class="bp-faq"><summary>Dove posso ascoltarlo?</summary><p>Puoi ascoltarlo direttamente in questa pagina, oppure nella libreria completa su https://audiolibri.org.</p></details></section>
+    <section class="bp-related"><h2>Da ascoltare dopo</h2><div class="bp-grid"><a class="nf-card" href="/audiolibro/le-piu-belle-fiabe-i-tre-porcellini-258B70gn9do/" aria-label="LE PIU&#x27; BELLE FIABE   I TRE PORCELLINI di Giovanni Boccaccio">
+  <span class="nf-card-cover" style="--cover-hue:89" data-initial="L">
+    <img class="nf-card-img" loading="lazy" alt="" src="https://i.ytimg.com/vi/258B70gn9do/mqdefault.jpg">
+    <span class="nf-card-duration">20m</span>
+  </span>
+  <span class="nf-card-body">
+    <span class="nf-card-title">LE PIU&#x27; BELLE FIABE   I TRE PORCELLINI</span>
+    <span class="nf-card-author">Giovanni Boccaccio</span>
+  </span>
+</a><a class="nf-card" href="/audiolibro/decameron-giornata-prima-novella-1-NN29Px-tJB4/" aria-label="Decameron, Giornata prima, Novella 1 di Giovanni Boccaccio">
+  <span class="nf-card-cover" style="--cover-hue:96" data-initial="D">
+    <img class="nf-card-img" loading="lazy" alt="" src="https://i.ytimg.com/vi/NN29Px-tJB4/mqdefault.jpg">
+    <span class="nf-card-duration">37m</span>
+  </span>
+  <span class="nf-card-body">
+    <span class="nf-card-title">Decameron, Giornata prima, Novella 1</span>
+    <span class="nf-card-author">Giovanni Boccaccio</span>
+  </span>
+</a><a class="nf-card" href="/audiolibro/decameron-_TUZ1dhQNRE/" aria-label="Decameron di Giovanni Boccaccio">
+  <span class="nf-card-cover" style="--cover-hue:197" data-initial="D">
+    <img class="nf-card-img" loading="lazy" alt="" src="https://i.ytimg.com/vi/_TUZ1dhQNRE/mqdefault.jpg">
+    <span class="nf-card-duration">8m</span>
+  </span>
+  <span class="nf-card-body">
+    <span class="nf-card-title">Decameron</span>
+    <span class="nf-card-author">Giovanni Boccaccio</span>
+  </span>
+</a><a class="nf-card" href="/audiolibro/i-vestiti-nuovi-dell-imperatore--gTTumeTdJU/" aria-label="I VESTITI NUOVI DELL&#x27;IMPERATORE di Giovanni Boccaccio">
+  <span class="nf-card-cover" style="--cover-hue:266" data-initial="I">
+    <img class="nf-card-img" loading="lazy" alt="" src="https://i.ytimg.com/vi/-gTTumeTdJU/mqdefault.jpg">
+    <span class="nf-card-duration">20m</span>
+  </span>
+  <span class="nf-card-body">
+    <span class="nf-card-title">I VESTITI NUOVI DELL&#x27;IMPERATORE</span>
+    <span class="nf-card-author">Giovanni Boccaccio</span>
+  </span>
+</a><a class="nf-card" href="/audiolibro/decameron-giornata-prima-novella-2-H-sy0P0C7-U/" aria-label="Decameron, Giornata prima, Novella 2 di Giovanni Boccaccio">
+  <span class="nf-card-cover" style="--cover-hue:61" data-initial="D">
+    <img class="nf-card-img" loading="lazy" alt="" src="https://i.ytimg.com/vi/H-sy0P0C7-U/mqdefault.jpg">
+    <span class="nf-card-duration">12m</span>
+  </span>
+  <span class="nf-card-body">
+    <span class="nf-card-title">Decameron, Giornata prima, Novella 2</span>
+    <span class="nf-card-author">Giovanni Boccaccio</span>
+  </span>
+</a><a class="nf-card" href="/audiolibro/gorgo-l-orco-DZ6er11bjjk/" aria-label="GORGO L&#x27;ORCO di Giovanni Boccaccio">
+  <span class="nf-card-cover" style="--cover-hue:222" data-initial="G">
+    <img class="nf-card-img" loading="lazy" alt="" src="https://i.ytimg.com/vi/DZ6er11bjjk/mqdefault.jpg">
+    <span class="nf-card-duration">6m</span>
+  </span>
+  <span class="nf-card-body">
+    <span class="nf-card-title">GORGO L&#x27;ORCO</span>
+    <span class="nf-card-author">Giovanni Boccaccio</span>
+  </span>
+</a><a class="nf-card" href="/audiolibro/decameron-giornata-prima-novella-4-i-nl5iniQZ0/" aria-label="Decameron, Giornata prima, Novella 4 di Giovanni Boccaccio">
+  <span class="nf-card-cover" style="--cover-hue:240" data-initial="D">
+    <img class="nf-card-img" loading="lazy" alt="" src="https://i.ytimg.com/vi/i-nl5iniQZ0/mqdefault.jpg">
+    <span class="nf-card-duration">11m</span>
+  </span>
+  <span class="nf-card-body">
+    <span class="nf-card-title">Decameron, Giornata prima, Novella 4</span>
+    <span class="nf-card-author">Giovanni Boccaccio</span>
+  </span>
+</a><a class="nf-card" href="/audiolibro/decameron-giornata-prima-novella-3-wvE6wIz1RkE/" aria-label="Decameron, Giornata prima, Novella 3 di Giovanni Boccaccio">
+  <span class="nf-card-cover" style="--cover-hue:261" data-initial="D">
+    <img class="nf-card-img" loading="lazy" alt="" src="https://i.ytimg.com/vi/wvE6wIz1RkE/mqdefault.jpg">
+    <span class="nf-card-duration">8m</span>
+  </span>
+  <span class="nf-card-body">
+    <span class="nf-card-title">Decameron, Giornata prima, Novella 3</span>
+    <span class="nf-card-author">Giovanni Boccaccio</span>
+  </span>
+</a><a class="nf-card" href="/audiolibro/gorgo-l-orco-iii-parte-NVel7h8UDQw/" aria-label="GORGO L&#x27;ORCO (III PARTE) di Giovanni Boccaccio">
+  <span class="nf-card-cover" style="--cover-hue:221" data-initial="G">
+    <img class="nf-card-img" loading="lazy" alt="" src="https://i.ytimg.com/vi/NVel7h8UDQw/mqdefault.jpg">
+    <span class="nf-card-duration">4m</span>
+  </span>
+  <span class="nf-card-body">
+    <span class="nf-card-title">GORGO L&#x27;ORCO (III PARTE)</span>
+    <span class="nf-card-author">Giovanni Boccaccio</span>
+  </span>
+</a><a class="nf-card" href="/audiolibro/i-racconta-storie-n-8-OQpoiok8HcU/" aria-label="I RACCONTA STORIE N.8 di Giovanni Boccaccio">
+  <span class="nf-card-cover" style="--cover-hue:298" data-initial="I">
+    <img class="nf-card-img" loading="lazy" alt="" src="https://i.ytimg.com/vi/OQpoiok8HcU/mqdefault.jpg">
+    <span class="nf-card-duration">50m</span>
+  </span>
+  <span class="nf-card-body">
+    <span class="nf-card-title">I RACCONTA STORIE N.8</span>
+    <span class="nf-card-author">Giovanni Boccaccio</span>
+  </span>
+</a><a class="nf-card" href="/audiolibro/la-marchesana-di-monferrato-o4KLSCTikW0/" aria-label="La marchesana di Monferrato di Giovanni Boccaccio">
+  <span class="nf-card-cover" style="--cover-hue:175" data-initial="L">
+    <img class="nf-card-img" loading="lazy" alt="" src="https://i.ytimg.com/vi/o4KLSCTikW0/mqdefault.jpg">
+    <span class="nf-card-duration">8m</span>
+  </span>
+  <span class="nf-card-body">
+    <span class="nf-card-title">La marchesana di Monferrato</span>
+    <span class="nf-card-author">Giovanni Boccaccio</span>
+  </span>
+</a><a class="nf-card" href="/audiolibro/i-racconta-storie-n-44-_cOXaNU_U7w/" aria-label="I RACCONTA STORIE N.44 di Giovanni Boccaccio">
+  <span class="nf-card-cover" style="--cover-hue:255" data-initial="I">
+    <img class="nf-card-img" loading="lazy" alt="" src="https://i.ytimg.com/vi/_cOXaNU_U7w/mqdefault.jpg">
+    <span class="nf-card-duration">52m</span>
+  </span>
+  <span class="nf-card-body">
+    <span class="nf-card-title">I RACCONTA STORIE N.44</span>
+    <span class="nf-card-author">Giovanni Boccaccio</span>
+  </span>
+</a></div></section>
     <a class="bp-back" href="/">← Tutta la libreria</a>
   </div>
 </main>
