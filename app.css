@@ -2004,7 +2004,24 @@ button:disabled {
     }
 }
 
-/* Ottimizzazioni per lo schermo intero sui dispositivi mobili */
+/* Unify the mobile genre pills with the desktop neutral-border style: the
+   legacy rules above made them borderless, shadowed and width-clipped. The
+   strip scrolls horizontally, so names don't need truncating. (!important is
+   required only to override the legacy !important declarations above.) */
+@media (max-width: 768px) {
+    .genre-list .genre-pill {
+        border: 1px solid var(--border-color) !important;
+        border-radius: var(--radius-pill) !important;
+        box-shadow: none !important;
+        max-width: none !important;
+        overflow: visible !important;
+    }
+    .genre-list .genre-pill.selected,
+    .genre-list .genre-pill.active {
+        border-color: var(--primary-color) !important;
+    }
+    .genre-list .genre-name { max-width: none !important; overflow: visible !important; }
+}
 @media (max-width: 768px) {
     /* Ottimizzazione della griglia di contenuti per occupare tutto lo spazio disponibile */
     .audiobook-grid {
