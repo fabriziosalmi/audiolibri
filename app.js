@@ -1469,7 +1469,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         // Set up pagination
-        const resultsPerPage = 10;
+        const resultsPerPage = 24;
         let currentPage = 1;
         const totalPages = Math.ceil(results.length / resultsPerPage);
         
@@ -1497,7 +1497,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h2 class="search-title">Risultati per "${sanitizedSearchTerm}"</h2>
                     <span class="results-count">${results.length} audiolibri trovati</span>
                 </div>
-                <button class="back-button" id="search-back-button">
+                <button class="ghost-btn" id="search-back-button" type="button">
                     <span class="back-icon"></span> Torna alla ricerca
                 </button>
             </div>

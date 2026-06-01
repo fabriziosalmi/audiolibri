@@ -1792,24 +1792,24 @@ button:disabled {
 }
 
 /* Search Results Styles */
+/* Clean, unboxed results section — same visual language as the home rows. */
 .search-results-card {
-    margin: 20px 0;
-    padding: 1.5rem;
-    background: var(--card-background);
-    border-radius: 16px;
-    box-shadow: var(--card-shadow);
-    border: 1px solid var(--border-color);
-    transition: all 0.3s ease;
-    margin-bottom: 30px;
+    margin: var(--space-2) 0 var(--space-8);
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
 }
 
 .search-results-header {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--space-5);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--border-color);
     flex-wrap: wrap;
-    gap: 12px;
+    gap: var(--space-3);
 }
 
 .search-info {
@@ -2791,7 +2791,13 @@ button:disabled {
 }
 .nf-card:hover .nf-card-img { filter: brightness(0.82); }
 
-.search-grid { display: flex; flex-wrap: wrap; gap: var(--space-4); }
+/* Even, responsive results grid (cards fill their cell instead of left-aligning). */
+.search-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: var(--space-5) var(--space-4);
+}
+.search-grid .nf-card { width: auto; }
 
 /* ── 11. Header main nav (row 1) + genre strip (row 2) ─────────────────────── */
 .main-nav {
