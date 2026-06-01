@@ -9,12 +9,12 @@
     
     <!-- WCAG Accessibility Meta Tags -->
     <meta name="color-scheme" content="light dark">
-    <meta name="theme-color" content="#4a6cf7" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#ff4343" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#b8324a" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#ff6b6b" media="(prefers-color-scheme: dark)">
     <meta name="description" content="Scopri e ascolta la più grande collezione di audiolibri italiani gratuiti. Audiolibri.org offre un'esperienza moderna e facile per gli amanti degli audiolibri in italiano.">
     <meta name="keywords" content="audiolibri, audiolibri italiani, audiolibri gratuiti, libri audio, ascolta libri, romanzi audio, narrativa italiana, letteratura italiana">
     <meta name="author" content="Audiolibri.org">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="language" content="Italian">
     <meta name="version" content="1.5.2">
     
@@ -33,7 +33,10 @@
     <meta property="og:url" content="https://audiolibri.org">
     <meta property="og:title" content="Audiolibri.org - Audiolibri Italiani Gratuiti">
     <meta property="og:description" content="Ascolta gratuitamente migliaia di audiolibri in italiano. La più grande collezione di audiolibri italiani gratuiti.">
-    <meta property="og:image" content="/images/og-image.jpg">
+    <meta property="og:image" content="https://audiolibri.org/icons/android-chrome-512x512.png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta property="og:image:alt" content="Audiolibri.org — audiolibri italiani gratuiti">
     <meta property="og:locale" content="it_IT">
     
     <!-- Twitter -->
@@ -41,7 +44,7 @@
     <meta property="twitter:url" content="https://audiolibri.org">
     <meta property="twitter:title" content="Audiolibri.org - Audiolibri Italiani Gratuiti">
     <meta property="twitter:description" content="Ascolta gratuitamente migliaia di audiolibri in italiano. La più grande collezione di audiolibri italiani gratuiti.">
-    <meta property="twitter:image" content="/images/twitter-image.jpg">
+    <meta property="twitter:image" content="https://audiolibri.org/icons/android-chrome-512x512.png">
     
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
@@ -52,8 +55,7 @@
     <link rel="shortcut icon" href="/icons/favicon.ico">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="msapplication-config" content="/icons/browserconfig.xml">
-    <meta name="theme-color" content="#ffffff">
-    
+
     <!-- Apple Touch Icons -->
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="152x152" href="/icons/apple-touch-icon-152x152.png">
@@ -78,14 +80,26 @@
       "url": "https://audiolibri.org",
       "name": "Audiolibri.org",
       "description": "La più grande collezione di audiolibri italiani gratuiti",
+      "inLanguage": "it-IT",
       "potentialAction": {
         "@type": "SearchAction",
-        "target": "https://audiolibri.org?search={search_term_string}",
+        "target": "https://audiolibri.org/?search={search_term_string}",
         "query-input": "required name=search_term_string"
       }
     }
     </script>
-    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Audiolibri.org",
+      "url": "https://audiolibri.org",
+      "logo": "https://audiolibri.org/icons/android-chrome-512x512.png",
+      "description": "La più grande collezione di audiolibri italiani gratuiti, in streaming e senza registrazione.",
+      "sameAs": ["https://github.com/fabriziosalmi/audiolibri"]
+    }
+    </script>
+
     <!-- Single consolidated stylesheet (replaces the former 9-file CSS stack) -->
     <link rel="preload" href="app.css" as="style">
     <link rel="stylesheet" href="app.css">
