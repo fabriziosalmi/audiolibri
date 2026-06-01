@@ -170,8 +170,9 @@ document.addEventListener('DOMContentLoaded', () => {
         prefersDarkMode ? 'Cambia al tema chiaro' : 'Cambia al tema scuro'
     );
     
-    // Cache configuration
-    const CACHE_VERSION = '1.0';
+    // Cache configuration (bump CACHE_VERSION on any augmented.json data change
+    // so clients drop their stale localStorage copy and refetch).
+    const CACHE_VERSION = '1.1';
     const CACHE_KEY = 'audiobooksData';
     const CACHE_VERSION_KEY = 'audiobooksDataVersion';
     const CACHE_TIMESTAMP_KEY = 'audiobooksDataTimestamp';
@@ -235,9 +236,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // The fallback logic ensures the app works with either data source
     function processAudiobooksData(data) {
         return Object.entries(data).map(([id, book]) => {
+            const baseTitle = book.real_title || book.title || 'Unknown Title';
             return {
                 id: id,
-                title: book.real_title || book.title || 'Unknown Title',
+                // Disambiguate multi-part series for display ("… — Capitolo 12").
+                title: book.part_display ? `${baseTitle} — ${book.part_display}` : baseTitle,
+                series: book.series || '',
+                part: book.part || null,
                 author: book.real_author || 'Unknown Author',
                 description: book.real_synopsis || book.description || 'No description available.',
                 genre: book.real_genre || '',
@@ -318,8 +323,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Function to fetch fresh data from server
     function fetchFreshData(isBackgroundUpdate) {
-        // Try loading augmented.json first, then fall back to audiobooks.json
-        fetch('augmented.json')
+        // Try loading augmented.json first, then fall back to audiobooks.json.
+        // cache:'no-cache' = always revalidate (conditional GET) so a redeployed
+        // data file is picked up immediately instead of a stale HTTP-cached copy.
+        fetch('augmented.json', { cache: 'no-cache' })
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -329,7 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => {
                 // If augmented.json fails, try audiobooks.json as fallback
                 console.warn('Failed to load augmented.json, trying audiobooks.json fallback:', error.message || error);
-                return fetch('audiobooks.json')
+                return fetch('audiobooks.json', { cache: 'no-cache' })
                     .then(response => {
                         if (!response.ok) {
                             throw new Error(`Fallback failed - audiobooks.json HTTP error! status: ${response.status}`);
