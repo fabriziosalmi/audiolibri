@@ -2741,6 +2741,7 @@ button:disabled:hover {
 .nf-row-arrow svg { width: 26px; height: 26px; filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.6)); }
 .nf-row-arrow--left { left: 0; border-radius: var(--radius-md) 0 0 var(--radius-md); background: linear-gradient(to left, transparent, var(--background-color) 78%); }
 .nf-row-arrow--right { right: 0; border-radius: 0 var(--radius-md) var(--radius-md) 0; background: linear-gradient(to right, transparent, var(--background-color) 78%); }
+.nf-row-arrow:hover { background-color: transparent; transform: none; box-shadow: none; }
 .nf-row-viewport.can-left .nf-row-arrow--left,
 .nf-row-viewport.can-right .nf-row-arrow--right { pointer-events: auto; }
 @media (hover: hover) {
@@ -2765,6 +2766,7 @@ button:disabled:hover {
     text-align: left;
     font-family: inherit;
     color: var(--text-color);
+    border-radius: 0;
     transition: transform var(--dur) var(--ease-out);
 }
 .nf-card-cover {
@@ -2801,7 +2803,9 @@ button:disabled:hover {
     color: rgba(255, 255, 255, 0.9);
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
 }
-.nf-card:hover { transform: translateY(-4px); z-index: 2; }
+/* background/box-shadow resets neutralise the global button:hover pill style
+   (var(--primary) bg + 9999px radius) leaking onto these structural buttons. */
+.nf-card:hover { transform: translateY(-4px); z-index: 2; background: none; box-shadow: none; }
 .nf-card:hover .nf-card-cover { box-shadow: var(--shadow-lg); }
 .nf-card:hover .nf-card-img { transform: scale(1.06); }
 .nf-card:focus-visible { outline: none; }
