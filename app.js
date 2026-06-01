@@ -497,9 +497,14 @@ document.addEventListener('DOMContentLoaded', () => {
             <section class="nf-row" aria-label="${esc(row.title)}">
                 <h3 class="nf-row-title">${esc(row.title)}</h3>
                 <div class="nf-row-scroller">
-                    ${row.books.map(b => `
+                    ${row.books.map(b => {
+                        const hue = [...String(b.id)].reduce((h, c) => h + c.charCodeAt(0), 0) % 360;
+                        const thumb = b.videoId ? `https://i.ytimg.com/vi/${b.videoId}/mqdefault.jpg` : b.coverImage;
+                        const initial = esc((b.title || '?').trim().charAt(0).toUpperCase());
+                        return `
                         <button type="button" class="nf-card" data-id="${esc(b.id)}" aria-label="${esc(b.title)} di ${esc(b.author)}">
-                            <span class="nf-card-cover" style="background-image:url('${b.coverImage}')">
+                            <span class="nf-card-cover" style="--cover-hue:${hue}" data-initial="${initial}">
+                                <img class="nf-card-img" loading="lazy" alt="" src="${thumb}">
                                 ${playOverlay}
                                 <span class="nf-card-duration">${esc(b.formattedDuration)}</span>
                             </span>
@@ -508,7 +513,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <span class="nf-card-author">${esc(b.author)}</span>
                             </span>
                         </button>
-                    `).join('')}
+                        `;
+                    }).join('')}
                 </div>
             </section>
         `).join('');
@@ -524,6 +530,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('current-audiobook')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
+        });
+
+        // YouTube serves a 120x90 grey placeholder for deleted videos (HTTP 200),
+        // so detect it by natural size and fall back to a generated cover.
+        mount.querySelectorAll('.nf-card-img').forEach(img => {
+            const fallback = () => img.closest('.nf-card-cover')?.classList.add('is-fallback');
+            if (img.complete) {
+                if (!img.naturalWidth || img.naturalWidth <= 120) fallback();
+            }
+            img.addEventListener('error', fallback);
+            img.addEventListener('load', () => { if (img.naturalWidth <= 120) fallback(); });
         });
     }
     
