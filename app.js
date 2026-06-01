@@ -260,7 +260,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 videoId: extractVideoId(book.url || ''),
                 categories: book.real_genre ? [book.real_genre] : (book.categories || []),
                 tags: book.tags || [],
-                uploadDate: book.upload_date || ''
+                uploadDate: book.upload_date || '',
+                viewCount: book.view_count || 0,
+                likeCount: book.like_count || 0
             };
         }).filter(book => book.title !== 'Unknown Title' && book.videoId);
     }
@@ -446,9 +448,83 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Generate and display genre navigation list
         generateGenreNavigation(books);
-        
+
+        // Build the Netflix-style home rows (Popolari / Novità / per genere)
+        renderHomeRows(books);
+
         // Update footer stats
         updateFooterStats(books);
+    }
+
+    /**
+     * Build the Netflix-style stacked rows on the home view from existing data.
+     * @param {Object[]} books - all processed audiobooks
+     */
+    function renderHomeRows(books) {
+        const mount = document.getElementById('home-rows');
+        if (!mount || !books || !books.length) return;
+
+        const byViews = [...books].sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0));
+        const byRecent = [...books].sort((a, b) => String(b.uploadDate || '').localeCompare(String(a.uploadDate || '')));
+
+        // Top genres by count
+        const genreCounts = books.reduce((acc, b) => {
+            (b.categories && b.categories.length ? b.categories : ['Altro']).forEach(g => {
+                const k = capitalizeCategory(g);
+                acc[k] = (acc[k] || 0) + 1;
+            });
+            return acc;
+        }, {});
+        const topGenres = Object.entries(genreCounts)
+            .filter(([g]) => g && g.toLowerCase() !== 'altro' && g.toLowerCase() !== 'education')
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5)
+            .map(([g]) => g);
+
+        const rows = [
+            { title: 'Popolari', books: byViews.slice(0, 18) },
+            { title: 'Aggiunti di recente', books: byRecent.slice(0, 18) },
+            ...topGenres.map(g => ({
+                title: g,
+                books: books.filter(b => (b.categories || []).some(c => capitalizeCategory(c) === g)).slice(0, 18)
+            }))
+        ].filter(r => r.books.length >= 4);
+
+        const esc = (s) => sanitizeText(String(s == null ? '' : s));
+        const playOverlay = '<span class="nf-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>';
+
+        mount.innerHTML = rows.map((row, ri) => `
+            <section class="nf-row" aria-label="${esc(row.title)}">
+                <h3 class="nf-row-title">${esc(row.title)}</h3>
+                <div class="nf-row-scroller">
+                    ${row.books.map(b => `
+                        <button type="button" class="nf-card" data-id="${esc(b.id)}" aria-label="${esc(b.title)} di ${esc(b.author)}">
+                            <span class="nf-card-cover" style="background-image:url('${b.coverImage}')">
+                                ${playOverlay}
+                                <span class="nf-card-duration">${esc(b.formattedDuration)}</span>
+                            </span>
+                            <span class="nf-card-body">
+                                <span class="nf-card-title">${esc(b.title)}</span>
+                                <span class="nf-card-author">${esc(b.author)}</span>
+                            </span>
+                        </button>
+                    `).join('')}
+                </div>
+            </section>
+        `).join('');
+
+        // Wire card clicks → set as hero + scroll up
+        const byId = new Map(books.map(b => [b.id, b]));
+        mount.querySelectorAll('.nf-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const book = byId.get(card.dataset.id);
+                if (book) {
+                    currentBook = book;
+                    displayBook(book);
+                    document.getElementById('current-audiobook')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
     }
     
     /**
@@ -824,150 +900,98 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const bookCard = document.getElementById('current-audiobook');
         
-        // Set background image with a gradient overlay
-        bookCard.style.backgroundImage = `url('${book.coverImage}')`;
+        const audioAvailable = !!book.audioUrl;
+
+        // Escape user-derived (scraped) text before injecting into innerHTML.
+        const sanitize = (s) => sanitizeText(String(s == null ? '' : s));
+
+        const trimmedDescription = book.description && book.description.length > 320
+            ? book.description.substring(0, 320).trim() + '…'
+            : (book.description || '');
+
+        const eyebrow = 'In evidenza';
+
+        const chipsHtml = (book.categories && book.categories.length)
+            ? `<div class="hero-chips" role="list" aria-label="Generi">${book.categories.slice(0, 4).map(c => `<span class="hero-chip" role="listitem">${sanitize(capitalizeCategory(c))}</span>`).join('')}</div>`
+            : '';
+
+        const ICON = {
+            play: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>',
+            shuffle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3h5v5"/><path d="M21 3 13 11"/><path d="M16 21h5v-5"/><path d="m21 21-7-7"/><path d="M3 4l6 6"/></svg>',
+            mic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><path d="M12 19v3"/></svg>',
+            clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+            eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>'
+        };
+
+        const views = book.viewCount ? book.viewCount.toLocaleString('it-IT') : null;
+        const metaHtml = [
+            `<span class="hero-meta-item">${ICON.clock}${book.formattedDuration}</span>`,
+            views ? `<span class="hero-meta-item">${ICON.eye}${views} visualizzazioni</span>` : '',
+            book.channel ? `<span class="hero-meta-item">${ICON.mic}${sanitize(book.channel)}</span>` : ''
+        ].filter(Boolean).join('<span class="hero-meta-sep">·</span>');
+
+        const channelCta = book.channelUrl
+            ? `<a class="hero-cta hero-cta-secondary" href="${encodeURI(book.channelUrl)}" target="_blank" rel="noopener noreferrer">${ICON.mic} Canale</a>`
+            : '';
         
-        // Check if audio file is available
-        const audioAvailable = book.audioUrl ? true : false;
-        const audioStatus = audioAvailable ? 
-            `<span class="audio-status available" role="status" aria-label="Audio disponibile">
-                <i class="audio-icon" aria-hidden="true"></i>Audio disponibile
-            </span>` : 
-            ``;
-        
-        // Create trimmed description (max 300 characters)
-        const trimmedDescription = book.description.length > 300 
-            ? book.description.substring(0, 300) + '...' 
-            : book.description;
-        
-        // Create channel link with icon
-        const channelHtml = book.channelUrl 
-            ? `<a href="${book.channelUrl}" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  class="channel-link"
-                  aria-label="Apri canale YouTube di ${book.channel || 'questo creatore'} in una nuova finestra">
-                <img src="https://www.youtube.com/s/desktop/7c155e84/img/favicon_144x144.png" 
-                     alt="" 
-                     class="channel-icon" 
-                     aria-hidden="true">
-                ${book.channel || 'Canale YouTube'}
-              </a>` 
-            : `${book.channel || ''}`;
-            
-        // Format upload date if available
-        const uploadDate = book.uploadDate ? 
-            formatUploadDate(book.uploadDate) : '';
-            
-        // Create category tags
-        let categoriesHtml = '';
-        if (book.categories && book.categories.length > 0) {
-            categoriesHtml = `
-            <div class="book-categories" role="list" aria-label="Categorie del libro">
-                ${book.categories.map(category => 
-                    `<span class="category-tag" role="listitem">${capitalizeCategory(category)}</span>`
-                ).join('')}
-            </div>`;
-        }
-        
-        // Format duration as a styled element
-        const durationHtml = `<span class="duration-badge">
-            <i class="time-icon" aria-hidden="true"></i>${book.formattedDuration}
-        </span>`;
-        
-        // Improved layout with better player interface and accessibility
         bookCard.innerHTML = `
-            <div class="card-overlay">
-                <div class="media-container slide-up">
-                    <div id="youtube-player" role="region" aria-label="Lettore video YouTube"></div>
-                    <audio id="audio-player" 
-                           controls 
-                           preload="metadata"
-                           aria-describedby="audio-description">
-                        Il tuo browser non supporta l'elemento audio.
-                    </audio>
-                    <div id="audio-description" class="sr-only">
-                        Lettore audio per l'audiolibro ${book.title} di ${book.author}
-                    </div>
-                    <div class="player-controls" role="region" aria-label="Controlli di riproduzione">
-                        <div class="controls-row">
-                            <button id="rewind-button" 
-                                    class="control-button" 
-                                    type="button"
-                                    aria-label="Riavvolgi di 10 secondi">
-                                <i class="rewind-icon" aria-hidden="true"></i>
-                                <span class="sr-only">Riavvolgi</span>
-                            </button>
-                            <button id="play-pause" 
-                                    class="control-button large" 
-                                    type="button"
-                                    aria-label="Riproduci o metti in pausa">
-                                <i class="play-icon" aria-hidden="true"></i>
-                                <span class="sr-only">Riproduci</span>
-                            </button>
-                            <button id="forward-button" 
-                                    class="control-button" 
-                                    type="button"
-                                    aria-label="Avanza di 10 secondi">
-                                <i class="forward-icon" aria-hidden="true"></i>
-                                <span class="sr-only">Avanza</span>
-                            </button>
-                        </div>
-                        <div class="progress-container" 
-                             id="progress-container"
-                             role="slider"
-                             aria-label="Posizione di riproduzione"
-                             aria-valuemin="0"
-                             aria-valuemax="100"
-                             aria-valuenow="0"
-                             tabindex="0">
-                            <div class="progress-bar" id="progress-bar"></div>
-                            <div class="progress-handle" id="progress-handle"></div>
-                        </div>
-                        <div class="time-display" aria-live="polite" aria-atomic="false">
-                            <span id="current-time" aria-label="Tempo corrente">0:00</span>
-                            <span aria-hidden="true">/</span>
-                            <span id="total-time" aria-label="Durata totale">${formatTimeDisplay(book.duration)}</span>
-                        </div>
-                        <div class="volume-control">
-                            <i class="volume-icon" aria-hidden="true"></i>
-                            <label for="volume-slider" class="sr-only">Controllo volume</label>
-                            <input type="range" 
-                                   id="volume-slider" 
-                                   min="0" 
-                                   max="100" 
-                                   value="100" 
-                                   aria-label="Volume: 100%"
-                                   aria-valuemin="0"
-                                   aria-valuemax="100"
-                                   aria-valuenow="100">
+            <div class="hero">
+                <div class="hero-backdrop" aria-hidden="true"></div>
+                <div class="hero-scrim" aria-hidden="true"></div>
+                <div class="hero-body">
+                    <div class="hero-media slide-up">
+                        <div id="youtube-player" role="region" aria-label="Lettore audiolibro"></div>
+                        <audio id="audio-player" controls preload="metadata" aria-describedby="audio-description">
+                            Il tuo browser non supporta l'elemento audio.
+                        </audio>
+                        <div id="audio-description" class="sr-only">Lettore audio per ${sanitize(book.title)} di ${sanitize(book.author)}</div>
+                        <div class="player-controls" role="region" aria-label="Controlli di riproduzione">
+                            <div class="controls-row">
+                                <button id="rewind-button" class="control-button" type="button" aria-label="Riavvolgi di 10 secondi">
+                                    <i class="rewind-icon" aria-hidden="true"></i><span class="sr-only">Riavvolgi</span>
+                                </button>
+                                <button id="play-pause" class="control-button large" type="button" aria-label="Riproduci o metti in pausa">
+                                    <i class="play-icon" aria-hidden="true"></i><span class="sr-only">Riproduci</span>
+                                </button>
+                                <button id="forward-button" class="control-button" type="button" aria-label="Avanza di 10 secondi">
+                                    <i class="forward-icon" aria-hidden="true"></i><span class="sr-only">Avanza</span>
+                                </button>
+                            </div>
+                            <div class="progress-container" id="progress-container" role="slider" aria-label="Posizione di riproduzione" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+                                <div class="progress-bar" id="progress-bar"></div>
+                                <div class="progress-handle" id="progress-handle"></div>
+                            </div>
+                            <div class="time-display" aria-live="polite" aria-atomic="false">
+                                <span id="current-time" aria-label="Tempo corrente">0:00</span>
+                                <span aria-hidden="true">/</span>
+                                <span id="total-time" aria-label="Durata totale">${formatTimeDisplay(book.duration)}</span>
+                            </div>
+                            <div class="volume-control">
+                                <i class="volume-icon" aria-hidden="true"></i>
+                                <label for="volume-slider" class="sr-only">Controllo volume</label>
+                                <input type="range" id="volume-slider" min="0" max="100" value="100" aria-label="Volume: 100%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="book-details fade-in">
-                    <div class="book-text-content">
-                        <h2 id="book-title">${book.title}</h2>
-                        <h3 id="book-author">di ${book.author}</h3>
-                        ${categoriesHtml}
-                        <p id="book-description">${trimmedDescription}</p>
-                        <div class="meta-inline">
-                            ${audioStatus}
-                            <div class="meta-item">
-                                <i class="channel-icon-small" aria-hidden="true"></i>
-                                <span>Canale: ${channelHtml}</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="duration-icon" aria-hidden="true"></i>
-                                <span>Durata: ${durationHtml}</span>
-                            </div>
-                            ${uploadDate ? `<div class="meta-item">
-                                <span>Pubblicato il ${uploadDate}</span>
-                            </div>` : ''}
+                    <div class="hero-content fade-in">
+                        <span class="hero-eyebrow">${sanitize(eyebrow)}</span>
+                        <h2 id="book-title" class="hero-title">${sanitize(book.title)}</h2>
+                        <p id="book-author" class="hero-author">di <b>${sanitize(book.author)}</b></p>
+                        ${chipsHtml}
+                        <p id="book-description" class="hero-synopsis">${sanitize(trimmedDescription)}</p>
+                        <div class="hero-meta">${metaHtml}</div>
+                        <div class="hero-actions">
+                            <button class="hero-cta hero-cta-primary" id="hero-play" type="button">${ICON.play} Ascolta</button>
+                            <button class="hero-cta hero-cta-secondary" id="hero-shuffle" type="button">${ICON.shuffle} Casuale</button>
+                            ${channelCta}
                         </div>
                     </div>
                 </div>
             </div>
         `;
+
+        const heroBackdrop = bookCard.querySelector('.hero-backdrop');
+        if (heroBackdrop) heroBackdrop.style.backgroundImage = `url('${book.coverImage}')`;
         
         // Set up audio player if audio is available
         const audioPlayer = document.getElementById('audio-player');
@@ -988,6 +1012,18 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             document.getElementById('youtube-player').innerHTML = '';
         }
+
+        // Hero CTAs
+        document.getElementById('hero-play')?.addEventListener('click', () => {
+            document.getElementById('play-pause')?.click();
+        });
+        document.getElementById('hero-shuffle')?.addEventListener('click', () => {
+            if (audiobooks && audiobooks.length) {
+                currentBook = audiobooks[Math.floor(Math.random() * audiobooks.length)];
+                displayBook(currentBook);
+                document.getElementById('current-audiobook')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
     }
     
     /**
