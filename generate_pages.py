@@ -255,7 +255,7 @@ def card_link(b) -> str:
 </a>"""
 
 
-def build_book_page(b: dict, related=(), in_series=False):
+def build_book_page(b: dict, related=(), in_series=False, series_name=None):
     vid = video_id(b)
     title, author, genre = display_title_of(b), author_of(b), genre_of(b)
     synopsis = (b.get("real_synopsis") or b.get("description") or "").strip()
@@ -297,7 +297,7 @@ def build_book_page(b: dict, related=(), in_series=False):
     if likes: stats.append({"@type": "InteractionCounter", "interactionType": "https://schema.org/LikeAction", "userInteractionCount": likes})
     if stats: audiobook["interactionStatistic"] = stats
 
-    series_name = (b.get("series") or "").strip()
+    series_name = (series_name or b.get("series") or "").strip()
     part = b.get("part")
     series_slug = slugify(series_name) if (in_series and series_name) else ""
     if series_slug:
@@ -496,29 +496,39 @@ def main():
             genres.setdefault(g, []).append(b)
         authors.setdefault(author_of(b), []).append(b)
 
-    # Multi-part series (>=2 chapters sharing a series name) get their own page.
-    series_map = {}
+    # Multi-part series get their own page. Group by SLUG (case/spacing-insensitive)
+    # so casing variants of one title ("L'innocenza"/"L'Innocenza") merge into a
+    # single page instead of colliding on the same /serie/<slug>/ URL.
+    series_groups = {}  # slug -> {"names": {name: count}, "chapters": [...]}
     for b in valid:
         s = (b.get("series") or "").strip()
         if s and b.get("part") is not None:
-            series_map.setdefault(s, []).append(b)
-    series_map = {s: ch for s, ch in series_map.items() if len(ch) >= 2}
-    multi_series = set(series_map)
+            sl = slugify(s)
+            g = series_groups.setdefault(sl, {"names": {}, "chapters": []})
+            g["names"][s] = g["names"].get(s, 0) + 1
+            g["chapters"].append(b)
+    series_groups = {sl: g for sl, g in series_groups.items() if len(g["chapters"]) >= 2}
+    multi_series_slugs = set(series_groups)
+    series_name_by_slug = {sl: max(g["names"], key=g["names"].get) for sl, g in series_groups.items()}
+
+    def series_args(b):
+        sl = slugify((b.get("series") or "").strip()) if (b.get("series") and b.get("part") is not None) else ""
+        return (sl in multi_series_slugs), series_name_by_slug.get(sl)
 
     if len(sys.argv) > 1 and sys.argv[1] != "all":
         vid = sys.argv[1]
         if vid not in books:
             sys.exit(f"id {vid} not found")
         b = books[vid]
-        rel_dir, page = build_book_page(b, related_for(b, authors, genres),
-                                        in_series=(b.get("series") in multi_series))
+        in_s, sname = series_args(b)
+        rel_dir, page = build_book_page(b, related_for(b, authors, genres), in_series=in_s, series_name=sname)
         print("wrote", write(rel_dir, page))
         return
 
     paths = []
     for b in valid:
-        rel_dir, page = build_book_page(b, related_for(b, authors, genres),
-                                        in_series=(b.get("series") in multi_series))
+        in_s, sname = series_args(b)
+        rel_dir, page = build_book_page(b, related_for(b, authors, genres), in_series=in_s, series_name=sname)
         paths.append(write(rel_dir, page))
 
     genre_entries = []
@@ -538,10 +548,11 @@ def main():
         author_entries.append((a, slugify(a), len(items)))
 
     series_entries = []
-    for name, chapters in sorted(series_map.items(), key=lambda kv: len(kv[1]), reverse=True):
-        rel_dir, page = build_series(name, chapters)
+    for sl, g in sorted(series_groups.items(), key=lambda kv: len(kv[1]["chapters"]), reverse=True):
+        name = series_name_by_slug[sl]
+        rel_dir, page = build_series(name, g["chapters"])
         paths.append(write(rel_dir, page))
-        series_entries.append((name, slugify(name), len(chapters)))
+        series_entries.append((name, sl, len(g["chapters"])))
 
     paths.append(write(*build_index("generi", genre_entries)))
     paths.append(write(*build_index("autori", sorted(author_entries, key=lambda x: x[0].lower()))))
