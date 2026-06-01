@@ -2443,6 +2443,7 @@ body:has(#genre-books-grid-card) .home-rows { display: none; }
     text-align: left;
     font-family: inherit;
     color: var(--text-color);
+    text-decoration: none;
     border-radius: 0;
     transition: transform var(--dur) var(--ease-out);
 }
