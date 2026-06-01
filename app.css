@@ -2870,3 +2870,57 @@ footer {
     .nf-card:hover { transform: none; }
     .nf-card:hover .nf-card-img { transform: none; }
 }
+
+/* ── 9. Slim sticky top bar ────────────────────────────────────────────────── */
+.site-bar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin: 0 0 var(--space-5);
+    padding: var(--space-3) var(--space-2);
+    text-align: left;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+    transition: background-color var(--dur), box-shadow var(--dur), backdrop-filter var(--dur);
+}
+.site-bar::before { content: none; }
+.site-bar.is-scrolled {
+    background: var(--background-color);
+    background: color-mix(in srgb, var(--background-color) 85%, transparent);
+    backdrop-filter: saturate(1.4) blur(12px);
+    box-shadow: 0 1px 0 var(--border-color), 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+.site-brand { margin: 0; flex: none; }
+.site-brand a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    text-decoration: none;
+    font-size: var(--text-xl);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--header-color);
+}
+.site-bar .search-container {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 440px;
+    margin: 0;
+    gap: var(--space-2);
+}
+.site-bar .search-container #search { min-width: 0; }
+@media (max-width: 560px) {
+    .site-brand a span { display: none; }
+    .site-bar #search-button span { display: none; }
+}

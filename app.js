@@ -124,6 +124,14 @@ document.addEventListener('DOMContentLoaded', () => {
             performSearch();
         }
     });
+
+    // Solidify the sticky top bar once the page is scrolled.
+    const siteHeader = document.getElementById('site-header');
+    if (siteHeader) {
+        const onScroll = () => siteHeader.classList.toggle('is-scrolled', window.scrollY > 12);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+    }
     
     function toggleTheme() {
         const newTheme = !prefersDarkMode;
