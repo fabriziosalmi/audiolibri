@@ -1420,54 +1420,49 @@ button:disabled:hover {
 .genre-pill {
     display: flex;
     align-items: center;
-    padding: 12px 20px;
-    border-radius: 24px;
-    background: rgba(var(--primary-rgb), 0.1);
-    color: var(--primary-color);
-    font-size: 0.95rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    white-space: nowrap;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-    position: relative;
-    overflow: hidden;
-    border: 1px solid rgba(var(--primary-rgb), 0.15);
+    gap: var(--space-2);
+    padding: 0.5rem 0.95rem;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    font-size: var(--text-sm);
+    font-weight: 600;
     letter-spacing: 0.01em;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color var(--dur), border-color var(--dur), color var(--dur), transform var(--dur);
 }
 
 .genre-pill:hover {
-    background: rgba(var(--primary-rgb), 0.18);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-    border-color: rgba(var(--primary-rgb), 0.25);
-}
-
-.genre-pill:active {
+    background: var(--hover-overlay);
+    border-color: var(--secondary-text);
     transform: translateY(-1px);
 }
+
+.genre-pill:active { transform: translateY(0); }
 
 .genre-count {
-    margin-left: 10px;
-    background: rgba(var(--primary-rgb), 0.2);
-    border-radius: 16px;
-    padding: 4px 12px;
-    font-size: 0.8rem;
+    background: rgba(var(--primary-rgb), 0.12);
+    color: var(--primary-color);
+    border-radius: var(--radius-pill);
+    padding: 2px 8px;
+    font-size: var(--text-xs);
     font-weight: 700;
-    line-height: 1;
+    line-height: 1.4;
 }
 
-.genre-pill.selected {
+.genre-pill.selected,
+.genre-pill.active {
     background: var(--primary-color);
-    color: white;
-    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.35);
+    color: #fff;
     border-color: var(--primary-color);
-    transform: translateY(-1px);
 }
 
-.genre-pill.selected .genre-count {
-    background: rgba(255, 255, 255, 0.25);
-    color: white;
+.genre-pill.selected .genre-count,
+.genre-pill.active .genre-count {
+    background: rgba(255, 255, 255, 0.22);
+    color: #fff;
 }
 
 /* Genre View Styles */
