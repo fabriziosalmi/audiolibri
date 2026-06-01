@@ -134,7 +134,8 @@ PAGE_CSS = """<style>
 .bp-faq { border-bottom:1px solid var(--border-color); padding:.9rem 0; }
 .bp-faq summary { cursor:pointer; font-weight:600; }
 .bp-faq p { color:var(--secondary-text); margin:.6rem 0 0; }
-.bp-grid { display:flex; flex-wrap:wrap; gap:var(--space-4); margin-top:1.5rem; }
+.bp-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:var(--space-5) var(--space-4); margin-top:1.5rem; }
+.bp-grid .nf-card { width:auto; }
 .bp-lead { font-size:var(--text-lg); color:var(--secondary-text); max-width:70ch; }
 .bp-back { display:inline-block; margin-top:2.5rem; color:var(--primary-color); text-decoration:none; font-weight:600; }
 .index-grid { display:flex; flex-wrap:wrap; gap:var(--space-3); margin-top:1.5rem; }
