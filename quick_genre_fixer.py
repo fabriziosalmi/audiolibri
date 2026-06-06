@@ -4,12 +4,21 @@ Quick Genre Fixer for Obvious Issues
 """
 
 import json
+import os
 import shutil
 from datetime import datetime
 
 def main():
     print("🔧 Quick Genre Fixer")
     print("=" * 50)
+    
+    required_files = ['audiobooks.json', 'augmented.json']
+    missing_files = [f for f in required_files if not os.path.exists(f)]
+    
+    if missing_files:
+        print(f"❌ Error: Required files missing: {', '.join(missing_files)}")
+        print("Please ensure 'audiobooks.json' and 'augmented.json' exist in the current directory.")
+        return
     
     # Create backups first
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -32,6 +41,9 @@ def main():
             
         print(f"✅ Loaded {len(audiobooks)} books from audiobooks.json")
         print(f"✅ Loaded {len(augmented)} books from augmented.json")
+    except json.JSONDecodeError as e:
+        print(f"❌ Failed to parse JSON data: {e}")
+        return
     except Exception as e:
         print(f"❌ Failed to load data: {e}")
         return
