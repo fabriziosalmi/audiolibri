@@ -343,11 +343,12 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
                   'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" '
                   'allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>')
     elif embed_type == "iframe" and embed_url:
+        allow_attr = 'allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" ' if source == "facebook" else ''
         player = (f'<iframe class="bp-player" src="{e(embed_url)}" title="Audiolibro: {e(title)}" loading="lazy" '
-                  'style="border:0;" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>')
+                  f'style="border:0;" {allow_attr}allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>')
     elif embed_type == "link_out":
-        btn_label = "Ascolta su Spotify" if source == "spotify" else f"Ascolta su {source.capitalize()}"
-        btn_color = "#1DB954" if source == "spotify" else "var(--primary-color)"
+        btn_label = "Ascolta su Spotify" if source == "spotify" else ("Ascolta su Facebook" if source == "facebook" else f"Ascolta su {source.capitalize()}")
+        btn_color = "#1DB954" if source == "spotify" else ("#1877F2" if source == "facebook" else "var(--primary-color)")
         player = f"""
         <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(255,255,255,0.03); border:1px dashed var(--border-color); border-radius:var(--radius-lg); padding:2.5rem; text-align:center; margin-bottom:2rem; width:100%;">
             <p style="margin:0 0 1.25rem; font-size:var(--text-lg); color:var(--secondary-text);">Questo audiolibro è disponibile esternamente su {e(source.capitalize())}.</p>

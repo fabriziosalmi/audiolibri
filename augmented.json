@@ -105768,5 +105768,44 @@
     "content_type": "audiobook",
     "real_language": "it",
     "real_narrator": "Dante Alighieri"
+  },
+  "facebook_10153835695096183": {
+    "title": "I Promessi Sposi — Capitolo 1",
+    "channel": "Audiolibri Italiani",
+    "channel_url": "https://www.facebook.com",
+    "duration": 3600.0,
+    "upload_date": "20260611",
+    "description": "La lettura ad alta voce del primo capitolo dei Promessi Sposi di Alessandro Manzoni.",
+    "transcript": "",
+    "view_count": 0,
+    "like_count": 0,
+    "download_date": "2026-06-11T21:18:39.241799",
+    "url": "https://www.facebook.com/watch/?v=10153835695096183",
+    "audio_file": "",
+    "processed": true,
+    "summary": "La lettura ad alta voce del primo capitolo dei Promessi Sposi di Alessandro Manzoni.",
+    "thumbnail": null,
+    "tags": [
+      "Facebook",
+      "Audiolibro",
+      "Italiano"
+    ],
+    "categories": [
+      "romanzo"
+    ],
+    "source": "facebook",
+    "source_url": "https://www.facebook.com/watch/?v=10153835695096183",
+    "embed_type": "iframe",
+    "embed_url": "https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fwatch%2F%3Fv%3D10153835695096183&show_text=0",
+    "audio_url": "",
+    "audio_chapters": [],
+    "license": "public_domain",
+    "real_title": "I Promessi Sposi — Capitolo 1",
+    "real_author": "Alessandro Manzoni",
+    "real_genre": "romanzo",
+    "real_synopsis": "La lettura ad alta voce del primo capitolo dei Promessi Sposi di Alessandro Manzoni.",
+    "content_type": "audiobook",
+    "real_language": "it",
+    "real_narrator": "Audiolibri Italiani"
   }
 }
