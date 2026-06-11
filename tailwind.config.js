@@ -103,7 +103,6 @@ module.exports = {
         },
       },
     },
-  },
   plugins: [
     require('./tailwind-mobile-plugin.js'),
   ],
