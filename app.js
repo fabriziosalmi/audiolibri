@@ -975,15 +975,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (book.embedType === 'youtube') {
             mediaHtml = `<div id="youtube-player" role="region" aria-label="Lettore video YouTube"></div>`;
         } else if (book.embedType === 'iframe') {
+            const allowAttr = book.source === 'facebook' ? 'allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"' : 'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"';
             mediaHtml = `
                 <iframe class="bp-player" src="${encodeURI(book.embedUrl)}" 
                   style="width:100%; height:180px; border:0; border-radius:var(--radius-md);" 
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
+                  ${allowAttr}
                   allowfullscreen title="Lettore alternativo"></iframe>
             `;
         } else if (book.embedType === 'link_out') {
-            const btnLabel = book.source === 'spotify' ? 'Ascolta su Spotify' : 'Ascolta sul sito originale';
-            const btnColor = book.source === 'spotify' ? '#1DB954' : 'var(--primary-color)';
+            const btnLabel = book.source === 'spotify' ? 'Ascolta su Spotify' : (book.source === 'facebook' ? 'Ascolta su Facebook' : 'Ascolta sul sito originale');
+            const btnColor = book.source === 'spotify' ? '#1DB954' : (book.source === 'facebook' ? '#1877F2' : 'var(--primary-color)');
             mediaHtml = `
                 <div class="link-out-player" style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:180px; background:rgba(255,255,255,0.05); border:1px dashed rgba(255,255,255,0.15); border-radius:var(--radius-md); padding:1.5rem; text-align:center; width:100%;">
                     <p style="margin:0 0 1rem; font-size:var(--text-sm); color:rgba(255,255,255,0.7);">Questo audiolibro è disponibile esternamente.</p>
