@@ -114,7 +114,7 @@ def display_title_of(b):
 
 def book_slug(b) -> str:
     vid = video_id(b)
-    return f"{slugify(title_of(b))}-{vid}" if vid else slugify(title_of(b))
+    return f"{slugify(title_of(b))}-{vid}" if vid else f"{slugify(title_of(b))}-{b.get('id', '')}"
 
 
 def meta_description(text: str, limit: int = 155) -> str:
@@ -265,7 +265,12 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
     cover = f"https://i.ytimg.com/vi/{vid}/maxresdefault.jpg" if vid else b.get("thumbnail", "")
     rel_dir = f"audiolibro/{book_slug(b)}"
     canonical = f"{SITE}/{rel_dir}/"
-    embed = f"https://www.youtube-nocookie.com/embed/{vid}" if vid else ""
+    embed_type = b.get("embed_type", "youtube" if vid else "audio")
+    embed_url = b.get("embed_url", f"https://www.youtube-nocookie.com/embed/{vid}" if vid else "")
+    audio_url = b.get("audio_url", b.get("audio_file", ""))
+    audio_chapters = b.get("audio_chapters", [])
+    source = b.get("source", "youtube" if vid else "unknown")
+    source_url = b.get("url", "")
     genre_label = genre.capitalize() if genre else ""
     description = meta_description(synopsis) or f"Ascolta gratis l'audiolibro «{title}» di {author}."
 
@@ -289,9 +294,9 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
         audiobook["readBy"] = {"@type": "Person", "name": channel}
         audiobook["publisher"] = {"@type": "Organization", "name": channel}
     if published: audiobook["datePublished"] = published
-    if embed:
+    if embed_url:
         audiobook["associatedMedia"] = {"@type": "AudioObject", "contentUrl": b.get("url", ""),
-                                         "embedUrl": embed, "duration": iso_duration(dur)}
+                                         "embedUrl": embed_url, "duration": iso_duration(dur)}
     stats = []
     if views: stats.append({"@type": "InteractionCounter", "interactionType": "https://schema.org/ListenAction", "userInteractionCount": views})
     if likes: stats.append({"@type": "InteractionCounter", "interactionType": "https://schema.org/LikeAction", "userInteractionCount": likes})
@@ -332,9 +337,80 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
                   + (f' › <a href="/serie/{series_slug}/">{e(series_name)}</a>' if series_slug else '')
                   + f' › <span>{e(title)}</span>')
     series_link_html = f'\n    <p class="bp-series">Parte di <a href="/serie/{series_slug}/">«{e(series_name)}»</a></p>' if series_slug else ''
-    player = (f'<iframe class="bp-player" src="{e(embed)}" title="Audiolibro: {e(title)}" loading="lazy" '
-              'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" '
-              'allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>') if embed else ""
+    player = ""
+    if embed_type == "youtube" and vid:
+        player = (f'<iframe class="bp-player" src="{e(embed_url)}" title="Audiolibro: {e(title)}" loading="lazy" '
+                  'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" '
+                  'allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>')
+    elif embed_type == "iframe" and embed_url:
+        player = (f'<iframe class="bp-player" src="{e(embed_url)}" title="Audiolibro: {e(title)}" loading="lazy" '
+                  'style="border:0;" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>')
+    elif embed_type == "link_out":
+        btn_label = "Ascolta su Spotify" if source == "spotify" else f"Ascolta su {source.capitalize()}"
+        btn_color = "#1DB954" if source == "spotify" else "var(--primary-color)"
+        player = f"""
+        <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(255,255,255,0.03); border:1px dashed var(--border-color); border-radius:var(--radius-lg); padding:2.5rem; text-align:center; margin-bottom:2rem; width:100%;">
+            <p style="margin:0 0 1.25rem; font-size:var(--text-lg); color:var(--secondary-text);">Questo audiolibro è disponibile esternamente su {e(source.capitalize())}.</p>
+            <a class="ios-button" href="{e(source_url)}" target="_blank" rel="noopener noreferrer" style="text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem; color:white; font-weight:600; background-color:{btn_color};">
+                {e(btn_label)}
+            </a>
+        </div>
+        """
+    elif embed_type == "audio" and audio_url:
+        chapters_list_html = ""
+        script_html = ""
+        if audio_chapters and len(audio_chapters) > 1:
+            chapters_li = []
+            for idx, ch in enumerate(audio_chapters):
+                ch_title = ch.get("title") or f"Capitolo {idx+1}"
+                ch_url = ch.get("audio_url")
+                ch_dur = ch.get("duration") or 0
+                ch_dur_str = human_duration(ch_dur) if ch_dur else ""
+                
+                chapters_li.append(f"""
+                <li style="display:flex; justify-content:space-between; align-items:center; padding:0.6rem 0.8rem; border:1px solid var(--border-color); border-radius:var(--radius-md); background:var(--hover-overlay); gap:1rem;">
+                    <span style="font-weight:600; font-size:var(--text-sm);">{e(ch_title)}</span>
+                    <div style="display:flex; gap:0.5rem; align-items:center;">
+                        {f'<span style="font-size:var(--text-xs); color:var(--secondary-text); margin-right:0.5rem;">{e(ch_dur_str)}</span>' if ch_dur_str else ''}
+                        <button onclick="playChapter('{e(ch_url)}', '{e(ch_title)}')" class="index-item" style="padding:0.25rem 0.7rem; font-size:var(--text-xs); margin:0; cursor:pointer; background:var(--background-color);">Ascolta</button>
+                        <a href="{e(ch_url)}" target="_blank" rel="noopener noreferrer" class="index-item" style="padding:0.25rem 0.7rem; font-size:var(--text-xs); margin:0; text-decoration:none; background:var(--background-color);">Apri</a>
+                    </div>
+                </li>
+                """)
+            
+            chapters_list_html = f"""
+            <div class="bp-chapters" style="margin-top:2rem; border-top:1px solid var(--border-color); padding-top:1.5rem;">
+                <h2 style="font-family:var(--font-display); font-size:var(--text-xl); margin-bottom:1rem;" id="active-chapter-title">Capitoli</h2>
+                <ul class="chapters-list" style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.6rem;">
+                    {"".join(chapters_li)}
+                </ul>
+            </div>
+            """
+            
+            script_html = """
+            <script>
+            function playChapter(url, title) {
+                var player = document.getElementById('audio-player-static');
+                if (player) {
+                    player.src = url;
+                    player.play().catch(function(err) { console.log('Autoplay blocked:', err); });
+                }
+                var titleEl = document.getElementById('active-chapter-title');
+                if (titleEl) {
+                    titleEl.textContent = 'Ora in riproduzione: ' + title;
+                }
+            }
+            </script>
+            """
+            
+        player = f"""
+        <audio id="audio-player-static" class="bp-player" style="height:54px; width:100%; border-radius:var(--radius-md); margin-bottom:1rem;" controls preload="metadata">
+            <source src="{e(audio_url)}" type="audio/mpeg">
+            Il tuo browser non supporta l'elemento audio.
+        </audio>
+        {script_html}
+        {chapters_list_html}
+        """
 
     main_html = f"""<div class="bp-wrap">
     <nav class="bp-crumbs" aria-label="Breadcrumb">{crumb_html}</nav>
@@ -462,14 +538,14 @@ def build_sitemap(paths):
 
 def related_for(b, authors, genres, limit=12):
     """Pick related titles for a book page: same author first, then same genre."""
-    seen = {video_id(b)}
+    seen = {b.get("id")}
     out = []
 
     def add_from(pool):
         for rb in sorted(pool, key=lambda x: x.get("view_count") or 0, reverse=True):
-            v = video_id(rb)
-            if v and v not in seen:
-                seen.add(v)
+            rid = rb.get("id")
+            if rid and rid not in seen:
+                seen.add(rid)
                 out.append(rb)
                 if len(out) >= limit:
                     return True
@@ -486,7 +562,9 @@ def related_for(b, authors, genres, limit=12):
 
 def main():
     books = json.loads(DATA.read_text())
-    valid = [b for b in books.values() if video_id(b)]
+    for k, b in books.items():
+        b["id"] = k
+    valid = [b for b in books.values() if (video_id(b) or b.get("audio_url") or b.get("audio_file") or b.get("embed_url") or b.get("embed_type") == "link_out")]
 
     # Group once: drives both the hub pages and the "related" lists on book pages.
     genres, authors = {}, {}
