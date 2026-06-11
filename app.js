@@ -237,6 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function processAudiobooksData(data) {
         return Object.entries(data).map(([id, book]) => {
             const baseTitle = book.real_title || book.title || 'Unknown Title';
+            const vid = extractVideoId(book.url || '');
             return {
                 id: id,
                 // Disambiguate multi-part series for display ("… — Capitolo 12").
@@ -247,20 +248,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 description: book.real_synopsis || book.description || 'No description available.',
                 genre: book.real_genre || '',
                 coverImage: book.thumbnail || '',
-                audioUrl: book.audio_file || '',
+                audioUrl: book.audio_url || book.audio_file || '',
+                audioChapters: book.audio_chapters || [],
                 duration: book.duration || 0,
                 formattedDuration: formatDuration(book.duration || 0),
                 url: book.url || '',
                 channel: book.channel || '',
                 channelUrl: book.channel_url || '',
-                videoId: extractVideoId(book.url || ''),
+                videoId: vid,
                 categories: book.real_genre ? [book.real_genre] : (book.categories || []),
                 tags: book.tags || [],
                 uploadDate: book.upload_date || '',
                 viewCount: book.view_count || 0,
-                likeCount: book.like_count || 0
+                likeCount: book.like_count || 0,
+                source: book.source || (vid ? 'youtube' : 'unknown'),
+                embedType: book.embed_type || (vid ? 'youtube' : 'audio'),
+                embedUrl: book.embed_url || '',
+                license: book.license || ''
             };
-        }).filter(book => book.title !== 'Unknown Title' && book.videoId);
+        }).filter(book => book.title !== 'Unknown Title' && (book.videoId || book.audioUrl || book.audioChapters.length > 0 || book.embedUrl || book.embedType === 'link_out'));
     }
     
     // Pick the initial hero from the most-viewed titles — more likely to be a
@@ -923,7 +929,6 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {string} [book.audioUrl] - Direct audio URL (optional)
      * @param {string[]} [book.categories] - Array of genre categories
      * @param {string} [book.formattedDuration] - Formatted duration string
-     * @returns {void}
      */
     function displayBook(book) {
         // WCAG: Announce book change to screen readers
@@ -931,8 +936,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const bookCard = document.getElementById('current-audiobook');
         
-        const audioAvailable = !!book.audioUrl;
-
         // Escape user-derived (scraped) text before injecting into innerHTML.
         const sanitize = (s) => sanitizeText(String(s == null ? '' : s));
 
@@ -965,44 +968,96 @@ document.addEventListener('DOMContentLoaded', () => {
             ? `<a class="hero-cta hero-cta-secondary" href="${encodeURI(book.channelUrl)}" target="_blank" rel="noopener noreferrer">${ICON.mic} Canale</a>`
             : '';
         
+        // Define different player layouts based on embedType
+        let mediaHtml = '';
+        const hasControls = book.embedType === 'youtube' || book.embedType === 'audio';
+
+        if (book.embedType === 'youtube') {
+            mediaHtml = `<div id="youtube-player" role="region" aria-label="Lettore video YouTube"></div>`;
+        } else if (book.embedType === 'iframe') {
+            mediaHtml = `
+                <iframe class="bp-player" src="${encodeURI(book.embedUrl)}" 
+                  style="width:100%; height:180px; border:0; border-radius:var(--radius-md);" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
+                  allowfullscreen title="Lettore alternativo"></iframe>
+            `;
+        } else if (book.embedType === 'link_out') {
+            const btnLabel = book.source === 'spotify' ? 'Ascolta su Spotify' : 'Ascolta sul sito originale';
+            const btnColor = book.source === 'spotify' ? '#1DB954' : 'var(--primary-color)';
+            mediaHtml = `
+                <div class="link-out-player" style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:180px; background:rgba(255,255,255,0.05); border:1px dashed rgba(255,255,255,0.15); border-radius:var(--radius-md); padding:1.5rem; text-align:center; width:100%;">
+                    <p style="margin:0 0 1rem; font-size:var(--text-sm); color:rgba(255,255,255,0.7);">Questo audiolibro è disponibile esternamente.</p>
+                    <a class="ios-button" href="${encodeURI(book.url)}" target="_blank" rel="noopener noreferrer" style="background-color:${btnColor}; text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem; color:white; font-weight:600;">
+                        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9v-2h2v2zm0-4H9V7h2v5zm4 4h-2v-5h2v5zm0-7h-2V7h2v2z"/></svg>
+                        ${btnLabel}
+                    </a>
+                </div>
+            `;
+        } else { // 'audio'
+            let selectorHtml = '';
+            if (book.audioChapters && book.audioChapters.length > 1) {
+                const options = book.audioChapters.map((ch, idx) => 
+                    `<option value="${idx}">${sanitize(ch.title)}</option>`
+                ).join('');
+                selectorHtml = `
+                    <div class="chapter-select-container" style="margin-bottom:0.75rem; width:100%;">
+                        <select id="chapter-select" class="tw-input" style="width:100%; padding:8px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:white; border-radius:var(--radius-sm); font-size:var(--text-xs); cursor:pointer;">
+                            ${options}
+                        </select>
+                    </div>
+                `;
+            }
+            mediaHtml = `
+                ${selectorHtml}
+                <audio id="audio-player" preload="metadata" style="display:none;"></audio>
+                <div id="audio-error-fallback" class="tw-hidden" style="padding:1rem; background:rgba(217,83,79,0.1); border:1px solid rgba(217,83,79,0.3); border-radius:var(--radius-sm); margin-bottom:1rem; text-align:center; width:100%;">
+                    <p style="margin:0 0 0.75rem; font-size:var(--text-xs); color:#d9534f;">⚠️ Errore di caricamento audio streaming.</p>
+                    <div style="display:flex; gap:0.5rem; justify-content:center;">
+                        <button id="btn-iframe-fallback" class="tw-button" style="font-size:var(--text-xs); padding:4px 8px;">Usa player alternativo</button>
+                        <a href="${encodeURI(book.url)}" target="_blank" class="tw-button" style="font-size:var(--text-xs); padding:4px 8px; text-decoration:none;">Apri sorgente</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        const controlsHtml = hasControls ? `
+            <div class="player-controls" role="region" aria-label="Controlli di riproduzione">
+                <div class="controls-row">
+                    <button id="rewind-button" class="control-button" type="button" aria-label="Riavvolgi di 10 secondi">
+                        <i class="rewind-icon" aria-hidden="true"></i><span class="sr-only">Riavvolgi</span>
+                    </button>
+                    <button id="play-pause" class="control-button large" type="button" aria-label="Riproduci o metti in pausa">
+                        <i class="play-icon" aria-hidden="true"></i><span class="sr-only">Riproduci</span>
+                    </button>
+                    <button id="forward-button" class="control-button" type="button" aria-label="Avanza di 10 secondi">
+                        <i class="forward-icon" aria-hidden="true"></i><span class="sr-only">Avanza</span>
+                    </button>
+                </div>
+                <div class="progress-container" id="progress-container" role="slider" aria-label="Posizione di riproduzione" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+                    <div class="progress-bar" id="progress-bar"></div>
+                    <div class="progress-handle" id="progress-handle"></div>
+                </div>
+                <div class="time-display" aria-live="polite" aria-atomic="false">
+                    <span id="current-time" aria-label="Tempo corrente">0:00</span>
+                    <span aria-hidden="true">/</span>
+                    <span id="total-time" aria-label="Durata totale">${formatTimeDisplay(book.duration)}</span>
+                </div>
+                <div class="volume-control">
+                    <i class="volume-icon" aria-hidden="true"></i>
+                    <label for="volume-slider" class="sr-only">Controllo volume</label>
+                    <input type="range" id="volume-slider" min="0" max="100" value="100" aria-label="Volume: 100%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+                </div>
+            </div>
+        ` : '';
+
         bookCard.innerHTML = `
             <div class="hero">
                 <div class="hero-backdrop" aria-hidden="true"></div>
                 <div class="hero-scrim" aria-hidden="true"></div>
                 <div class="hero-body">
                     <div class="hero-media slide-up">
-                        <div id="youtube-player" role="region" aria-label="Lettore audiolibro"></div>
-                        <audio id="audio-player" controls preload="metadata" aria-describedby="audio-description">
-                            Il tuo browser non supporta l'elemento audio.
-                        </audio>
-                        <div id="audio-description" class="sr-only">Lettore audio per ${sanitize(book.title)} di ${sanitize(book.author)}</div>
-                        <div class="player-controls" role="region" aria-label="Controlli di riproduzione">
-                            <div class="controls-row">
-                                <button id="rewind-button" class="control-button" type="button" aria-label="Riavvolgi di 10 secondi">
-                                    <i class="rewind-icon" aria-hidden="true"></i><span class="sr-only">Riavvolgi</span>
-                                </button>
-                                <button id="play-pause" class="control-button large" type="button" aria-label="Riproduci o metti in pausa">
-                                    <i class="play-icon" aria-hidden="true"></i><span class="sr-only">Riproduci</span>
-                                </button>
-                                <button id="forward-button" class="control-button" type="button" aria-label="Avanza di 10 secondi">
-                                    <i class="forward-icon" aria-hidden="true"></i><span class="sr-only">Avanza</span>
-                                </button>
-                            </div>
-                            <div class="progress-container" id="progress-container" role="slider" aria-label="Posizione di riproduzione" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
-                                <div class="progress-bar" id="progress-bar"></div>
-                                <div class="progress-handle" id="progress-handle"></div>
-                            </div>
-                            <div class="time-display" aria-live="polite" aria-atomic="false">
-                                <span id="current-time" aria-label="Tempo corrente">0:00</span>
-                                <span aria-hidden="true">/</span>
-                                <span id="total-time" aria-label="Durata totale">${formatTimeDisplay(book.duration)}</span>
-                            </div>
-                            <div class="volume-control">
-                                <i class="volume-icon" aria-hidden="true"></i>
-                                <label for="volume-slider" class="sr-only">Controllo volume</label>
-                                <input type="range" id="volume-slider" min="0" max="100" value="100" aria-label="Volume: 100%" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
-                            </div>
-                        </div>
+                        ${mediaHtml}
+                        ${controlsHtml}
                     </div>
                     <div class="hero-content fade-in">
                         <span class="hero-eyebrow">${sanitize(eyebrow)}</span>
@@ -1012,7 +1067,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <p id="book-description" class="hero-synopsis">${sanitize(trimmedDescription)}</p>
                         <div class="hero-meta">${metaHtml}</div>
                         <div class="hero-actions">
-                            <button class="hero-cta hero-cta-primary" id="hero-play" type="button">${ICON.play} Ascolta</button>
+                            ${hasControls ? `<button class="hero-cta hero-cta-primary" id="hero-play" type="button">${ICON.play} Ascolta</button>` : ''}
                             <button class="hero-cta hero-cta-secondary" id="hero-shuffle" type="button">${ICON.shuffle} Casuale</button>
                             ${channelCta}
                         </div>
@@ -1022,26 +1077,31 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
         const heroBackdrop = bookCard.querySelector('.hero-backdrop');
-        if (heroBackdrop) heroBackdrop.style.backgroundImage = `url('${book.coverImage}')`;
-        
-        // Set up audio player if audio is available
-        const audioPlayer = document.getElementById('audio-player');
-        if (audioAvailable) {
-            audioPlayer.src = book.audioUrl;
-            audioPlayer.style.display = 'block';
-        } else {
-            audioPlayer.style.display = 'none';
+        if (heroBackdrop) {
+            if (book.coverImage) {
+                heroBackdrop.style.backgroundImage = `url('${book.coverImage}')`;
+            } else {
+                heroBackdrop.style.background = 'linear-gradient(135deg, #2b303c 0%, #171b26 100%)';
+            }
         }
         
+        // Stop YouTube player if playing a different type of book
+        if (book.embedType !== 'youtube' && youtubePlayer) {
+            try {
+                youtubePlayer.destroy();
+                youtubePlayer = null;
+            } catch (e) {
+                console.warn('Could not destroy YouTube player:', e);
+            }
+        }
+
         // Set up player controls
         setupPlayerControls(book);
         
         // Set up YouTube player if video ID is available
-        if (book.videoId) {
+        if (book.embedType === 'youtube' && book.videoId) {
             document.getElementById('youtube-player').innerHTML = '';
             loadYouTubeVideo(book.videoId);
-        } else {
-            document.getElementById('youtube-player').innerHTML = '';
         }
 
         // Hero CTAs
@@ -1057,15 +1117,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
+
     /**
-     * Initialize player controls for YouTube video player
+     * Initialize player controls for YouTube video player or native audio player
      * Sets up play/pause, seek, progress bar, and volume controls
      * @param {Object} book - The audiobook object being played
      * @returns {void}
      */
     function setupPlayerControls(book) {
         const playPauseButton = document.getElementById('play-pause');
+        if (!playPauseButton) return; // Non-controlled media types (iframe, link_out)
+
         const rewindButton = document.getElementById('rewind-button');
         const forwardButton = document.getElementById('forward-button');
         const volumeSlider = document.getElementById('volume-slider');
@@ -1073,76 +1135,191 @@ document.addEventListener('DOMContentLoaded', () => {
         const progressHandle = document.getElementById('progress-handle');
         const progressContainer = document.getElementById('progress-container');
         const currentTimeDisplay = document.getElementById('current-time');
+        const totalTimeDisplay = document.getElementById('total-time');
         
         // Reset player state
         playerState.duration = book.duration;
+        playerState.isPlaying = false;
         updateProgressBar(0);
-        
-        // Volume control
-        volumeSlider.addEventListener('input', function() {
-            const volume = this.value;
-            playerState.volume = volume;
-            if (youtubePlayer && youtubePlayer.setVolume) {
-                youtubePlayer.setVolume(volume);
-            }
-        });
-        
-        // Play/Pause button
-        playPauseButton.addEventListener('click', function() {
-            if (!youtubePlayer) return;
-            
-            if (playerState.isPlaying) {
-                youtubePlayer.pauseVideo();
-                this.innerHTML = '<i class="play-icon"></i>';
-                playerState.isPlaying = false;
-            } else {
-                youtubePlayer.playVideo();
-                this.innerHTML = '<i class="pause-icon"></i>';
-                playerState.isPlaying = true;
-            }
-        });
-        
-        // Rewind 10 seconds button
-        rewindButton.addEventListener('click', function() {
-            if (!youtubePlayer) return;
-            const newTime = Math.max(0, youtubePlayer.getCurrentTime() - 10);
-            youtubePlayer.seekTo(newTime);
-        });
-        
-        // Forward 10 seconds button
-        forwardButton.addEventListener('click', function() {
-            if (!youtubePlayer) return;
-            const newTime = Math.min(playerState.duration, youtubePlayer.getCurrentTime() + 10);
-            youtubePlayer.seekTo(newTime);
-        });
-        
-        // Progress bar click handling
-        progressContainer.addEventListener('click', function(e) {
-            if (!youtubePlayer) return;
-            
-            const rect = this.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const width = rect.width;
-            const percentage = x / width;
-            const seekTime = percentage * playerState.duration;
-            
-            youtubePlayer.seekTo(seekTime);
-            updateProgressBar(percentage * 100);
-        });
-        
-        // Update progress every second
-        if (updateInterval) clearInterval(updateInterval);
-        updateInterval = setInterval(() => {
-            if (youtubePlayer && youtubePlayer.getCurrentTime) {
-                const currentTime = youtubePlayer.getCurrentTime();
-                playerState.currentTime = currentTime;
+
+        if (book.embedType === 'audio') {
+            const audioPlayer = document.getElementById('audio-player');
+            if (audioPlayer) {
+                // Volume initialization
+                audioPlayer.volume = playerState.volume / 100;
                 
-                // Update UI elements
-                const percentage = (currentTime / playerState.duration) * 100;
-                updateProgressBar(percentage);
-                currentTimeDisplay.textContent = formatTimeDisplay(currentTime);
+                // Chapter list support
+                const chapterSelect = document.getElementById('chapter-select');
+                if (chapterSelect && book.audioChapters && book.audioChapters.length > 0) {
+                    audioPlayer.src = book.audioChapters[0].audio_url;
+                    playerState.duration = book.audioChapters[0].duration || book.duration;
+                    if (totalTimeDisplay) totalTimeDisplay.textContent = formatTimeDisplay(playerState.duration);
+                    
+                    chapterSelect.addEventListener('change', function() {
+                        const idx = parseInt(this.value, 10);
+                        const activeChapter = book.audioChapters[idx];
+                        audioPlayer.src = activeChapter.audio_url;
+                        playerState.duration = activeChapter.duration || book.duration;
+                        updateProgressBar(0);
+                        if (currentTimeDisplay) currentTimeDisplay.textContent = '0:00';
+                        if (totalTimeDisplay) totalTimeDisplay.textContent = formatTimeDisplay(playerState.duration);
+                        
+                        audioPlayer.play().catch(err => console.log("Play failed/blocked:", err));
+                    });
+                } else {
+                    audioPlayer.src = book.audioUrl;
+                }
+
+                // Wiring native audio events to custom UI controls
+                audioPlayer.addEventListener('play', () => {
+                    playerState.isPlaying = true;
+                    playPauseButton.innerHTML = '<i class="pause-icon"></i>';
+                    announceToScreenReader('Riproduzione avviata');
+                });
+                
+                audioPlayer.addEventListener('pause', () => {
+                    playerState.isPlaying = false;
+                    playPauseButton.innerHTML = '<i class="play-icon"></i>';
+                    announceToScreenReader('Riproduzione in pausa');
+                });
+                
+                audioPlayer.addEventListener('timeupdate', () => {
+                    playerState.currentTime = audioPlayer.currentTime;
+                    const duration = playerState.duration || audioPlayer.duration || book.duration || 1;
+                    const percentage = (audioPlayer.currentTime / duration) * 100;
+                    updateProgressBar(percentage);
+                    if (currentTimeDisplay) currentTimeDisplay.textContent = formatTimeDisplay(audioPlayer.currentTime);
+                });
+                
+                audioPlayer.addEventListener('durationchange', () => {
+                    if (audioPlayer.duration && !isNaN(audioPlayer.duration)) {
+                        // Only override duration if we don't have chapter duration or chapter select is not active
+                        if (!chapterSelect) {
+                            playerState.duration = audioPlayer.duration;
+                            if (totalTimeDisplay) totalTimeDisplay.textContent = formatTimeDisplay(audioPlayer.duration);
+                        }
+                    }
+                });
+                
+                audioPlayer.addEventListener('error', () => {
+                    console.error("Audio error on native player:", audioPlayer.error);
+                    const errorFallback = document.getElementById('audio-error-fallback');
+                    if (errorFallback) errorFallback.classList.remove('tw-hidden');
+                    
+                    const iframeFallbackBtn = document.getElementById('btn-iframe-fallback');
+                    if (iframeFallbackBtn && book.embedUrl) {
+                        iframeFallbackBtn.onclick = () => {
+                            const heroMedia = document.querySelector('.hero-media');
+                            if (heroMedia) {
+                                heroMedia.innerHTML = `
+                                    <iframe class="bp-player" src="${encodeURI(book.embedUrl)}" 
+                                      style="width:100%; height:180px; border:0; border-radius:var(--radius-md);" 
+                                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"
+                                      allowfullscreen title="Lettore alternativo"></iframe>
+                                `;
+                            }
+                        };
+                    } else if (iframeFallbackBtn) {
+                        iframeFallbackBtn.style.display = 'none';
+                    }
+                });
+
+                // Control bar actions for Audio
+                playPauseButton.onclick = function() {
+                    if (playerState.isPlaying) {
+                        audioPlayer.pause();
+                    } else {
+                        audioPlayer.play().catch(err => console.warn("Audio play blocked or failed:", err));
+                    }
+                };
+
+                volumeSlider.oninput = function() {
+                    const volume = this.value;
+                    playerState.volume = volume;
+                    audioPlayer.volume = volume / 100;
+                };
+
+                rewindButton.onclick = function() {
+                    audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 10);
+                };
+
+                forwardButton.onclick = function() {
+                    audioPlayer.currentTime = Math.min(playerState.duration, audioPlayer.currentTime + 10);
+                };
+
+                progressContainer.onclick = function(e) {
+                    const rect = this.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const percentage = x / rect.width;
+                    const seekTime = percentage * playerState.duration;
+                    audioPlayer.currentTime = seekTime;
+                    updateProgressBar(percentage * 100);
+                };
             }
-        }, 1000);
+        } else if (book.embedType === 'youtube') {
+            // Control bar actions for YouTube
+            volumeSlider.addEventListener('input', function() {
+                const volume = this.value;
+                playerState.volume = volume;
+                if (youtubePlayer && youtubePlayer.setVolume) {
+                    youtubePlayer.setVolume(volume);
+                }
+            });
+            
+            playPauseButton.addEventListener('click', function() {
+                if (!youtubePlayer) return;
+                
+                if (playerState.isPlaying) {
+                    youtubePlayer.pauseVideo();
+                    this.innerHTML = '<i class="play-icon"></i>';
+                    playerState.isPlaying = false;
+                } else {
+                    youtubePlayer.playVideo();
+                    this.innerHTML = '<i class="pause-icon"></i>';
+                    playerState.isPlaying = true;
+                }
+            });
+            
+            rewindButton.addEventListener('click', function() {
+                if (!youtubePlayer) return;
+                const newTime = Math.max(0, youtubePlayer.getCurrentTime() - 10);
+                youtubePlayer.seekTo(newTime);
+            });
+            
+            forwardButton.addEventListener('click', function() {
+                if (!youtubePlayer) return;
+                const newTime = Math.min(playerState.duration, youtubePlayer.getCurrentTime() + 10);
+                youtubePlayer.seekTo(newTime);
+            });
+            
+            progressContainer.addEventListener('click', function(e) {
+                if (!youtubePlayer) return;
+                
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const width = rect.width;
+                const percentage = x / width;
+                const seekTime = percentage * playerState.duration;
+                
+                youtubePlayer.seekTo(seekTime);
+                updateProgressBar(percentage * 100);
+            });
+        }
+
+        // Update progress every second ONLY for YouTube (native audio uses timeupdate event)
+        if (updateInterval) clearInterval(updateInterval);
+        if (book.embedType === 'youtube') {
+            updateInterval = setInterval(() => {
+                if (youtubePlayer && youtubePlayer.getCurrentTime) {
+                    const currentTime = youtubePlayer.getCurrentTime();
+                    playerState.currentTime = currentTime;
+                    
+                    const percentage = (currentTime / playerState.duration) * 100;
+                    updateProgressBar(percentage);
+                    currentTimeDisplay.textContent = formatTimeDisplay(currentTime);
+                }
+            }, 1000);
+        }
     }
     
     function updateProgressBar(percentage) {

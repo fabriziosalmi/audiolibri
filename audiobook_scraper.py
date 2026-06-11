@@ -175,6 +175,76 @@ def extract_transcript_from_description(description):
     
     return transcript
 
+# List of channels that host non-audiobook material (comedy, movies, English-only content)
+BLACKLIST_CHANNELS = {
+    'iaraculonna',
+    'LaraBellyDance',
+    'giuliomania',
+    'I film di Mondo TV',
+    'Jason Stephenson - Sleep Meditation Music',
+    'Nigel John Stanford',
+    'Jason Headley',
+    'TheVideoCellar',
+    'Warner Bros. Italia',
+    'Veronicartoon',
+    'Film&Clips',
+    'Audio Books',
+    'Incredible Librivox Audiobooks',
+    'Bardic Knowledge',
+    'Fab Audio Books',
+    'English Audio Books',
+    'AudioLibros: MaginBooks',
+    'AMA Audiolibros',
+    'EducaBabyTV',
+    'Enrico Brignano Ufficiale',
+    'Greatest AudioBooks',
+    'Art and Design',
+    'giuseppe pugliese'
+}
+
+# Specific video IDs representing non-audiobooks
+BLACKLIST_IDS = {
+    'IsvALeok750', # playlist promo video
+    'CrEtgLpoWgE', # Astronave Sensor Help
+    'GE8Dj701Q0M', # Sergio Bonelli interview
+    'xyx-RMoPyZo', # Vir in Live livestream replay
+    'FTkXdSKljOI', # Fiorello & Baldini - Mike Bongiorno e Pinocchio
+    'pKSVywHXd8Y', # Fiorello & Baldini - Mike Bongiorno e Polifemo
+    'f199fI0jG6Q', # Fiorello e Baldini Mike Bongiorno O Sole Mio
+    'Mv8EFsjKMow', # Fiorello - Mike Bongiorno - Agenzia viaggi
+    'nWRYL_XuJtE', # viva radio 2 mike bongiorno bambino cinese
+    'xFUkkzAQyXU', # Viva Radio 2-Genius-Bambino Anti-Juventino
+    'JCLzc7S5xSY', # Fiorello & Baldini - Mike e i trenta denari
+    'fUbl5wiRtR8', # Fiorello & Baldini - Mike e il bambino tedesco
+    'es36GaQeAKk'  # 50 SFUMATURE DI NERO -IL FILM- Versione di Giulia Segreti
+}
+
+def is_valid_audiobook(video_id, title, channel):
+    """Determine if a video is a valid Italian audiobook based on metadata heuristics."""
+    # 1. Check specific video ID blacklist
+    if video_id in BLACKLIST_IDS:
+        return False, "Blacklisted video ID"
+        
+    # 2. Check channel blacklist
+    if channel.strip().lower() in [c.lower() for c in BLACKLIST_CHANNELS]:
+        return False, f"Blacklisted channel: {channel}"
+        
+    title_lower = title.lower()
+    
+    # 3. Check for Fiorello/Bongiorno/Viva Radio parody content
+    if ('fiorello' in title_lower and 'baldini' in title_lower) or \
+       ('fiorello' in title_lower and 'bongiorno' in title_lower) or \
+       ('fiorello imita' in title_lower) or \
+       ('viva radio' in title_lower):
+        return False, "Fiorello / Viva Radio comedy parody pattern"
+        
+    # 4. Check for English-only audiobooks
+    if any(w in title_lower for w in ['audiobook', 'full audiobook', 'unabridged', 'translated by', 'read by']) and \
+       not any(w in title_lower for w in ['italiano', 'ita', 'tradotto']):
+        return False, "English audiobook title pattern"
+        
+    return True, ""
+
 def extract_metadata(youtube_url, progress):
     # Create a task for this metadata extraction
     task_id = progress.add_task(f"[cyan]Extracting metadata...", total=100)
@@ -205,6 +275,18 @@ def extract_metadata(youtube_url, progress):
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info_dict = ydl.extract_info(youtube_url, download=False)
             
+        # Extract video ID for consistent identification
+        video_id = info_dict.get('id', youtube_url.split('v=')[-1])
+        title = info_dict.get('title', 'Unknown')
+        channel = info_dict.get('channel', info_dict.get('uploader', 'Unknown'))
+        
+        # Apply data validation check
+        is_valid, reason = is_valid_audiobook(video_id, title, channel)
+        if not is_valid:
+            progress.update(task_id, description=f"[yellow]Skipped: {reason[:30]}...", completed=100)
+            console.log(f"Skipping {video_id} - {reason}")
+            return True
+
         # Apply duration filtering if configured
         if CONFIG['min_duration'] > 0 and float(info_dict.get('duration', 0)) < CONFIG['min_duration']:
             progress.update(task_id, description=f"[yellow]Skipped: Duration too short", completed=100)
@@ -216,8 +298,6 @@ def extract_metadata(youtube_url, progress):
             console.log(f"Skipping {info_dict.get('id')} - duration too long")
             return True
             
-        # Extract video ID for consistent identification
-        video_id = info_dict.get('id', youtube_url.split('v=')[-1])
         existing_metadata = load_existing_metadata()
 
         if video_id in existing_metadata:
@@ -298,6 +378,13 @@ def download_audio(youtube_url, progress):
             
             video_id = yt.video_id
             existing_metadata = load_existing_metadata()  # Changed variable name for clarity
+
+            # Apply data validation check
+            is_valid, reason = is_valid_audiobook(video_id, yt.title or 'Unknown', yt.author or 'Unknown')
+            if not is_valid:
+                progress.update(task_id, description=f"[yellow]Skipped: {reason[:30]}...", completed=100)
+                console.log(f"Skipping {video_id} - {reason}")
+                return True
 
             if video_id in existing_metadata:
                 progress.update(task_id, description=f"[yellow]Skipped: {yt.title[:40]}...", completed=100)
