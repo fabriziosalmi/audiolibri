@@ -1,13 +1,23 @@
 {
-  "version": "1.4.5",
+  "version": "1.4.6",
   "entries": [
+    {
+      "date": "2026-06-11",
+      "title": "Supporto multi-sorgente, ripristino database e integrazione Facebook.",
+      "changes": [
+        "Aggiunto supporto completo e resiliente per video pubblici Facebook tramite facebook_scraper.py.",
+        "Ripristinato il catalogo italiano LibriVox (87 audiolibri) e il feed di test RSS (Divina Commedia).",
+        "Inglobati nuovi canali YouTube (Luigi Bellanca e Luigi Loperfido) aggiungendo 77 nuovi audiolibri.",
+        "Rigenerazione completa del sito statico con 2.107 audiolibri."
+      ]
+    },
     {
       "date": "2025-05-13",
       "title": "Miglioramenti e risoluzioni ai problemi riscontrati.",
       "changes": [
         "Risolti i problemi di navigazione tra categorie da mobile.",
         "Nuovi contenuti possono essere aggiunti in qualunque momento."
-     ]
+      ]
     }
   ]
 }
