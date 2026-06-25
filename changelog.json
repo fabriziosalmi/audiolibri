@@ -1,6 +1,14 @@
 {
-  "version": "1.5.5",
+  "version": "1.5.6",
   "entries": [
+    {
+      "date": "2026-06-25",
+      "title": "Correzioni alla home: lettore in evidenza e cache.",
+      "changes": [
+        "Risolto il crash del lettore in evidenza sulla home (onPlayerReady) con i libri YouTube.",
+        "Rimossa la cache localStorage sovradimensionata che causava QuotaExceededError: il caching è ora gestito dal service worker."
+      ]
+    },
     {
       "date": "2026-06-11",
       "title": "Supporto multi-sorgente, ripristino database e integrazione Facebook.",
