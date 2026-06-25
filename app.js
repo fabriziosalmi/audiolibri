@@ -170,66 +170,10 @@ document.addEventListener('DOMContentLoaded', () => {
         prefersDarkMode ? 'Cambia al tema chiaro' : 'Cambia al tema scuro'
     );
     
-    // Cache configuration (bump CACHE_VERSION on any augmented.json data change
-    // so clients drop their stale localStorage copy and refetch).
-    const CACHE_VERSION = '1.1';
-    const CACHE_KEY = 'audiobooksData';
-    const CACHE_VERSION_KEY = 'audiobooksDataVersion';
-    const CACHE_TIMESTAMP_KEY = 'audiobooksDataTimestamp';
-    const CACHE_EXPIRY_HOURS = 24; // Cache expires after 24 hours
-    
-    // Function to check if cache is valid
-    function isCacheValid() {
-        try {
-            const cachedVersion = localStorage.getItem(CACHE_VERSION_KEY);
-            const cachedTimestamp = localStorage.getItem(CACHE_TIMESTAMP_KEY);
-            
-            if (!cachedVersion || !cachedTimestamp) return false;
-            if (cachedVersion !== CACHE_VERSION) return false;
-            
-            const cacheAge = Date.now() - parseInt(cachedTimestamp);
-            const maxAge = CACHE_EXPIRY_HOURS * 60 * 60 * 1000;
-            
-            return cacheAge < maxAge;
-        } catch (e) {
-            return false;
-        }
-    }
-    
-    // Function to load data from cache
-    function loadFromCache() {
-        try {
-            const cachedData = localStorage.getItem(CACHE_KEY);
-            if (cachedData) {
-                return JSON.parse(cachedData);
-            }
-        } catch (e) {
-            console.error('Error loading from cache:', e);
-        }
-        return null;
-    }
-    
-    // Function to save data to cache
-    function saveToCache(data) {
-        try {
-            localStorage.setItem(CACHE_KEY, JSON.stringify(data));
-            localStorage.setItem(CACHE_VERSION_KEY, CACHE_VERSION);
-            localStorage.setItem(CACHE_TIMESTAMP_KEY, Date.now().toString());
-        } catch (e) {
-            console.warn('Could not save to cache:', e);
-            // If localStorage is full, clear old data and try again
-            if (e.name === 'QuotaExceededError') {
-                try {
-                    localStorage.removeItem(CACHE_KEY);
-                    localStorage.setItem(CACHE_KEY, JSON.stringify(data));
-                    localStorage.setItem(CACHE_VERSION_KEY, CACHE_VERSION);
-                    localStorage.setItem(CACHE_TIMESTAMP_KEY, Date.now().toString());
-                } catch (e2) {
-                    console.error('Still could not save to cache after clearing:', e2);
-                }
-            }
-        }
-    }
+    // Audiobook data is cached by the service worker (cache-first with a
+    // background refresh — see service-worker.js). The dataset (augmented.json,
+    // ~6 MB) is far larger than the ~5 MB localStorage quota, so there is
+    // deliberately no app-level localStorage cache.
     
     // Function to process raw data into audiobooks array
     // This function handles both augmented.json (with real_* fields) and audiobooks.json (with basic fields)
@@ -300,30 +244,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Load the audiobook data - try cache first, then fetch
-    async function loadAudiobooksData() {
-        // Check if we have valid cached data
-        if (isCacheValid()) {
-            const cachedData = loadFromCache();
-            if (cachedData) {
-                // Use cached data immediately
-                audiobooks = processAudiobooksData(cachedData);
-                updateLibraryStats(audiobooks);
-                
-                if (audiobooks.length > 0) {
-                    setTimeout(() => {
-                        currentBook = pickFeaturedBook();
-                        displayBook(currentBook);
-                        runSearchFromUrl();
-                    }, 300);
-                }
-                
-                // Optionally fetch fresh data in background for next time
-                fetchFreshData(true);
-                return;
-            }
-        }
-        
-        // No valid cache, fetch fresh data
+    function loadAudiobooksData() {
+        // One-time cleanup: older builds cached the whole dataset in localStorage,
+        // which overflowed the ~5 MB quota. The service worker is the cache now (it
+        // serves augmented.json cache-first), so drop the orphaned keys and fetch.
+        ['audiobooksData', 'audiobooksDataVersion', 'audiobooksDataTimestamp']
+            .forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
         fetchFreshData(false);
     }
     
@@ -356,9 +282,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
             })
             .then(data => {
-                // Save to cache for next time
-                saveToCache(data);
-                
                 // Only update UI if this isn't a background update
                 if (!isBackgroundUpdate) {
                     // Convert the JSON object to an array of audiobooks
@@ -1408,11 +1331,14 @@ document.addEventListener('DOMContentLoaded', () => {
         announceToScreenReader('Riproduzione avviata');
         
         // Update UI
-        document.getElementById('play-pause').innerHTML = '<i class="pause-icon"></i>';
-        document.getElementById('total-time').textContent = formatTimeDisplay(playerState.duration);
+        const playPauseBtn = document.getElementById('play-pause');
+        if (playPauseBtn) playPauseBtn.innerHTML = '<i class="pause-icon"></i>';
+        const totalTimeEl = document.getElementById('total-time');
+        if (totalTimeEl) totalTimeEl.textContent = formatTimeDisplay(playerState.duration);
         
-        // Hide audio player when YouTube is available
-        document.getElementById('audio-player').style.display = 'none';
+        // Hide audio player when YouTube is available (only present for embedType 'audio')
+        const audioPlayerEl = document.getElementById('audio-player');
+        if (audioPlayerEl) audioPlayerEl.style.display = 'none';
     }
     
     function onPlayerStateChange(event) {
