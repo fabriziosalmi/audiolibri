@@ -1,6 +1,15 @@
 {
-  "version": "1.5.6",
+  "version": "1.5.7",
   "entries": [
+    {
+      "date": "2026-06-25",
+      "title": "+777 nuovi audiolibri italiani.",
+      "changes": [
+        "Catalogo cresciuto da 2090 a 2867 audiolibri (+37%), da canali italiani vettati.",
+        "Metadati arricchiti a mano (titolo, autore, genere, sinossi) e nomi autore normalizzati.",
+        "Aggiornata la cache del service worker per servire subito i nuovi contenuti."
+      ]
+    },
     {
       "date": "2026-06-25",
       "title": "Correzioni alla home: lettore in evidenza e cache.",
