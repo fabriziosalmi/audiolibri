@@ -12,6 +12,8 @@ README.md
 augmented.json.backup_*
 synopsis_checkpoint_*
 augment_checkpoint_*
+augment_checkpoint.json*
+checkpoint.json
 test_sandbox/
 audiobooks.json.backup_*
 __pycache__/
