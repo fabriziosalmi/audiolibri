@@ -1,4 +1,4 @@
-const CACHE_NAME = 'audiolibri-cache-v8';
+const CACHE_NAME = 'audiolibri-cache-v9';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -7,7 +7,8 @@ const ASSETS_TO_CACHE = [
   '/mobile-enhancements.js',
   '/tailwind-mobile.js',
   '/audiobooks_transparent.png',
-  '/favicon.ico'
+  '/favicon.ico',
+  '/offline.html'
 ];
 
 // Install event - cache essential assets

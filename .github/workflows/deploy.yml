@@ -1,0 +1,62 @@
+name: Build & deploy to GitHub Pages
+
+# Deploy on every push to main, or manually. The build regenerates the
+# lightweight home index and all static pages from augmented.json, so the
+# deployed site can never drift from the source data (the old manual-build
+# failure mode). Requires: Settings -> Pages -> Source = "GitHub Actions".
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Least-privilege token for the Pages deployment.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time; a newer push supersedes an in-flight run.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # No third-party deps: both scripts use only the Python standard library.
+      - name: Build lightweight home index (index.min.json)
+        run: python3 build_index.py
+
+      - name: Regenerate pages, collections, sitemap, robots
+        run: python3 generate_pages.py all
+
+      # Keep the source dataset and internal docs off the public site.
+      # (Both scripts have already run and consumed augmented.json above.)
+      - name: Prune non-public files
+        run: |
+          rm -f augmented.json
+          rm -rf docs
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
