@@ -155,6 +155,14 @@ a.bp-chip:hover { background:rgba(var(--primary-rgb),.2); }
 .index-item { display:inline-flex; align-items:center; gap:.6rem; padding:.6rem 1.1rem; border:1px solid var(--border-color); border-radius:var(--radius-pill); text-decoration:none; color:var(--text-color); font-weight:600; transition:background-color .2s,border-color .2s,transform .2s; }
 .index-item:hover { background:var(--hover-overlay); border-color:var(--secondary-text); transform:translateY(-1px); }
 .index-count { color:var(--secondary-text); font-weight:500; font-size:var(--text-sm); }
+.bp-facts-wrap { margin-top:2.2rem; }
+.bp-facts-wrap h2 { font-family:var(--font-display); font-size:var(--text-2xl); margin:0 0 .8rem; }
+.bp-facts { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:.7rem 1.6rem; margin:0; }
+.bp-fact { border-bottom:1px solid var(--border-color); padding:.4rem 0; }
+.bp-fact dt { font-size:var(--text-xs); text-transform:uppercase; letter-spacing:.06em; color:var(--secondary-text); }
+.bp-fact dd { margin:.15rem 0 0; font-weight:600; color:var(--text-color); }
+.bp-fact dd a { color:var(--primary-color); text-decoration:none; }
+.bp-authorbio { font-size:var(--text-lg); line-height:1.7; color:var(--secondary-text); max-width:72ch; margin:.2rem 0 1.8rem; }
 </style>"""
 
 
@@ -255,6 +263,51 @@ def card_link(b) -> str:
 </a>"""
 
 
+# Short original biographies (public-domain facts) for well-known authors, used
+# on /autore/<slug>/ hubs for E-E-A-T. Keyed by a lowercase substring of the name
+# so variants ("H.P. Lovecraft" / "Howard Phillips Lovecraft") both match.
+AUTHOR_BIOS = {
+    "pirandello": "Luigi Pirandello (1867–1936) è stato uno dei massimi narratori e drammaturghi italiani, premio Nobel per la letteratura nel 1934. La sua opera indaga l'identità e il contrasto tra vita e «maschera», da «Il fu Mattia Pascal» a «Uno, nessuno e centomila».",
+    "verga": "Giovanni Verga (1840–1922), scrittore siciliano, è il maggiore esponente del Verismo italiano. Con «I Malavoglia» e le novelle di «Vita dei campi» raccontò con crudo realismo il mondo dei vinti.",
+    "annunzio": "Gabriele D'Annunzio (1863–1938) fu poeta, romanziere e drammaturgo, figura dominante dell'Estetismo e del Decadentismo italiano, celebre per la ricerca formale e il culto della «vita inimitabile».",
+    "manzoni": "Alessandro Manzoni (1785–1873) è l'autore de «I Promessi Sposi», il romanzo che ha fondato la lingua letteraria italiana moderna, unendo fede, storia e attenzione agli umili.",
+    "leopardi": "Giacomo Leopardi (1798–1837) è tra i più grandi poeti e pensatori italiani. I «Canti» e le «Operette morali» esprimono, con altissima musicalità, la sua riflessione sul dolore e sull'infinito.",
+    "dante": "Dante Alighieri (1265–1321), padre della lingua italiana, è l'autore della «Divina Commedia», il poema che attraversa Inferno, Purgatorio e Paradiso ed è pietra angolare della letteratura mondiale.",
+    "boccaccio": "Giovanni Boccaccio (1313–1375) è l'autore del «Decameron», raccolta di cento novelle che ritrae con arguzia la società del Trecento e segna la nascita della prosa narrativa europea.",
+    "collodi": "Carlo Collodi (1826–1890), pseudonimo di Carlo Lorenzini, è l'autore de «Le avventure di Pinocchio», tra i libri per l'infanzia più letti e tradotti al mondo.",
+    "de amicis": "Edmondo De Amicis (1846–1908), scrittore e giornalista, è celebre soprattutto per «Cuore», il libro che ha accompagnato generazioni di studenti italiani.",
+    "svevo": "Italo Svevo (1861–1928), scrittore triestino, è l'autore de «La coscienza di Zeno», romanzo pioniere dell'introspezione psicologica nella narrativa italiana.",
+    "deledda": "Grazia Deledda (1871–1936), scrittrice sarda, fu premio Nobel per la letteratura nel 1926. I suoi romanzi ritraggono con intensità la Sardegna e i suoi conflitti morali.",
+    "poe": "Edgar Allan Poe (1809–1849), scrittore statunitense, è maestro del racconto gotico e inventore del racconto poliziesco, celebre per «Il gatto nero», «Il pozzo e il pendolo» e la poesia «Il corvo».",
+    "lovecraft": "Howard Phillips Lovecraft (1890–1937), scrittore statunitense, è il padre dell'«orrore cosmico». Il suo universo, dominato da entità come Cthulhu, ha influenzato profondamente la narrativa horror e fantastica.",
+    "wilde": "Oscar Wilde (1854–1900), scrittore e drammaturgo irlandese dell'Estetismo, è autore de «Il ritratto di Dorian Gray» e di commedie brillanti come «L'importanza di chiamarsi Ernesto».",
+    "dickens": "Charles Dickens (1812–1870) è tra i più grandi narratori inglesi dell'età vittoriana. Con «Oliver Twist» e «Canto di Natale» denunciò le ingiustizie sociali del suo tempo.",
+    "stevenson": "Robert Louis Stevenson (1850–1894), scrittore scozzese, è autore di classici dell'avventura e del fantastico come «L'isola del tesoro» e «Lo strano caso del dottor Jekyll e del signor Hyde».",
+    "conan doyle": "Arthur Conan Doyle (1859–1930), scrittore britannico, ha creato Sherlock Holmes, il più celebre detective della letteratura, protagonista di romanzi e racconti tradotti in tutto il mondo.",
+    "bram stoker": "Bram Stoker (1847–1912), scrittore irlandese, è autore di «Dracula», il romanzo che ha fissato l'immaginario moderno del vampiro.",
+    "mary shelley": "Mary Shelley (1797–1851), scrittrice inglese, con «Frankenstein» ha dato origine alla fantascienza moderna, interrogandosi sui limiti della scienza e sulla responsabilità del creatore.",
+    "twain": "Mark Twain (1835–1910), pseudonimo di Samuel Clemens, è tra i padri della letteratura statunitense, autore de «Le avventure di Tom Sawyer» e «Huckleberry Finn».",
+    "jack london": "Jack London (1876–1916), scrittore statunitense, è celebre per i romanzi d'avventura ambientati nella natura selvaggia, come «Il richiamo della foresta» e «Zanna Bianca».",
+    "kafka": "Franz Kafka (1883–1924), scrittore boemo di lingua tedesca, è autore di opere come «La metamorfosi» e «Il processo», emblemi dell'angoscia e dell'assurdo della condizione moderna.",
+    "maupassant": "Guy de Maupassant (1850–1893), maestro francese del racconto, ha lasciato centinaia di novelle di straordinaria efficacia, dal realismo al fantastico, come «Le Horla» e «Palla di sego».",
+    "verne": "Jules Verne (1828–1905), scrittore francese, è considerato il padre della fantascienza per romanzi visionari come «Ventimila leghe sotto i mari» e «Il giro del mondo in 80 giorni».",
+    "victor hugo": "Victor Hugo (1802–1885), gigante del Romanticismo francese, è autore de «I miserabili» e «Notre-Dame de Paris», affreschi potenti di giustizia sociale e umanità.",
+    "dostoevskij": "Fëdor Dostoevskij (1821–1881), tra i massimi romanzieri russi, ha esplorato le profondità morali e psicologiche dell'uomo in «Delitto e castigo» e «I fratelli Karamazov».",
+    "tolstoj": "Lev Tolstoj (1828–1910), scrittore russo, è autore dei monumentali «Guerra e pace» e «Anna Karenina», tra i vertici del romanzo realista di ogni tempo.",
+    "cechov": "Anton Čechov (1860–1904), scrittore e drammaturgo russo, è maestro del racconto moderno e del teatro, capace di cogliere con delicatezza le sfumature dell'animo umano.",
+    "kipling": "Rudyard Kipling (1865–1936), scrittore britannico, premio Nobel nel 1907, è celebre per «Il libro della giungla» e per i racconti ambientati nell'India coloniale.",
+    "carroll": "Lewis Carroll (1832–1898), pseudonimo di Charles Dodgson, matematico e scrittore inglese, è autore di «Alice nel Paese delle Meraviglie», capolavoro del nonsense.",
+}
+
+
+def author_bio(author):
+    a = (author or "").lower()
+    for key, bio in AUTHOR_BIOS.items():
+        if key in a:
+            return bio
+    return ""
+
+
 def build_book_page(b: dict, related=(), in_series=False, series_name=None):
     vid = video_id(b)
     title, author, genre = display_title_of(b), author_of(b), genre_of(b)
@@ -331,6 +384,20 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
     if related:
         related_cards = "".join(card_link(rb) for rb in related)
         related_html = f'<section class="bp-related"><h2>Da ascoltare dopo</h2><div class="bp-grid">{related_cards}</div></section>'
+
+    # Factual "Scheda" block: real, per-title data (reader, year, language, ...)
+    # that gives thin pages unique substance without inventing prose.
+    facts = [("Autore", f'<a href="/autore/{slugify(author)}/">{e(author)}</a>')]
+    if channel: facts.append(("Lettore", e(channel)))
+    if genre_label: facts.append(("Genere", f'<a href="/genere/{slugify(genre)}/">{e(genre_label)}</a>'))
+    if series_slug: facts.append(("Serie", f'<a href="/serie/{series_slug}/">{e(series_name)}</a>'))
+    if dur: facts.append(("Durata", e(human_duration(dur))))
+    if published: facts.append(("Anno", e(published[:4])))
+    facts.append(("Lingua", "Italiano"))
+    if views: facts.append(("Ascolti", e(f"{views:,}".replace(",", "."))))
+    facts.append(("Disponibilità", "Gratis, in streaming"))
+    facts_html = "".join(f'<div class="bp-fact"><dt>{lbl}</dt><dd>{val}</dd></div>' for lbl, val in facts)
+    facts_section = f'<section class="bp-facts-wrap"><h2>Scheda</h2><dl class="bp-facts">{facts_html}</dl></section>'
     faq_html = "".join(f'<details class="bp-faq"><summary>{e(q)}</summary><p>{e(a)}</p></details>' for q, a in faq)
     crumb_html = ('<a href="/">Home</a>'
                   + (f' › <a href="/genere/{slugify(genre)}/">{e(genre_label)}</a>' if genre_label else '')
@@ -421,6 +488,7 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
     <div class="bp-chips">{chips}</div>
     {player}
     <section class="bp-synopsis"><h2>Trama</h2><p>{e(synopsis)}</p></section>
+    {facts_section}
     <section class="bp-faqs"><h2>Domande frequenti</h2>{faq_html}</section>
     {related_html}
     <a class="bp-back" href="/">← Tutta la libreria</a>
@@ -449,10 +517,16 @@ def build_hub(kind, label, items, slug):
                   "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
                                       {"@type": "ListItem", "position": 2, "name": h1, "item": canonical}]}
     grid = "".join(card_link(b) for b in items)
+    bio_html = ""
+    if kind == "autore":
+        bio = author_bio(label)
+        if bio:
+            bio_html = f'<p class="bp-authorbio">{e(bio)}</p>'
     main_html = f"""<div class="bp-wrap">
     <nav class="bp-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/{ 'generi' if kind=='genere' else 'autori' }/">{ 'Generi' if kind=='genere' else 'Autori' }</a> › <span>{e(h1)}</span></nav>
     <h1 class="bp-title">{e(h1)}</h1>
     <p class="bp-lead">{e(lead)}</p>
+    {bio_html}
     <div class="bp-grid">{grid}</div>
     <a class="bp-back" href="/">← Tutta la libreria</a>
   </div>"""
