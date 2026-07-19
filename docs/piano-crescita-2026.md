@@ -27,6 +27,25 @@ lang: it
 
 > **Regola di questo piano.** Prima si mette a posto la *casa* (performance + igiene + strumenti), poi si accende il *traffico* (il post). Sparare il post su una home lenta è l'unico errore irreversibile: la prima impressione a 13.000 persone si spende una volta sola.
 
+# Stato di avanzamento — aggiornato 19 luglio 2026
+
+Gran parte di questo piano è già **implementata e in produzione**. Questa è la fotografia dell'esecuzione; il resto del documento riporta l'analisi, la strategia e la roadmap originali.
+
+## ✅ Fatto e live
+
+- **Fase 0 — Igiene**: rimossi file di test/backup, `robots.txt` arricchito, `offline.html` a `noindex`.
+- **Fase 1 — Performance**: indice leggero `index.min.json` (**620 KB gzip** vs 1,4 MB), `cache: no-cache` eliminato, service worker aggiornato; home statica-first con blocco di link crawlabili. In più un *perf pass* dopo PageSpeed: CLS mobile ridotto (altezza dell'hero riservata), immagine LCP alleggerita di **~1 MB** (backdrop `mqdefault`), logo header **465 KB → 10 KB**.
+- **Fase 2 — Contenuto**: **6 pagine-collezione** tematiche (`/raccolta/*`) + indice `/raccolte/`; **scheda dati** su tutte le 2.806 pagine-titolo; **biografie** per ~30 autori classici. Filtri delle collezioni corretti (niente falsi positivi; contenuti sensibili esclusi).
+- **Infrastruttura**: **CI/CD** via GitHub Actions — ogni push rigenera e pubblica, il *drift* non è più possibile. Superficie pubblica ripulita (dataset, script e documenti interni non serviti). Release **v1.6.0**, README riscritto, screenshot aggiornata.
+- **Indicizzazione**: sitemap inviata e **accettata da Google Search Console** (3.071 pagine).
+
+## ⏳ Cosa resta
+
+- **Bing Webmaster Tools**: verifica del sito + invio sitemap.
+- **Cloudflare proxy** (§6): attivazione con Full (strict), Brotli, HTTP/3, Cache Rules — risolve anche il warning cache-TTL di PageSpeed.
+- **Lancio social** (§5): il post su Telegram + Facebook, ora che il sito è live e veloce.
+- **Rifinitura CLS mobile**: compattare l'hero mobile (molto alto) per portare i Core Web Vitals in "verde" pieno.
+
 # 1. Dove sei oggi — Diagnosi
 
 ## Il semaforo
