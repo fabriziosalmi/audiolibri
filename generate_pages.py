@@ -605,9 +605,22 @@ def build_index(kind, entries):
 # capture informational queries ("audiolibri per bambini", "horror", ...).
 # Each carries a unique intro so the page is not thin/duplicate content.
 
-def _blob(b):
+def _meta(b):
+    # Match on reliable fields only — NOT real_synopsis, whose text is polluted by
+    # channel promo blurbs ("...anche per bambini", contacts) that cause false
+    # positives (e.g. 46 Camilleri novels landing in the kids collection).
     return " ".join([title_of(b), author_of(b), genre_of(b),
-                     (b.get("real_synopsis") or ""), " ".join(b.get("categories") or [])]).lower()
+                     " ".join(b.get("categories") or [])]).lower()
+
+
+# Titles kept out of every curated collection: sensitive / true-crime content
+# that must not sit next to literary works or on kid-facing pages.
+_COLLECTION_BLOCK = ("pedofil", "deep web", "stupro", "incesto", "violenza sessuale")
+
+
+def _blocked(b):
+    text = (title_of(b) + " " + (b.get("real_synopsis") or "")).lower()
+    return any(w in text for w in _COLLECTION_BLOCK)
 
 
 COLLECTIONS = [
@@ -618,14 +631,14 @@ COLLECTIONS = [
                "alta voce e pronte da ascoltare. Una raccolta pensata per accompagnare il gioco, la "
                "nanna o i viaggi in auto — tutta gratuita, in streaming e senza registrazione.",
          match=lambda b: genre_of(b).lower() == "fiaba"
-               or any(k in _blob(b) for k in ("fiaba", "favola", "filastrocc", "per bambini", "per ragazzi"))),
+               or any(k in _meta(b) for k in ("fiaba", "fiabe", "favola", "filastrocc", "cappuccetto", "pinocchio"))),
     dict(slug="classici-della-scuola",
          h1="Classici della letteratura da ascoltare",
          title="Classici della scuola gratis: Manzoni, Pirandello, Verga e altri | Audiolibri.org",
          intro="I grandi classici della letteratura italiana più letti a scuola, da «I Promessi Sposi» "
                "alla «Divina Commedia», da Pirandello a Verga e Leopardi. Perfetti per ripassare "
                "un'opera ascoltandola, o per riscoprirla con calma, gratis e in streaming.",
-         match=lambda b: any(k in _blob(b) for k in (
+         match=lambda b: any(k in _meta(b) for k in (
                "promessi sposi", "divina commedia", "dante alighieri", "manzoni", "pirandello",
                "giovanni verga", "leopardi", "decameron", "boccaccio", "foscolo", "italo svevo"))),
     dict(slug="audiolibri-horror",
@@ -635,7 +648,7 @@ COLLECTIONS = [
                "che hanno definito la paura in letteratura. Narrazioni che trasformano l'ascolto in un "
                "brivido, gratis e senza registrazione.",
          match=lambda b: genre_of(b).lower() == "horror"
-               or any(k in _blob(b) for k in ("lovecraft", "edgar allan poe", "racconto del terrore"))),
+               or any(k in _meta(b) for k in ("lovecraft", "edgar allan poe", "dracula", "frankenstein", "arthur machen", "algernon blackwood"))),
     dict(slug="audiolibri-gialli",
          h1="Audiolibri gialli e thriller",
          title="Audiolibri gialli gratis: mistero e thriller da ascoltare | Audiolibri.org",
@@ -643,7 +656,7 @@ COLLECTIONS = [
                "polizieschi e thriller da ascoltare gratuitamente, per chi ama tenere il fiato sospeso "
                "fino all'ultima rivelazione.",
          match=lambda b: genre_of(b).lower() in ("giallo", "mistero")
-               or any(k in _blob(b) for k in ("giallo", "poliziesco", "sherlock holmes", "delitto"))),
+               or any(k in _meta(b) for k in ("camilleri", "montalbano", "agatha christie", "sherlock", "conan doyle", "simenon", "poliziesco"))),
     dict(slug="racconti-brevi",
          h1="Racconti brevi da ascoltare",
          title="Racconti brevi gratis: audiolibri sotto i 15 minuti | Audiolibri.org",
@@ -829,7 +842,7 @@ def main():
     # Thematic collections: curated landing pages for informational queries.
     coll_entries = []
     for c in COLLECTIONS:
-        items = [b for b in valid if c["match"](b)]
+        items = [b for b in valid if c["match"](b) and not _blocked(b)]
         if len(items) < 8:
             continue
         items.sort(key=lambda b: b.get("view_count") or 0, reverse=True)
