@@ -1005,7 +1005,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const heroBackdrop = bookCard.querySelector('.hero-backdrop');
         if (heroBackdrop) {
             if (book.coverImage) {
-                heroBackdrop.style.backgroundImage = `url('${book.coverImage}')`;
+                // The backdrop is heavily blurred, so a small thumbnail looks identical
+                // to maxres — swap it in to cut ~1 MB off the LCP image on mobile.
+                const bg = book.coverImage.replace('/maxresdefault.', '/mqdefault.').replace('/hqdefault.', '/mqdefault.');
+                heroBackdrop.style.backgroundImage = `url('${bg}')`;
             } else {
                 heroBackdrop.style.background = 'linear-gradient(135deg, #2b303c 0%, #171b26 100%)';
             }
