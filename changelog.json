@@ -1,6 +1,16 @@
 {
-  "version": "1.5.7",
+  "version": "1.6.0",
   "entries": [
+    {
+      "date": "2026-07-19",
+      "title": "Home più veloce, raccolte tematiche e schede più ricche.",
+      "changes": [
+        "Home molto più leggera e veloce: carica un indice ridotto invece dell'intero catalogo.",
+        "Nuove raccolte tematiche: bambini e fiabe, classici della scuola, gialli, horror, racconti brevi e opere integrali.",
+        "Ogni titolo ha ora una scheda con lettore, durata, anno e lingua; le pagine dei grandi autori classici includono una breve biografia.",
+        "Migliorata la scopribilità su Google e attivata la pubblicazione automatica ad ogni aggiornamento."
+      ]
+    },
     {
       "date": "2026-06-25",
       "title": "+777 nuovi audiolibri italiani.",

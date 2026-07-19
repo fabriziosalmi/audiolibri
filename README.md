@@ -1,86 +1,86 @@
 # Audiolibri.org
 
-## Overview
-Audiolibri.org is a curated platform that aggregates and organizes audiobooks in Italian. This project serves as a discovery engine for audiobook content, making it easy for users to find and access literary works in audio format.
+**The largest collection of free Italian audiobooks** — 2,800+ titles, streaming, no signup, no app, no ads.
 
-## [https://audiolibri.org](https://audiolibri.org)
+🔊 **[audiolibri.org](https://audiolibri.org)**
 
-![screenshot](https://github.com/fabriziosalmi/audiolibri/blob/main/screenshot.png?raw=true)
+![audiolibri.org](https://github.com/fabriziosalmi/audiolibri/blob/main/screenshot.png?raw=true)
 
-## Features
-- **Extensive Library**: Collection of audiobooks from various sources and narrators
-- **Categorized Content**: Browse by author, genre, narrator, or popularity
-- **Search Functionality**: Find specific works or authors
-- **Metadata Rich**: Detailed information about each audiobook including:
-  - Duration
-  - Narrator/channel
-  - Publication date
-  - View and like statistics
-  - Descriptions and transcripts where available
+## What it is
 
-## Technology
-This platform is built using:
-- Frontend: HTML, CSS, JavaScript
-- Data storage: JSON
-- Deployment: GitHub Pages
+Audiolibri.org is a curated catalogue of public-domain and freely listenable audiobooks in Italian — novels, short stories, fairy tales, mysteries, horror, poetry, school classics. Every title plays straight from the browser. The project is open source and non-profit.
 
-## Data Processing
-The platform includes several Python tools for processing audiobook data:
+- **~2,800 audiobooks** in Italian, free and streaming
+- Browse by **genre**, **author**, **themed collection** and **series**
+- **Search** by title, author or narrator
+- A **dedicated page** per title with synopsis, a data sheet (duration, narrator, year) and player
+- **No signup, no app, no ads**
 
-### Python Scripts
-- `audiobook_scraper.py`: Collects metadata from audiobook sources
-- `augment.py`: Enhances audiobook entries with additional metadata using LLM
-- `stats.py`: Generates usage statistics and analytics
-- Other utilities: `author_cleaner.py`, `genre_manager.py`, `title_cleaner_v2.py`
+## Architecture
 
-### Python Environment Setup
+A **static site** served by **GitHub Pages**, generated from a JSON dataset:
 
-It's recommended to use a virtual environment to manage dependencies:
+- **Frontend** — vanilla HTML/CSS/JavaScript (no framework). The home loads a lightweight index (`index.min.json`) and renders dynamically; every detail page is pre-generated static HTML.
+- **Static pages** — `generate_pages.py` builds the ~2,800 title pages (with schema.org `Audiobook` + `BreadcrumbList` + `FAQPage` structured data), the genre / author / series hubs, the themed collections, the sitemap and robots.txt.
+- **Home index** — `build_index.py` produces `index.min.json`, a slimmed dataset with only the fields the home needs, for a fast first load.
+- **Deploy** — every push to `main` builds and publishes via GitHub Actions (`.github/workflows/deploy.yml`), so the live site can never drift from the source data.
+
+### URL structure
+
+```
+/                      Home — search + themed rows + collections
+/audiolibro/<slug>/    A single title (player, synopsis, data sheet, related)
+/genere/<slug>/        All titles in a genre
+/autore/<slug>/        All titles by an author (with a bio for the classics)
+/raccolta/<slug>/      Themed collections (kids, classics, horror, mystery…)
+/generi/  /autori/  /raccolte/  /serie/    Navigation indexes
+```
+
+## Data pipeline (Python)
+
+Scripts collect and enrich the audiobook metadata:
+
+| Script | Purpose |
+|---|---|
+| `audiobook_scraper.py` | Collect metadata from sources |
+| `augment.py` | Enrich entries (title, author, synopsis, genre) via an LLM |
+| `build_index.py` | Build the lightweight home index (`index.min.json`) |
+| `generate_pages.py` | Generate all static pages, sitemap and robots.txt |
+| `stats.py`, `author_cleaner.py`, `genre_manager.py`, `title_cleaner_v2.py` | Data-cleaning utilities |
+
+### Regenerate the site locally
+
+The site build uses only the Python 3 standard library — no dependencies:
 
 ```bash
-# Create virtual environment
-python3 -m venv venv
+python3 build_index.py         # -> index.min.json
+python3 generate_pages.py all  # -> pages, sitemap, robots.txt
+```
 
-# Activate virtual environment
-# On macOS/Linux:
-source venv/bin/activate
-# On Windows:
-venv\Scripts\activate
+### Scraper / enrichment setup
 
-# Install dependencies
+```bash
+python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Environment Variables
+Key environment variables:
 
-The Python scripts support configuration via environment variables:
-
-**audiobook_scraper.py:**
-- `AUDIOBOOKS_OUTPUT_DIR`: Output directory for audiobooks data (default: current directory)
-- `MAX_WORKERS`: Number of concurrent workers for scraping (default: 5)
-- `RATE_LIMIT`: Rate limit for API requests in seconds (default: 0.5)
-
-**augment.py:**
-- `LLM_API_URL`: URL for LLM API endpoint (default: http://localhost:1234/v1/chat/completions)
-
-Example:
-```bash
-export LLM_API_URL="http://localhost:1234/v1/chat/completions"
-export MAX_WORKERS=10
-python augment.py
-```
+- `augment.py`: `LLM_API_URL` (default `http://localhost:1234/v1/chat/completions`)
+- `audiobook_scraper.py`: `MAX_WORKERS` (default 5), `RATE_LIMIT` in seconds (default 0.5)
 
 ## Contributing
-Contributions to improve the platform are welcome. Please feel free to:
-- Report bugs or issues
-- Suggest new audiobooks to be included
-- Contribute to code improvements
+
+Contributions welcome — bug reports, suggested audiobooks, code improvements. Open an issue or a pull request.
 
 ## License
-This project is available under Creative Commons 1.0 License. Content rights belong to their respective owners.
+
+Code is released under a Creative Commons license. Rights to the audio content belong to their respective authors and narrators; audiolibri.org is a catalogue that links to freely accessible content.
 
 ## Acknowledgments
-Thanks to all the narrators and creators who make literary works accessible in audio format.
 
-## Visit
-[https://audiolibri.org](https://audiolibri.org)
+Thanks to all the narrators and voices who make literature accessible in audio.
+
+---
+
+🔊 **[audiolibri.org](https://audiolibri.org)**
