@@ -102,8 +102,8 @@
     </script>
 
     <!-- Single consolidated stylesheet (replaces the former 9-file CSS stack) -->
-    <link rel="preload" href="app.css?v=1.6.0" as="style">
-    <link rel="stylesheet" href="app.css?v=1.6.0">
+    <link rel="preload" href="app.css?v=1.6.2" as="style">
+    <link rel="stylesheet" href="app.css?v=1.6.2">
     
     <!-- Add before other resources -->
     <link rel="preconnect" href="https://www.youtube.com">
@@ -114,7 +114,7 @@
     <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
     <!-- Add YouTube API -->
     <script src="https://www.youtube.com/iframe_api" defer></script>
-    <script defer src="tailwind-mobile.js?v=1.6.0"></script>
+    <script defer src="tailwind-mobile.js?v=1.6.2"></script>
 </head>
 <body>
     <div class="container tw-container mobile-container ios-safe-inset">
@@ -156,9 +156,9 @@
 
         <main id="main-content" role="main">
             <div class="single-card fade-in tw-card mobile-card ios-card">
-                <div class="audiobook-card tw-relative tw-flex tw-flex-col tw-min-h-[400px] sm:tw-min-h-[500px] tw-bg-cover tw-bg-center" id="current-audiobook" role="region" aria-label="Audiolibro corrente">
+                <div class="audiobook-card tw-relative tw-flex tw-flex-col tw-bg-cover tw-bg-center" id="current-audiobook" role="region" aria-label="Audiolibro corrente">
                     <!-- Audiobook content will be displayed here -->
-                    <div class="loading-container tw-flex tw-flex-col tw-justify-center tw-items-center tw-h-[400px] sm:tw-h-[500px]" role="status" aria-live="polite">
+                    <div class="loading-container tw-flex tw-flex-col tw-justify-center tw-items-center" role="status" aria-live="polite">
                         <div class="loading-spinner tw-w-[40px] tw-h-[40px] sm:tw-w-[50px] sm:tw-h-[50px] tw-mb-6" aria-hidden="true"></div>
                         <p class="tw-text-base">Caricamento della tua libreria di audiolibri...</p>
                         <small class="tw-text-secondary-text tw-mt-2">Attendi mentre prepariamo la tua collezione</small>
@@ -216,8 +216,8 @@
         </footer>
     </div>
     
-    <script src="app.js?v=1.6.0"></script>
-    <script src="mobile-enhancements.js?v=1.6.0"></script> <!-- Additional mobile UI enhancements -->
+    <script src="app.js?v=1.6.2"></script>
+    <script src="mobile-enhancements.js?v=1.6.2"></script> <!-- Additional mobile UI enhancements -->
     <!-- Service Worker Registration -->
     <script>
         // Skip the service worker on local dev hosts so cache-first never serves stale assets.

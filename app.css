@@ -993,7 +993,7 @@ button:disabled {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 500px;
+    min-height: inherit;
     color: var(--text-color);
     background-color: var(--card-background);
     border-radius: 16px;
@@ -1435,6 +1435,7 @@ button:disabled {
 
 /* Genre Navigation Styles */
 .genre-navigation {
+    min-height: 56px;
     margin: 20px 0;
     padding: 1.5rem;
     background: #12121200;
@@ -2069,7 +2070,7 @@ button:disabled {
     /* Card dei contenuti ottimizzate per la visualizzazione mobile */
     .audiobook-card {
         width: 100% !important;
-        min-height: 220px !important;
+        min-height: 92vh !important; /* reserve the tall stacked-hero height to prevent CLS on the loading->hero swap */
         margin: 0 !important;
     }
     
@@ -2396,6 +2397,9 @@ button:disabled {
 @media (max-width: 860px) {
     .hero-body { flex-direction: column; align-items: stretch; }
     .hero-media { flex-basis: auto; }
+    /* The stacked mobile hero is tall; reserve height so the loading->hero swap
+       (slow on 4G) doesn't shift the page — the main driver of CLS on mobile. */
+    .audiobook-card { min-height: 92vh; }
 }
 @media (prefers-reduced-motion: reduce) {
     .hero-cta:hover { transform: none; }
@@ -2407,6 +2411,7 @@ button:disabled {
     flex-direction: column;
     gap: clamp(1.5rem, 3vw, 2.5rem);
     margin-top: clamp(1.5rem, 3vw, 2.5rem);
+    min-height: 70vh; /* reserve space so populating rows don't shift the footer (CLS) */
 }
 /* While a search-results or genre overlay is open, hide the home recommendation
    rows so those views aren't cluttered by the home content below them. */
