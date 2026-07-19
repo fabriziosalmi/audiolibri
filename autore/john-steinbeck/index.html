@@ -96,6 +96,14 @@ a.bp-chip:hover { background:rgba(var(--primary-rgb),.2); }
 .index-item { display:inline-flex; align-items:center; gap:.6rem; padding:.6rem 1.1rem; border:1px solid var(--border-color); border-radius:var(--radius-pill); text-decoration:none; color:var(--text-color); font-weight:600; transition:background-color .2s,border-color .2s,transform .2s; }
 .index-item:hover { background:var(--hover-overlay); border-color:var(--secondary-text); transform:translateY(-1px); }
 .index-count { color:var(--secondary-text); font-weight:500; font-size:var(--text-sm); }
+.bp-facts-wrap { margin-top:2.2rem; }
+.bp-facts-wrap h2 { font-family:var(--font-display); font-size:var(--text-2xl); margin:0 0 .8rem; }
+.bp-facts { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:.7rem 1.6rem; margin:0; }
+.bp-fact { border-bottom:1px solid var(--border-color); padding:.4rem 0; }
+.bp-fact dt { font-size:var(--text-xs); text-transform:uppercase; letter-spacing:.06em; color:var(--secondary-text); }
+.bp-fact dd { margin:.15rem 0 0; font-weight:600; color:var(--text-color); }
+.bp-fact dd a { color:var(--primary-color); text-decoration:none; }
+.bp-authorbio { font-size:var(--text-lg); line-height:1.7; color:var(--secondary-text); max-width:72ch; margin:.2rem 0 1.8rem; }
 </style>
 </head>
 <body>
@@ -119,6 +127,7 @@ a.bp-chip:hover { background:rgba(var(--primary-rgb),.2); }
     <nav class="bp-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/autori/">Autori</a> › <span>Audiolibri di John Steinbeck</span></nav>
     <h1 class="bp-title">Audiolibri di John Steinbeck</h1>
     <p class="bp-lead">Tutti gli audiolibri di John Steinbeck da ascoltare gratis: 2 titoli.</p>
+    
     <div class="bp-grid"><a class="nf-card" href="/audiolibro/uomini-e-topi-EUMiTFMHhBI/" aria-label="Uomini e Topi di John Steinbeck">
   <span class="nf-card-cover" style="--cover-hue:162" data-initial="U">
     <img class="nf-card-img" loading="lazy" alt="" src="https://i.ytimg.com/vi/EUMiTFMHhBI/mqdefault.jpg">
