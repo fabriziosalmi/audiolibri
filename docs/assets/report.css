@@ -1,0 +1,184 @@
+/* ============================================================
+   audiolibri.org — Piano di Crescita 2026
+   Print stylesheet for WeasyPrint (pandoc --pdf-engine=weasyprint)
+   ============================================================ */
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/Users/fab/Documents/git/audiolibri/fonts/inter-latin.woff2') format('woff2');
+  font-weight: normal; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Fraunces';
+  src: url('/Users/fab/Documents/git/audiolibri/fonts/fraunces-latin.woff2') format('woff2');
+  font-weight: normal; font-style: normal; font-display: swap;
+}
+
+:root {
+  --brand:   #b8324a;
+  --brand-d: #8f2439;
+  --ink:     #1c1418;
+  --body:    #322a2e;
+  --muted:   #7a7076;
+  --line:    #ece5e8;
+  --line-2:  #d9cfd4;
+  --soft:    #faf6f7;
+  --soft-2:  #f3ebee;
+  --green:   #2e9e5b;
+  --amber:   #d98a1f;
+  --red:     #d23b4e;
+}
+
+/* ---------- Page geometry ---------- */
+@page {
+  size: A4;
+  margin: 20mm 18mm 20mm 18mm;
+  @bottom-left  { content: "audiolibri.org — Piano di Crescita 2026"; font-family: 'Inter'; font-size: 7.5pt; color: #a89ba1; }
+  @bottom-right { content: counter(page) " / " counter(pages); font-family: 'Inter'; font-size: 7.5pt; color: #a89ba1; }
+}
+@page :first { margin: 0; @bottom-left { content: none; } @bottom-right { content: none; } }
+
+/* ---------- Base ---------- */
+* { box-sizing: border-box; }
+html { font-size: 10.5pt; }
+body {
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  color: var(--body);
+  line-height: 1.5;
+  font-weight: 400;
+  -weasy-hyphens: none;
+}
+p { margin: 0 0 .62em; orphans: 2; widows: 2; }
+strong { color: var(--ink); font-weight: 700; }
+em { color: var(--brand-d); font-style: italic; }
+a { color: var(--brand-d); text-decoration: none; }
+
+/* ---------- Cover (pandoc title block) ---------- */
+#title-block-header {
+  page: first;
+  height: 297mm;
+  padding: 34mm 22mm 24mm;
+  display: flex; flex-direction: column;
+  background:
+    radial-gradient(120% 80% at 100% 0%, #fbe9ee 0%, rgba(251,233,238,0) 55%),
+    linear-gradient(180deg, #ffffff 0%, #fdf9fa 100%);
+  border-top: 10mm solid var(--brand);
+  break-after: page;
+}
+#title-block-header .eyebrow,
+#title-block-header::before {
+  content: "DOCUMENTO STRATEGICO · SEO & PRODOTTO";
+  font-family: 'Inter'; font-weight: 700; font-size: 9pt;
+  letter-spacing: .22em; color: var(--brand);
+  text-transform: uppercase;
+}
+#title-block-header .title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600; font-size: 62pt; line-height: .98;
+  color: var(--ink); margin: 6mm 0 0; letter-spacing: -.01em;
+}
+#title-block-header .subtitle {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 400; font-size: 19pt; line-height: 1.25;
+  color: var(--brand-d); margin: 7mm 0 0; max-width: 150mm;
+}
+#title-block-header .author {
+  margin: auto 0 0; padding-top: 8mm;
+  font-size: 10.5pt; color: var(--muted);
+  border-top: .4mm solid var(--line-2); max-width: 130mm;
+}
+#title-block-header .date {
+  margin: 2.5mm 0 0; font-size: 10.5pt; color: var(--ink); font-weight: 600;
+}
+
+/* ---------- Table of contents ---------- */
+#TOC {
+  break-after: page;
+  padding-top: 4mm;
+}
+#TOC::before {
+  content: "Indice";
+  display: block;
+  font-family: 'Fraunces', Georgia, serif; font-weight: 600;
+  font-size: 26pt; color: var(--ink); margin: 0 0 6mm;
+}
+#TOC ul { list-style: none; margin: 0; padding: 0; }
+#TOC > ul > li { margin: 0 0 1.2mm; }
+#TOC ul ul { padding-left: 6mm; }
+#TOC a {
+  color: var(--body); font-size: 10.5pt;
+  display: inline-block; padding: 1mm 0;
+}
+#TOC > ul > li > a { font-weight: 700; color: var(--ink); font-size: 11pt; }
+#TOC ul ul a { color: var(--muted); font-weight: 400; font-size: 9.5pt; }
+
+/* ---------- Headings ---------- */
+h1 {
+  break-before: page;
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600; font-size: 27pt; line-height: 1.06;
+  color: var(--ink); margin: 0 0 5mm;
+  padding: 0 0 3mm; border-bottom: .8mm solid var(--brand);
+}
+h1:first-of-type { }
+h2 {
+  font-family: 'Inter'; font-weight: 700; font-size: 14pt;
+  color: var(--brand-d); margin: 8mm 0 2.5mm;
+  break-after: avoid;
+}
+h3 {
+  font-family: 'Inter'; font-weight: 700; font-size: 11pt;
+  color: var(--ink); margin: 5mm 0 1.5mm; break-after: avoid;
+}
+
+/* keep the very first heading (Sintesi) from forcing a blank page after TOC is fine */
+
+/* ---------- Lists ---------- */
+ul, ol { margin: 0 0 .7em; padding-left: 5.2mm; }
+li { margin: 0 0 1.1mm; }
+li::marker { color: var(--brand); }
+
+/* ---------- Blockquote / callout ---------- */
+blockquote {
+  margin: 4mm 0; padding: 3.5mm 5mm;
+  background: var(--soft-2);
+  border-left: 1.6mm solid var(--brand);
+  border-radius: 0 2mm 2mm 0;
+  color: var(--ink);
+  break-inside: avoid;
+}
+blockquote p { margin: 0; }
+blockquote p + p { margin-top: .5em; }
+
+/* ---------- Tables ---------- */
+table {
+  width: 100%; border-collapse: collapse;
+  margin: 3mm 0 5mm; font-size: 9.3pt;
+  break-inside: auto;
+}
+thead { display: table-header-group; }
+th {
+  background: var(--brand); color: #fff;
+  font-weight: 700; text-align: left;
+  padding: 2.2mm 3mm; font-size: 9pt;
+  letter-spacing: .01em;
+}
+td {
+  padding: 2mm 3mm; border-bottom: .3mm solid var(--line);
+  vertical-align: top; color: var(--body);
+}
+tbody tr:nth-child(even) { background: var(--soft); }
+tr { break-inside: avoid; }
+
+/* ---------- Inline code ---------- */
+code {
+  font-family: 'SF Mono', ui-monospace, 'Menlo', monospace;
+  font-size: 8.6pt; background: var(--soft-2);
+  color: var(--brand-d); padding: .3mm 1.3mm; border-radius: 1.2mm;
+}
+
+/* ---------- Horizontal rule ---------- */
+hr { border: 0; border-top: .3mm solid var(--line-2); margin: 6mm 0; }
+
+/* ---------- Emoji sizing hint ---------- */
+img.emoji { height: 1em; width: 1em; vertical-align: -.12em; }

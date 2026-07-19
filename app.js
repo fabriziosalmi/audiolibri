@@ -255,10 +255,12 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Function to fetch fresh data from server
     function fetchFreshData(isBackgroundUpdate) {
-        // Try loading augmented.json first, then fall back to audiobooks.json.
-        // cache:'no-cache' = always revalidate (conditional GET) so a redeployed
-        // data file is picked up immediately instead of a stale HTTP-cached copy.
-        fetch('augmented.json', { cache: 'no-cache' })
+        // Load the lightweight home index first (built by build_index.py: only the
+        // fields the home renders/searches — no transcript, no full description).
+        // Falls back to the full audiobooks.json if the index is missing. Default
+        // HTTP caching applies and the service worker serves it cache-first with a
+        // background revalidate, so a redeploy is picked up on the next visit.
+        fetch('index.min.json')
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -266,9 +268,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 return response.json();
             })
             .catch(error => {
-                // If augmented.json fails, try audiobooks.json as fallback
-                console.warn('Failed to load augmented.json, trying audiobooks.json fallback:', error.message || error);
-                return fetch('audiobooks.json', { cache: 'no-cache' })
+                // If the index fails, fall back to the full audiobooks.json
+                console.warn('Failed to load index.min.json, trying audiobooks.json fallback:', error.message || error);
+                return fetch('audiobooks.json')
                     .then(response => {
                         if (!response.ok) {
                             throw new Error(`Fallback failed - audiobooks.json HTTP error! status: ${response.status}`);
