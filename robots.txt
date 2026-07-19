@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
 
+# Build scripts and internal tooling (served by GitHub Pages, but not content)
+Disallow: /*.py$
+Disallow: /deploy/
+
 Sitemap: https://audiolibri.org/sitemap.xml

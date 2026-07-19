@@ -498,6 +498,9 @@ def build_index(kind, entries):
     elif kind == "autori":
         h1, sub = "Autori", "autore"
         lead = f"Esplora gli audiolibri italiani gratuiti per autore — {len(entries)} autori."
+    elif kind == "raccolte":
+        h1, sub = "Raccolte", "raccolta"
+        lead = f"Raccolte tematiche di audiolibri gratuiti — {len(entries)} collezioni per genere, età e occasione."
     else:  # serie
         h1, sub = "Serie", "serie"
         lead = f"Audiolibri a puntate, da ascoltare capitolo per capitolo — {len(entries)} serie."
@@ -521,6 +524,91 @@ def build_index(kind, entries):
   </div>"""
     head_html = head(page_title, meta_description(lead), canonical, "", "website", (itemlist, breadcrumb))
     return rel_dir, shell(head_html, main_html)
+
+
+# ---- Thematic collections -------------------------------------------------
+# Curated landing pages under /raccolta/<slug>/ grouping titles by theme, to
+# capture informational queries ("audiolibri per bambini", "horror", ...).
+# Each carries a unique intro so the page is not thin/duplicate content.
+
+def _blob(b):
+    return " ".join([title_of(b), author_of(b), genre_of(b),
+                     (b.get("real_synopsis") or ""), " ".join(b.get("categories") or [])]).lower()
+
+
+COLLECTIONS = [
+    dict(slug="audiolibri-per-bambini",
+         h1="Audiolibri per bambini e fiabe",
+         title="Audiolibri per bambini gratis: fiabe e favole da ascoltare | Audiolibri.org",
+         intro="Fiabe classiche, favole della tradizione e filastrocche per i più piccoli, lette ad "
+               "alta voce e pronte da ascoltare. Una raccolta pensata per accompagnare il gioco, la "
+               "nanna o i viaggi in auto — tutta gratuita, in streaming e senza registrazione.",
+         match=lambda b: genre_of(b).lower() == "fiaba"
+               or any(k in _blob(b) for k in ("fiaba", "favola", "filastrocc", "per bambini", "per ragazzi"))),
+    dict(slug="classici-della-scuola",
+         h1="Classici della letteratura da ascoltare",
+         title="Classici della scuola gratis: Manzoni, Pirandello, Verga e altri | Audiolibri.org",
+         intro="I grandi classici della letteratura italiana più letti a scuola, da «I Promessi Sposi» "
+               "alla «Divina Commedia», da Pirandello a Verga e Leopardi. Perfetti per ripassare "
+               "un'opera ascoltandola, o per riscoprirla con calma, gratis e in streaming.",
+         match=lambda b: any(k in _blob(b) for k in (
+               "promessi sposi", "divina commedia", "dante alighieri", "manzoni", "pirandello",
+               "giovanni verga", "leopardi", "decameron", "boccaccio", "foscolo", "italo svevo"))),
+    dict(slug="audiolibri-horror",
+         h1="Audiolibri horror da ascoltare",
+         title="Audiolibri horror gratis: Poe, Lovecraft e racconti del terrore | Audiolibri.org",
+         intro="Racconti del terrore e atmosfere gotiche: da H.P. Lovecraft a Edgar Allan Poe, le storie "
+               "che hanno definito la paura in letteratura. Narrazioni che trasformano l'ascolto in un "
+               "brivido, gratis e senza registrazione.",
+         match=lambda b: genre_of(b).lower() == "horror"
+               or any(k in _blob(b) for k in ("lovecraft", "edgar allan poe", "racconto del terrore"))),
+    dict(slug="audiolibri-gialli",
+         h1="Audiolibri gialli e thriller",
+         title="Audiolibri gialli gratis: mistero e thriller da ascoltare | Audiolibri.org",
+         intro="Delitti, indagini e misteri da risolvere un capitolo alla volta. Una raccolta di gialli, "
+               "polizieschi e thriller da ascoltare gratuitamente, per chi ama tenere il fiato sospeso "
+               "fino all'ultima rivelazione.",
+         match=lambda b: genre_of(b).lower() in ("giallo", "mistero")
+               or any(k in _blob(b) for k in ("giallo", "poliziesco", "sherlock holmes", "delitto"))),
+    dict(slug="racconti-brevi",
+         h1="Racconti brevi da ascoltare",
+         title="Racconti brevi gratis: audiolibri sotto i 15 minuti | Audiolibri.org",
+         intro="Storie complete in pochi minuti, perfette per una pausa pranzo, una passeggiata o "
+               "l'attesa del treno. Racconti brevi da ascoltare tutti d'un fiato, gratis e in streaming.",
+         match=lambda b: 0 < (b.get("duration") or 0) <= 900),
+    dict(slug="opere-integrali",
+         h1="Audiolibri integrali oltre un'ora",
+         title="Audiolibri integrali gratis: opere complete da ascoltare | Audiolibri.org",
+         intro="Romanzi e opere lette per intero, dall'inizio alla fine, per chi vuole immergersi in una "
+               "storia lunga senza interruzioni. Audiolibri integrali di oltre un'ora, gratuiti e in streaming.",
+         match=lambda b: (b.get("duration") or 0) >= 3600),
+]
+
+
+def build_collection(c, items):
+    rel_dir = f"raccolta/{c['slug']}"
+    canonical = f"{SITE}/{rel_dir}/"
+    h1, intro = c["h1"], c["intro"]
+    lead = f"{len(items)} audiolibri da ascoltare gratis, in streaming e senza registrazione."
+    itemlist = {"@context": "https://schema.org", "@type": "ItemList", "name": h1, "numberOfItems": len(items),
+                "itemListElement": [{"@type": "ListItem", "position": i + 1, "url": f"{SITE}/audiolibro/{book_slug(b)}/", "name": display_title_of(b)}
+                                    for i, b in enumerate(items)]}
+    breadcrumb = {"@context": "https://schema.org", "@type": "BreadcrumbList",
+                  "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
+                                      {"@type": "ListItem", "position": 2, "name": "Raccolte", "item": f"{SITE}/raccolte/"},
+                                      {"@type": "ListItem", "position": 3, "name": h1, "item": canonical}]}
+    grid = "".join(card_link(b) for b in items)
+    main_html = f"""<div class="bp-wrap">
+    <nav class="bp-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <a href="/raccolte/">Raccolte</a> › <span>{e(h1)}</span></nav>
+    <p class="bp-eyebrow">Raccolta</p>
+    <h1 class="bp-title">{e(h1)}</h1>
+    <p class="bp-lead">{e(lead)}</p>
+    <div class="bp-synopsis"><p>{e(intro)}</p></div>
+    <div class="bp-grid">{grid}</div>
+    <a class="bp-back" href="/raccolte/">← Tutte le raccolte</a>
+  </div>"""
+    head_html = head(c["title"], meta_description(intro), canonical, "", "website", (itemlist, breadcrumb))
+    return rel_dir, shell(head_html, main_html, with_fallback=True)
 
 
 def write(rel_dir, page):
@@ -559,6 +647,37 @@ def related_for(b, authors, genres, limit=12):
     if g:
         add_from(genres.get(g, []))
     return out
+
+
+def build_home_explore(valid, genre_entries, coll_entries):
+    """Static, crawlable homepage links so the home isn't empty for bots that
+    don't execute JS (AI crawlers) and to spread internal links to hubs."""
+    colls = "".join(f'<a href="/raccolta/{slug}/">{e(h1)}</a>' for h1, slug, _ in coll_entries)
+    gens = "".join(f'<a href="/genere/{slug}/">{e(label)}</a>' for label, slug, _ in genre_entries)
+    top = [b for b in sorted(valid, key=lambda x: x.get("view_count") or 0, reverse=True)
+           if not ((b.get("duration") or 0) < 600 and (b.get("view_count") or 0) > 1_000_000)][:24]
+    titles = "".join(f'<a href="/audiolibro/{book_slug(b)}/">{e(display_title_of(b))}</a>' for b in top)
+    parts = []
+    if colls:
+        parts.append(f'<h2>Raccolte</h2><div class="he-links">{colls}</div>')
+    parts.append(f'<h2>Generi</h2><div class="he-links">{gens}</div>')
+    parts.append(f'<h2>Titoli popolari</h2><div class="he-links">{titles}</div>')
+    parts.append('<p class="he-all"><a href="/generi/">Tutti i generi</a> · '
+                 '<a href="/autori/">Tutti gli autori</a> · '
+                 '<a href="/raccolte/">Tutte le raccolte</a></p>')
+    return "".join(parts)
+
+
+def inject_home_explore(block):
+    """Replace the content between the EXPLORE markers in index.html."""
+    index_path = ROOT / "index.html"
+    txt = index_path.read_text(encoding="utf-8")
+    a, b = "<!-- EXPLORE:START -->", "<!-- EXPLORE:END -->"
+    if a in txt and b in txt:
+        txt = txt[:txt.index(a) + len(a)] + "\n" + block + "\n                " + txt[txt.index(b):]
+        index_path.write_text(txt, encoding="utf-8")
+        return True
+    return False
 
 
 def main():
@@ -633,16 +752,35 @@ def main():
         paths.append(write(rel_dir, page))
         series_entries.append((name, sl, len(g["chapters"])))
 
+    # Thematic collections: curated landing pages for informational queries.
+    coll_entries = []
+    for c in COLLECTIONS:
+        items = [b for b in valid if c["match"](b)]
+        if len(items) < 8:
+            continue
+        items.sort(key=lambda b: b.get("view_count") or 0, reverse=True)
+        rel_dir, page = build_collection(c, items)
+        paths.append(write(rel_dir, page))
+        coll_entries.append((c["h1"], c["slug"], len(items)))
+
     paths.append(write(*build_index("generi", genre_entries)))
     paths.append(write(*build_index("autori", sorted(author_entries, key=lambda x: x[0].lower()))))
     if series_entries:
         paths.append(write(*build_index("serie", sorted(series_entries, key=lambda x: x[0].lower()))))
+    if coll_entries:
+        paths.append(write(*build_index("raccolte", coll_entries)))
 
     (ROOT / "sitemap.xml").write_text(build_sitemap(paths), encoding="utf-8")
-    (ROOT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n", encoding="utf-8")
+    (ROOT / "robots.txt").write_text(
+        "User-agent: *\nAllow: /\n\n"
+        "# Build scripts and internal tooling (served by GitHub Pages, but not content)\n"
+        "Disallow: /*.py$\nDisallow: /deploy/\n\n"
+        f"Sitemap: {SITE}/sitemap.xml\n", encoding="utf-8")
+
+    inject_home_explore(build_home_explore(valid, genre_entries, coll_entries))
 
     print(f"books={len(valid)}  genre_hubs={len(genre_entries)}  author_hubs={len(author_entries)}  "
-          f"series={len(series_entries)}  indexes={2 + (1 if series_entries else 0)}  sitemap_urls={len(paths) + 1}")
+          f"series={len(series_entries)}  collections={len(coll_entries)}  sitemap_urls={len(paths) + 1}")
 
 
 if __name__ == "__main__":
