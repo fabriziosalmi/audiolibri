@@ -226,6 +226,7 @@ def footer_html():
         <a class="footer-link" href="/generi/">Generi</a>
         <a class="footer-link" href="/autori/">Autori</a>
         <a class="footer-link" href="https://github.com/fabriziosalmi/audiolibri/blob/main/ACCESSIBILITY.md" target="_blank" rel="noopener noreferrer">Accessibilità</a>
+        <a class="footer-link" href="/privacy.html">Privacy</a>
       </nav>
       <div class="footer-actions">
         <a class="ghost-btn" href="https://github.com/fabriziosalmi/audiolibri" target="_blank" rel="noopener noreferrer" aria-label="Codice sorgente su GitHub">{GITHUB_SVG}<span>GitHub</span></a>
