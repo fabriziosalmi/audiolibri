@@ -139,6 +139,7 @@ PAGE_CSS = """<style>
 .bp-player { aspect-ratio:16/9; width:100%; max-width:760px; border:0; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--card-shadow); margin-bottom:2rem; background:#000; }
 .bp-synopsis h2, .bp-faqs h2 { font-family:var(--font-display); font-size:var(--text-2xl); margin:0 0 .8rem; }
 .bp-synopsis p { font-size:var(--text-lg); line-height:1.7; max-width:70ch; }
+.bp-ai-note { font-size:var(--text-sm); line-height:1.55; max-width:70ch; opacity:.72; border-left:3px solid currentColor; padding-left:.75rem; margin-top:.9rem; }
 .bp-faqs { margin-top:2.5rem; }
 .bp-faq { border-bottom:1px solid var(--border-color); padding:.9rem 0; }
 .bp-faq summary { cursor:pointer; font-weight:600; }
@@ -312,7 +313,14 @@ def author_bio(author):
 def build_book_page(b: dict, related=(), in_series=False, series_name=None):
     vid = video_id(b)
     title, author, genre = display_title_of(b), author_of(b), genre_of(b)
-    synopsis = (b.get("real_synopsis") or b.get("description") or "").strip()
+    # real_synopsis is written by augment.py / synopsis_reprocessor.py, which
+    # ask a local language model to rewrite the source material. When it is
+    # missing we fall back to the channel's own description, which is not
+    # generated - so the notice below is only shown when it actually applies.
+    synopsis = (b.get("real_synopsis") or "").strip()
+    synopsis_is_generated = bool(synopsis)
+    if not synopsis:
+        synopsis = (b.get("description") or "").strip()
     channel = (b.get("channel") or "").strip()
     dur, views, likes = b.get("duration") or 0, b.get("view_count") or 0, b.get("like_count") or 0
     published = iso_date(b.get("upload_date", ""))
@@ -400,6 +408,13 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
     facts_html = "".join(f'<div class="bp-fact"><dt>{lbl}</dt><dd>{val}</dd></div>' for lbl, val in facts)
     facts_section = f'<section class="bp-facts-wrap"><h2>Scheda</h2><dl class="bp-facts">{facts_html}</dl></section>'
     faq_html = "".join(f'<details class="bp-faq"><summary>{e(q)}</summary><p>{e(a)}</p></details>' for q, a in faq)
+    # Trama, titolo, autore e genere non sono scritti da noi né presi dalla
+    # fonte: li ricava un modello linguistico dal materiale del canale. Chi
+    # legge deve poterlo sapere lì, accanto al testo, non solo nell'informativa.
+    ai_notice = ('<p class="bp-ai-note">Trama, titolo, autore e genere di questa scheda sono '
+                 'stati generati automaticamente da un modello linguistico a partire dal '
+                 'materiale pubblicato dal canale. Possono contenere errori: l\'audio è '
+                 'sempre la fonte attendibile.</p>') if synopsis_is_generated else ''
     crumb_html = ('<a href="/">Home</a>'
                   + (f' › <a href="/genere/{slugify(genre)}/">{e(genre_label)}</a>' if genre_label else '')
                   + (f' › <a href="/serie/{series_slug}/">{e(series_name)}</a>' if series_slug else '')
@@ -488,7 +503,7 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
     <p class="bp-author">di <b><a href="/autore/{slugify(author)}/">{e(author)}</a></b></p>{series_link_html}
     <div class="bp-chips">{chips}</div>
     {player}
-    <section class="bp-synopsis"><h2>Trama</h2><p>{e(synopsis)}</p></section>
+    <section class="bp-synopsis"><h2>Trama</h2><p>{e(synopsis)}</p>{ai_notice}</section>
     {facts_section}
     <section class="bp-faqs"><h2>Domande frequenti</h2>{faq_html}</section>
     {related_html}
