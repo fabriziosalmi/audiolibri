@@ -9,6 +9,8 @@ yarn.lock
 package-lock.json
 package.json
 README.md
+# ...but the fonts folder's README is licence attribution and must be tracked.
+!fonts/README.md
 augmented.json.backup_*
 synopsis_checkpoint_*
 augment_checkpoint_*
