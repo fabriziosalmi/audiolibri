@@ -379,8 +379,9 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
         crumbs.append({"@type": "ListItem", "position": len(crumbs) + 1, "name": series_name, "item": f"{SITE}/serie/{series_slug}/"})
     crumbs.append({"@type": "ListItem", "position": len(crumbs) + 1, "name": title, "item": canonical})
     breadcrumb = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": crumbs}
-    faqpage = {"@context": "https://schema.org", "@type": "FAQPage",
-               "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]}
+    # NB: no FAQPage JSON-LD — Google retired FAQ rich results (May 2026), so the
+    # markup only bloated the HTML. The visible FAQ section below is kept (useful
+    # content for users and AI answer engines).
 
     chips = ""
     if genre_label:
@@ -512,7 +513,7 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
     page_title = f"{title} — audiolibro gratis di {author} | Audiolibri.org"
     # The content is a YouTube video, so also expose VideoObject → eligible for
     # video rich results. Google requires uploadDate, so emit only when present.
-    schemas = [audiobook, breadcrumb, faqpage]
+    schemas = [audiobook, breadcrumb]
     if embed_type == "youtube" and vid and published:
         schemas.append({"@context": "https://schema.org", "@type": "VideoObject",
                         "name": title, "description": synopsis or f"Audiolibro «{title}» di {author}.",
