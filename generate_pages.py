@@ -379,8 +379,9 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
         crumbs.append({"@type": "ListItem", "position": len(crumbs) + 1, "name": series_name, "item": f"{SITE}/serie/{series_slug}/"})
     crumbs.append({"@type": "ListItem", "position": len(crumbs) + 1, "name": title, "item": canonical})
     breadcrumb = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": crumbs}
-    faqpage = {"@context": "https://schema.org", "@type": "FAQPage",
-               "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]}
+    # NB: no FAQPage JSON-LD — Google retired FAQ rich results (May 2026), so the
+    # markup only bloated the HTML. The visible FAQ section below is kept (useful
+    # content for users and AI answer engines).
 
     chips = ""
     if genre_label:
@@ -512,7 +513,7 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
     page_title = f"{title} — audiolibro gratis di {author} | Audiolibri.org"
     # The content is a YouTube video, so also expose VideoObject → eligible for
     # video rich results. Google requires uploadDate, so emit only when present.
-    schemas = [audiobook, breadcrumb, faqpage]
+    schemas = [audiobook, breadcrumb]
     if embed_type == "youtube" and vid and published:
         schemas.append({"@context": "https://schema.org", "@type": "VideoObject",
                         "name": title, "description": synopsis or f"Audiolibro «{title}» di {author}.",
@@ -729,9 +730,19 @@ def write(rel_dir, page):
     return f"{rel_dir}/"
 
 
-def build_sitemap(paths):
+def _lastmod(books):
+    """Most-recent upload date among these books (YYYY-MM-DD), else today.
+    Stable across rebuilds (a page's lastmod only moves when new content lands),
+    so Google can trust the freshness signal instead of seeing every URL as
+    'changed today' on each deploy."""
+    dates = [d for d in (iso_date(b.get("upload_date", "")) for b in books) if d]
+    return max(dates) if dates else TODAY
+
+
+def build_sitemap(entries):
+    """entries: list of (rel_path, lastmod)."""
     urls = f"  <url><loc>{SITE}/</loc><lastmod>{TODAY}</lastmod></url>\n"
-    urls += "".join(f"  <url><loc>{SITE}/{p}</loc><lastmod>{TODAY}</lastmod></url>\n" for p in paths)
+    urls += "".join(f"  <url><loc>{SITE}/{p}</loc><lastmod>{lm}</lastmod></url>\n" for p, lm in entries)
     return ('<?xml version="1.0" encoding="UTF-8"?>\n'
             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls + "</urlset>\n")
 
@@ -838,13 +849,13 @@ def main():
     for b in valid:
         in_s, sname = series_args(b)
         rel_dir, page = build_book_page(b, related_for(b, authors, genres), in_series=in_s, series_name=sname)
-        paths.append(write(rel_dir, page))
+        paths.append((write(rel_dir, page), iso_date(b.get("upload_date", "")) or TODAY))
 
     genre_entries = []
     for g, items in sorted(genres.items(), key=lambda kv: len(kv[1]), reverse=True):
         items.sort(key=lambda b: b.get("view_count") or 0, reverse=True)
         rel_dir, page = build_hub("genere", g.capitalize(), items, slugify(g))
-        paths.append(write(rel_dir, page))
+        paths.append((write(rel_dir, page), _lastmod(items)))
         genre_entries.append((g.capitalize(), slugify(g), len(items)))
 
     author_entries = []
@@ -853,14 +864,14 @@ def main():
             continue
         items.sort(key=lambda b: b.get("view_count") or 0, reverse=True)
         rel_dir, page = build_hub("autore", a, items, slugify(a))
-        paths.append(write(rel_dir, page))
+        paths.append((write(rel_dir, page), _lastmod(items)))
         author_entries.append((a, slugify(a), len(items)))
 
     series_entries = []
     for sl, g in sorted(series_groups.items(), key=lambda kv: len(kv[1]["chapters"]), reverse=True):
         name = series_name_by_slug[sl]
         rel_dir, page = build_series(name, g["chapters"])
-        paths.append(write(rel_dir, page))
+        paths.append((write(rel_dir, page), _lastmod(g["chapters"])))
         series_entries.append((name, sl, len(g["chapters"])))
 
     # Thematic collections: curated landing pages for informational queries.
@@ -871,15 +882,15 @@ def main():
             continue
         items.sort(key=lambda b: b.get("view_count") or 0, reverse=True)
         rel_dir, page = build_collection(c, items)
-        paths.append(write(rel_dir, page))
+        paths.append((write(rel_dir, page), _lastmod(items)))
         coll_entries.append((c["h1"], c["slug"], len(items)))
 
-    paths.append(write(*build_index("generi", genre_entries)))
-    paths.append(write(*build_index("autori", sorted(author_entries, key=lambda x: x[0].lower()))))
+    paths.append((write(*build_index("generi", genre_entries)), TODAY))
+    paths.append((write(*build_index("autori", sorted(author_entries, key=lambda x: x[0].lower()))), TODAY))
     if series_entries:
-        paths.append(write(*build_index("serie", sorted(series_entries, key=lambda x: x[0].lower()))))
+        paths.append((write(*build_index("serie", sorted(series_entries, key=lambda x: x[0].lower()))), TODAY))
     if coll_entries:
-        paths.append(write(*build_index("raccolte", coll_entries)))
+        paths.append((write(*build_index("raccolte", coll_entries)), TODAY))
 
     (ROOT / "sitemap.xml").write_text(build_sitemap(paths), encoding="utf-8")
     (ROOT / "robots.txt").write_text(
