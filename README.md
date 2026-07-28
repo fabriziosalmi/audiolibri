@@ -16,6 +16,16 @@ Audiolibri.org is a curated catalogue of public-domain and freely listenable aud
 - A **dedicated page** per title with synopsis, a data sheet (duration, narrator, year) and player
 - **No signup, no app, no ads**
 
+## Browse the catalogue
+
+Everything below is free and plays straight in the browser:
+
+**[Home](https://audiolibri.org)** · **[Genres](https://audiolibri.org/generi/)** · **[Authors](https://audiolibri.org/autori/)** · **[Collections](https://audiolibri.org/raccolte/)**
+
+**Themed collections** — [Audiolibri per bambini e fiabe](https://audiolibri.org/raccolta/audiolibri-per-bambini/) · [Classici della scuola](https://audiolibri.org/raccolta/classici-della-scuola/) · [Gialli e thriller](https://audiolibri.org/raccolta/audiolibri-gialli/) · [Horror](https://audiolibri.org/raccolta/audiolibri-horror/) · [Racconti brevi](https://audiolibri.org/raccolta/racconti-brevi/) · [Opere integrali](https://audiolibri.org/raccolta/opere-integrali/)
+
+**Popular genres** — [Romanzo](https://audiolibri.org/genere/romanzo/) · [Racconto](https://audiolibri.org/genere/racconto/) · [Giallo](https://audiolibri.org/genere/giallo/) · [Horror](https://audiolibri.org/genere/horror/) · [Fantascienza](https://audiolibri.org/genere/fantascienza/) · [Poesia](https://audiolibri.org/genere/poesia/) · [Fiaba](https://audiolibri.org/genere/fiaba/) · [Avventura](https://audiolibri.org/genere/avventura/)
+
 ## Architecture
 
 A **static site** served by **GitHub Pages**, generated from a JSON dataset:
