@@ -2395,10 +2395,14 @@ button:disabled {
 }
 
 @media (max-width: 860px) {
-    .hero-body { flex-direction: column; align-items: stretch; }
+    .hero-body { flex-direction: column; align-items: stretch; gap: 1rem; padding: 1.1rem; }
     .hero-media { flex-basis: auto; }
-    /* The stacked mobile hero is tall; reserve height so the loading->hero swap
-       (slow on 4G) doesn't shift the page — the main driver of CLS on mobile. */
+    .hero-content { gap: var(--space-2); }
+    .hero-title { font-size: clamp(1.6rem, 6.5vw, 2.2rem); -webkit-line-clamp: 2; line-clamp: 2; }
+    .hero-synopsis { -webkit-line-clamp: 2; line-clamp: 2; }
+    /* Compacting the stacked hero (above) keeps its real height within the
+       reserved 92vh min-height, so the loading->hero swap no longer shifts the
+       page — the main driver of mobile CLS. */
     .audiobook-card { min-height: 92vh; }
 }
 @media (prefers-reduced-motion: reduce) {
