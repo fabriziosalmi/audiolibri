@@ -38,6 +38,16 @@ jobs:
       - name: Regenerate pages, collections, sitemap, robots
         run: python3 generate_pages.py all
 
+      - name: Notify IndexNow (Bing / Yandex)
+        run: |
+          KEY="58a0e07ddb9947f141c78693bc91dc8e"
+          URLS=$(grep -oE 'https://audiolibri\.org/[^<]+' sitemap.xml \
+                 | python3 -c 'import sys,json; print(json.dumps([l.strip() for l in sys.stdin if l.strip()]))')
+          curl -sS -m 30 -X POST "https://api.indexnow.org/indexnow" \
+            -H "Content-Type: application/json" \
+            -d "{\"host\":\"audiolibri.org\",\"key\":\"$KEY\",\"keyLocation\":\"https://audiolibri.org/$KEY.txt\",\"urlList\":$URLS}" \
+            -o /dev/null -w "IndexNow: HTTP %{http_code}\n" || true
+
       # Keep the source dataset and internal docs off the public site.
       # (Both scripts have already run and consumed augmented.json above.)
       - name: Prune non-public files
