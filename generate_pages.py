@@ -517,7 +517,7 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
     if embed_type == "youtube" and vid and published:
         schemas.append({"@context": "https://schema.org", "@type": "VideoObject",
                         "name": title, "description": synopsis or f"Audiolibro «{title}» di {author}.",
-                        "thumbnailUrl": cover, "uploadDate": published, "duration": iso_duration(dur),
+                        "thumbnailUrl": cover, "uploadDate": f"{published}T00:00:00+00:00", "duration": iso_duration(dur),
                         "contentUrl": b.get("url", ""), "embedUrl": embed_url})
     head_html = head(page_title, description, canonical, cover, "article", tuple(schemas))
     return rel_dir, shell(head_html, main_html)
