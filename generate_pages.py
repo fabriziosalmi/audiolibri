@@ -857,6 +857,133 @@ def inject_home_explore(block):
     return False
 
 
+GUIDE_CSS = """<style>
+.bp-guide { max-width: 820px; }
+.bp-guide h2 { font-family: var(--font-display); font-size: var(--text-xl); margin: 2.2rem 0 .7rem; color: var(--header-color); }
+.bp-guide h3 { font-size: 1.08rem; margin: 1.3rem 0 .3rem; color: var(--header-color); }
+.bp-guide p { line-height: 1.7; margin: 0 0 1rem; color: var(--text-color); }
+.bp-guide ul { margin: 0 0 1rem 1.2rem; line-height: 1.7; color: var(--text-color); }
+.bp-guide a { color: var(--primary-color); }
+.guide-table-wrap { overflow-x: auto; margin: 1rem 0 1.5rem; }
+.guide-table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); min-width: 520px; }
+.guide-table th, .guide-table td { text-align: left; padding: .55rem .6rem; border-bottom: 1px solid var(--border-color); }
+.guide-table th { color: var(--header-color); }
+</style>"""
+
+
+def build_guide(valid, genre_entries, coll_entries):
+    """Long-form editorial landing for the informational query set
+    ('migliori audiolibri gratis', 'dove ascoltare ...'). Plays the same game as
+    the aggregator blogs that outrank us, but from the site that actually owns the
+    catalogue — with deep internal links into collections/genres/titles."""
+    rel_dir = "migliori-audiolibri-gratis"
+    canonical = f"{SITE}/{rel_dir}/"
+    title = "Migliori audiolibri gratis in italiano (2026): dove ascoltarli | Audiolibri.org"
+    h1 = "Migliori audiolibri gratis in italiano (2026)"
+    description = ("Guida ai migliori audiolibri gratis in italiano: dove ascoltarli in streaming "
+                   "senza registrazione, le piattaforme gratuite a confronto e i titoli da non perdere per ogni genere.")
+    total = len(valid)
+
+    by_genre = {}
+    for b in valid:
+        by_genre.setdefault(genre_of(b), []).append(b)
+    colls = {slug: h1c for h1c, slug, _ in coll_entries}
+
+    def rc(slug, fallback_label):
+        return f'<a href="/raccolta/{slug}/">{e(colls[slug])}</a>' if slug in colls else e(fallback_label)
+
+    def tt(genre_key, n=3):
+        items = sorted(by_genre.get(genre_key, []), key=lambda x: x.get("view_count") or 0, reverse=True)[:n]
+        return ", ".join(f'<a href="/audiolibro/{book_slug(b)}/">{e(display_title_of(b))}</a>' for b in items) or "i titoli del catalogo"
+
+    breadcrumb = {"@context": "https://schema.org", "@type": "BreadcrumbList",
+                  "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
+                                      {"@type": "ListItem", "position": 2, "name": h1, "item": canonical}]}
+    article = {"@context": "https://schema.org", "@type": "Article", "headline": h1, "inLanguage": "it-IT",
+               "description": description,
+               "author": {"@type": "Organization", "name": "Audiolibri.org", "url": SITE},
+               "publisher": {"@type": "Organization", "name": "Audiolibri.org",
+                             "logo": {"@type": "ImageObject", "url": SITE + "/icons/android-chrome-512x512.png"}},
+               "datePublished": TODAY, "dateModified": TODAY, "mainEntityOfPage": canonical}
+
+    body = f"""<div class="bp-wrap bp-guide">
+    <nav class="bp-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <span>{e(h1)}</span></nav>
+    <p class="bp-eyebrow">Guida</p>
+    <h1 class="bp-title">{e(h1)}</h1>
+    <p class="bp-lead">Per ascoltare ottimi audiolibri in italiano non serve quasi mai pagare, e spesso nemmeno registrarsi. Ecco le piattaforme gratuite migliori, come funzionano davvero e i titoli da cui partire, genere per genere.</p>
+
+    <p>Negli ultimi anni ascoltare libri è diventato un'abitudine quotidiana: in auto, mentre si cammina, prima di dormire. Il bello è che gran parte di questo tesoro è gratis. Le opere il cui diritto d'autore è scaduto — Verga, Pirandello, Dostoevskij, Poe, i fratelli Grimm — possono essere lette, registrate e diffuse liberamente, e progetti come questo le raccolgono in un unico posto.</p>
+    <p>Abbiamo confrontato le principali fonti gratuite in italiano guardando a ciò che conta per chi ascolta: quanti titoli offrono, se richiedono un account e la qualità dell'esperienza. Partiamo da dove ascoltarli.</p>
+
+    <h2>Dove ascoltare audiolibri gratis in italiano</h2>
+    <h3>1. Audiolibri.org</h3>
+    <p>Il modo più immediato: oltre {total} audiolibri in italiano, in streaming e <strong>senza registrazione</strong>. Apri una scheda, premi play e ascolti — da telefono, tablet o computer, anche a schermo spento. Nessun account, nessuna pubblicità invadente, nessun cookie di tracciamento. È un progetto open source e senza scopo di lucro: trovi <a href="/generi/">tutti i generi</a>, <a href="/autori/">gli autori</a> e le <a href="/raccolte/">raccolte curate</a>.</p>
+    <h3>2. RaiPlay Sound (Ad alta voce)</h3>
+    <p>Il servizio audio della Rai propone letture e sceneggiati di qualità professionale, con la sezione «Ad alta voce» dedicata agli audiolibri. È gratuito; per alcuni contenuti è consigliato l'accesso con un account Rai. Ottimo per produzioni curate e voci di attori.</p>
+    <h3>3. Liber Liber</h3>
+    <p>Storico progetto italiano della cultura libera: la biblioteca «Liber Liber» raccoglie classici della letteratura italiana in testo e audio, scaricabili gratuitamente. Una fonte preziosa per i grandi nomi della nostra tradizione.</p>
+    <h3>4. LibriVox</h3>
+    <p>Il più grande archivio internazionale di audiolibri di pubblico dominio, letti da volontari di tutto il mondo. Il catalogo in italiano è più limitato rispetto all'inglese, ma cresce ed è del tutto gratuito e senza registrazione.</p>
+    <h3>5. Loyal Books</h3>
+    <p>Ex «Books Should Be Free», raccoglie audiolibri ed e-book di pubblico dominio in molte lingue. Interfaccia essenziale, catalogo internazionale, tutto gratis.</p>
+    <h3>6. YouTube</h3>
+    <p>Cercando il titolo trovi moltissime letture integrali gratuite. La qualità però è molto variabile e i video sono spesso interrotti dalla pubblicità: conviene affidarsi a canali di lettori riconosciuti.</p>
+    <h3>7. Spotify e podcast</h3>
+    <p>Alcuni audiolibri e podcast narrativi sono disponibili gratuitamente con un account Spotify. Comodo se già usi l'app per la musica, meno completo per il catalogo classico in italiano.</p>
+
+    <h2>Come funziona lo streaming gratis, senza registrazione</h2>
+    <p>La differenza principale tra le piattaforme è tra <strong>streaming</strong> e <strong>download</strong>. Con lo streaming — come su audiolibri.org — apri e ascolti subito, senza occupare spazio sul dispositivo; con il download (LibriVox, Liber Liber) salvi il file per l'ascolto offline. Per la maggior parte delle persone lo streaming è la via più semplice: nessun account, nessuna installazione, si riprende da dove si era rimasti. E su smartphone l'audio continua anche con lo schermo spento.</p>
+
+    <h2>I migliori audiolibri gratis per genere</h2>
+    <p>Non sai da dove iniziare? Ecco i punti di partenza migliori, con le raccolte curate e alcuni tra i titoli più ascoltati.</p>
+    <h3>Grandi classici</h3>
+    <p>Le opere che hanno fatto la storia della letteratura, oggi libere da diritti. Parti da {rc('classici-della-scuola', 'i classici da ascoltare')} o da titoli come {tt('romanzo')}.</p>
+    <h3>Gialli e thriller</h3>
+    <p>Delitti, indagini e tensione. Vai alla raccolta {rc('audiolibri-gialli', 'gli audiolibri gialli')}; tra i più ascoltati: {tt('giallo')}.</p>
+    <h3>Horror e mistero</h3>
+    <p>Racconti del terrore e atmosfere gotiche. Scopri {rc('audiolibri-horror', 'gli audiolibri horror')} e titoli come {tt('horror')}.</p>
+    <h3>Per bambini e fiabe</h3>
+    <p>Storie della buonanotte e fiabe classiche, perfette da ascoltare insieme. Trovi tutto in {rc('audiolibri-per-bambini', 'gli audiolibri per bambini')}; ad esempio {tt('fiaba')}.</p>
+    <h3>Racconti brevi</h3>
+    <p>Ideali per una pausa: una storia intera in pochi minuti. Prova {rc('racconti-brevi', 'i racconti brevi')} o {tt('racconto')}.</p>
+    <h3>Fantascienza e avventura</h3>
+    <p>Mondi lontani e grandi viaggi. Esplora il genere <a href="/genere/fantascienza/">fantascienza</a> con {tt('fantascienza')}.</p>
+
+    <h2>Le piattaforme gratuite a confronto</h2>
+    <div class="guide-table-wrap"><table class="guide-table">
+      <thead><tr><th>Piattaforma</th><th>Catalogo</th><th>Italiano</th><th>Registrazione</th><th>Costo</th></tr></thead>
+      <tbody>
+        <tr><td>Audiolibri.org</td><td>~{total} titoli</td><td>Sì</td><td>No</td><td>Gratis</td></tr>
+        <tr><td>RaiPlay Sound</td><td>Ampio, curato</td><td>Sì</td><td>Consigliata</td><td>Gratis</td></tr>
+        <tr><td>Liber Liber</td><td>Classici italiani</td><td>Sì</td><td>No</td><td>Gratis</td></tr>
+        <tr><td>LibriVox</td><td>Pubblico dominio</td><td>Parziale</td><td>No</td><td>Gratis</td></tr>
+        <tr><td>Loyal Books</td><td>Pubblico dominio</td><td>Parziale</td><td>No</td><td>Gratis</td></tr>
+        <tr><td>Audible</td><td>Enorme</td><td>Sì</td><td>Sì</td><td>A pagamento (prova gratis)</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2>Perché scegliere audiolibri.org</h2>
+    <p>Tra le opzioni gratuite, audiolibri.org ha tre vantaggi concreti: è il catalogo in italiano più ampio in <strong>streaming immediato</strong>, non chiede <strong>alcuna registrazione</strong>, e <strong>rispetta la privacy</strong> di chi ascolta (nessun tracciamento, nessuna terza parte contattata finché non premi play). Ed è open source: chiunque può vedere come funziona e contribuire.</p>
+
+    <h2>Domande frequenti</h2>
+    <h3>Qual è il miglior sito di audiolibri gratis in italiano?</h3>
+    <p>Dipende da cosa cerchi: per ampiezza e immediatezza in streaming senza registrazione, audiolibri.org; per produzioni professionali, RaiPlay Sound «Ad alta voce»; per i classici scaricabili, Liber Liber.</p>
+    <h3>Gli audiolibri gratis sono legali?</h3>
+    <p>Sì, quando si tratta di opere di pubblico dominio (diritto d'autore scaduto) o di registrazioni condivise liberamente da chi le ha realizzate. Tutte le fonti citate qui operano su questa base.</p>
+    <h3>Servono registrazione o carta di credito?</h3>
+    <p>Su audiolibri.org, LibriVox, Liber Liber e Loyal Books no. Su RaiPlay Sound e Spotify può servire un account gratuito.</p>
+    <h3>Posso ascoltarli offline?</h3>
+    <p>Con lo streaming ascolti online; se ti serve l'offline, le piattaforme con download (LibriVox, Liber Liber) fanno al caso tuo.</p>
+    <h3>Quanto costano?</h3>
+    <p>Tutte le piattaforme di questa guida sono gratuite. Audible è a pagamento (con una prova gratuita) e la citiamo solo per completezza.</p>
+
+    <p>Pronto ad ascoltare? Inizia dal <a href="/">catalogo completo</a>, scegli una <a href="/raccolte/">raccolta</a> e premi play: nessun account, nessun costo, solo storie.</p>
+    <a class="bp-back" href="/">← Torna al catalogo</a>
+  </div>"""
+    head_html = head(title, description, canonical, f"{SITE}/og-cover.png", "article", (article, breadcrumb))
+    return rel_dir, shell(head_html, GUIDE_CSS + body, with_fallback=True)
+
+
 def main():
     books = json.loads(DATA.read_text())
     for k, b in books.items():
@@ -946,6 +1073,8 @@ def main():
         paths.append((write(*build_index("serie", sorted(series_entries, key=lambda x: x[0].lower()))), TODAY))
     if coll_entries:
         paths.append((write(*build_index("raccolte", coll_entries)), TODAY))
+
+    paths.append((write(*build_guide(valid, genre_entries, coll_entries)), TODAY))
 
     (ROOT / "sitemap.xml").write_text(build_sitemap(paths), encoding="utf-8")
     (ROOT / "robots.txt").write_text(
