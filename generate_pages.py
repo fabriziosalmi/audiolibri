@@ -810,7 +810,7 @@ def related_for(b, authors, genres, limit=12):
     def add_from(pool):
         for rb in sorted(pool, key=lambda x: x.get("view_count") or 0, reverse=True):
             rid = rb.get("id")
-            if rid and rid not in seen:
+            if rid and rid not in seen and not _blocked(rb):
                 seen.add(rid)
                 out.append(rb)
                 if len(out) >= limit:
@@ -832,7 +832,8 @@ def build_home_explore(valid, genre_entries, coll_entries):
     colls = "".join(f'<a href="/raccolta/{slug}/">{e(h1)}</a>' for h1, slug, _ in coll_entries)
     gens = "".join(f'<a href="/genere/{slug}/">{e(label)}</a>' for label, slug, _ in genre_entries)
     top = [b for b in sorted(valid, key=lambda x: x.get("view_count") or 0, reverse=True)
-           if not ((b.get("duration") or 0) < 600 and (b.get("view_count") or 0) > 1_000_000)][:24]
+           if not ((b.get("duration") or 0) < 600 and (b.get("view_count") or 0) > 1_000_000)
+           and not _blocked(b)][:24]
     titles = "".join(f'<a href="/audiolibro/{book_slug(b)}/">{e(display_title_of(b))}</a>' for b in top)
     parts = []
     if colls:
@@ -886,7 +887,8 @@ def build_guide(valid, genre_entries, coll_entries):
 
     by_genre = {}
     for b in valid:
-        by_genre.setdefault(genre_of(b), []).append(b)
+        if not _blocked(b):
+            by_genre.setdefault(genre_of(b), []).append(b)
     colls = {slug: h1c for h1c, slug, _ in coll_entries}
 
     def rc(slug, fallback_label):
@@ -904,7 +906,7 @@ def build_guide(valid, genre_entries, coll_entries):
                "author": {"@type": "Organization", "name": "Audiolibri.org", "url": SITE},
                "publisher": {"@type": "Organization", "name": "Audiolibri.org",
                              "logo": {"@type": "ImageObject", "url": SITE + "/icons/android-chrome-512x512.png"}},
-               "datePublished": TODAY, "dateModified": TODAY, "mainEntityOfPage": canonical}
+               "datePublished": "2026-08-10", "dateModified": TODAY, "mainEntityOfPage": canonical}
 
     body = f"""<div class="bp-wrap bp-guide">
     <nav class="bp-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <span>{e(h1)}</span></nav>
@@ -989,8 +991,8 @@ def build_about():
     rel_dir = "chi-siamo"
     canonical = f"{SITE}/{rel_dir}/"
     title = "Chi siamo | Audiolibri.org"
-    description = ("Audiolibri.org e il piu grande catalogo di audiolibri gratis in italiano: la storia, "
-                   "la missione e i principi del progetto - gratis, senza registrazione, open source, privacy-first.")
+    description = ("Audiolibri.org è il più grande catalogo di audiolibri gratis in italiano: la storia, "
+                   "la missione e i principi del progetto — gratis, senza registrazione, open source, privacy-first.")
     breadcrumb = {"@context": "https://schema.org", "@type": "BreadcrumbList",
                   "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
                                       {"@type": "ListItem", "position": 2, "name": "Chi siamo", "item": canonical}]}
