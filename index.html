@@ -106,14 +106,12 @@
     <link rel="stylesheet" href="app.css?v=1.6.3">
     
     <!-- Add before other resources -->
-    <link rel="preconnect" href="https://www.youtube.com">
-    <link rel="dns-prefetch" href="https://www.youtube.com">
 
+    <!-- The YouTube API is injected on first play (app.js): no third party is
+         contacted until a visitor asks for a recording. -->
     <!-- Fonts are self-hosted via @font-face in app.css (no third-party calls) -->
     <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
-    <!-- Add YouTube API -->
-    <script src="https://www.youtube.com/iframe_api" defer></script>
     <script defer src="tailwind-mobile.js?v=1.6.3"></script>
 </head>
 <body>
