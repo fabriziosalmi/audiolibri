@@ -984,6 +984,45 @@ def build_guide(valid, genre_entries, coll_entries):
     return rel_dir, shell(head_html, GUIDE_CSS + body, with_fallback=True)
 
 
+def build_about():
+    """Chi siamo — E-E-A-T page. Deliberately names no people or third parties."""
+    rel_dir = "chi-siamo"
+    canonical = f"{SITE}/{rel_dir}/"
+    title = "Chi siamo | Audiolibri.org"
+    description = ("Audiolibri.org e il piu grande catalogo di audiolibri gratis in italiano: la storia, "
+                   "la missione e i principi del progetto - gratis, senza registrazione, open source, privacy-first.")
+    breadcrumb = {"@context": "https://schema.org", "@type": "BreadcrumbList",
+                  "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
+                                      {"@type": "ListItem", "position": 2, "name": "Chi siamo", "item": canonical}]}
+    body = f"""<div class="bp-wrap bp-guide">
+    <nav class="bp-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <span>Chi siamo</span></nav>
+    <p class="bp-eyebrow">Il progetto</p>
+    <h1 class="bp-title">Chi siamo</h1>
+    <p class="bp-lead">Audiolibri.org è il più grande catalogo di audiolibri gratis in italiano: oltre 2.800 opere da ascoltare in streaming, senza registrazione e senza installare nulla.</p>
+
+    <h2>La storia</h2>
+    <p>Il progetto nasce nel 2014 da un'idea semplice: rendere la lettura ad alta voce accessibile a chiunque, gratuitamente. Da una manciata di titoli condivisi per passione, negli anni è cresciuto fino a diventare la raccolta di audiolibri gratuiti in italiano più ampia del web.</p>
+
+    <h2>La missione</h2>
+    <p>Le storie e la cultura non dovrebbero avere barriere. Un buon audiolibro tiene compagnia in viaggio, aiuta chi fatica a leggere, accompagna il sonno dei bambini e fa scoprire un classico a chi non l'avrebbe mai aperto. L'obiettivo è uno solo: metterlo a portata di play, per tutti, gratis.</p>
+
+    <h2>Come funziona</h2>
+    <ul>
+      <li><strong>Gratis e senza registrazione.</strong> Nessun account, nessun abbonamento, nessuna carta di credito: apri e ascolti.</li>
+      <li><strong>Nel rispetto delle regole.</strong> Il catalogo raccoglie opere di pubblico dominio e registrazioni condivise liberamente.</li>
+      <li><strong>Rispettoso della tua privacy.</strong> Nessun cookie di tracciamento e nessuna terza parte contattata finché non premi play.</li>
+      <li><strong>Aperto e trasparente.</strong> Un progetto open source e senza scopo di lucro: il codice è pubblico e chiunque può contribuire.</li>
+    </ul>
+
+    <h2>Contribuisci</h2>
+    <p>Ti piace il progetto? Puoi aiutarlo a crescere: segnala un titolo, migliora il codice o semplicemente condividilo con chi ama i libri. Trovi tutto su <a href="https://github.com/fabriziosalmi/audiolibri" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+
+    <a class="bp-back" href="/">← Torna al catalogo</a>
+  </div>"""
+    head_html = head(title, description, canonical, f"{SITE}/og-cover.png", "website", (breadcrumb,))
+    return rel_dir, shell(head_html, GUIDE_CSS + body, with_fallback=True)
+
+
 def main():
     books = json.loads(DATA.read_text())
     for k, b in books.items():
@@ -1075,6 +1114,7 @@ def main():
         paths.append((write(*build_index("raccolte", coll_entries)), TODAY))
 
     paths.append((write(*build_guide(valid, genre_entries, coll_entries)), TODAY))
+    paths.append((write(*build_about()), TODAY))
 
     (ROOT / "sitemap.xml").write_text(build_sitemap(paths), encoding="utf-8")
     (ROOT / "robots.txt").write_text(
