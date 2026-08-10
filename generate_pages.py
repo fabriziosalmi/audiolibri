@@ -198,11 +198,12 @@ a.bp-chip:hover { background:rgba(var(--primary-rgb),.2); }
 </style>"""
 
 
-def head(title, description, canonical, image, og_type="website", extra_ld=()):
+def head(title, description, canonical, image, og_type="website", extra_ld=(), noindex=False):
     ld = "".join('<script type="application/ld+json">\n'
                  + json.dumps(o, ensure_ascii=False, indent=2) + "\n</script>\n" for o in extra_ld)
     img = (f'<meta property="og:image" content="{e(image)}">\n'
            f'<meta name="twitter:image" content="{e(image)}">') if image else ""
+    robots = "noindex, follow" if noindex else "index, follow, max-image-preview:large"
     return f"""<!DOCTYPE html>
 <html lang="it">
 <head>
@@ -211,7 +212,7 @@ def head(title, description, canonical, image, og_type="website", extra_ld=()):
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>{e(title)}</title>
 <meta name="description" content="{e(description)}">
-<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="robots" content="{robots}">
 <link rel="canonical" href="{e(canonical)}">
 <meta name="theme-color" content="#000000">
 <meta name="color-scheme" content="light dark">
@@ -343,6 +344,7 @@ def author_bio(author):
 
 def build_book_page(b: dict, related=(), in_series=False, series_name=None):
     vid = video_id(b)
+    estatus = EMBED_STATUS.get(vid)  # 401/403 = embed off (video exists); 404 = video gone; None = ok
     title, author, genre = display_title_of(b), author_of(b), genre_of(b)
     # real_synopsis is written by augment.py / synopsis_reprocessor.py, which
     # ask a local language model to rewrite the source material. When it is
@@ -387,7 +389,7 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
         audiobook["readBy"] = {"@type": "Person", "name": channel}
         audiobook["publisher"] = {"@type": "Organization", "name": channel}
     if published: audiobook["datePublished"] = published
-    if embed_url:
+    if embed_url and not estatus:
         audiobook["associatedMedia"] = {"@type": "AudioObject", "contentUrl": b.get("url", ""),
                                          "embedUrl": embed_url, "duration": iso_duration(dur)}
     stats = []
@@ -475,7 +477,16 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
                 f'{fallback}</div>{FACADE_SCRIPT}')
 
     player = ""
-    if embed_type == "youtube" and vid:
+    if estatus in (401, 403):
+        player = (f'<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(255,255,255,0.03); border:1px dashed var(--border-color); border-radius:var(--radius-lg); padding:2.5rem; text-align:center; margin-bottom:2rem; width:100%;">'
+                  f'<p style="margin:0 0 1.25rem; font-size:var(--text-lg); color:var(--secondary-text);">L\'incorporamento è stato disattivato dal canale, ma puoi ascoltare «{e(title)}» gratis su YouTube.</p>'
+                  f'<a class="ios-button" href="https://www.youtube.com/watch?v={e(vid)}" target="_blank" rel="noopener noreferrer" style="text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem; color:white; font-weight:600; background-color:#FF0000;">▶ Ascolta su YouTube</a>'
+                  f'</div>')
+    elif estatus == 404:
+        player = (f'<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(255,255,255,0.03); border:1px dashed var(--border-color); border-radius:var(--radius-lg); padding:2.5rem; text-align:center; margin-bottom:2rem; width:100%;">'
+                  f'<p style="margin:0; font-size:var(--text-lg); color:var(--secondary-text);">Questo audiolibro non è più disponibile alla fonte. Trovi tanti altri titoli qui sotto e nella <a href="/">libreria completa</a>.</p>'
+                  f'</div>')
+    elif embed_type == "youtube" and vid:
         player = facade(
             embed_url,
             "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
@@ -569,12 +580,12 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
     # The content is a YouTube video, so also expose VideoObject → eligible for
     # video rich results. Google requires uploadDate, so emit only when present.
     schemas = [audiobook, breadcrumb]
-    if embed_type == "youtube" and vid and published:
+    if embed_type == "youtube" and vid and published and not estatus:
         schemas.append({"@context": "https://schema.org", "@type": "VideoObject",
                         "name": title, "description": synopsis or f"Audiolibro «{title}» di {author}.",
                         "thumbnailUrl": cover, "uploadDate": f"{published}T00:00:00+00:00", "duration": iso_duration(dur),
                         "contentUrl": b.get("url", ""), "embedUrl": embed_url})
-    head_html = head(page_title, description, canonical, cover, "article", tuple(schemas))
+    head_html = head(page_title, description, canonical, cover, "article", tuple(schemas), noindex=(estatus == 404))
     return rel_dir, shell(head_html, main_html)
 
 
@@ -703,6 +714,22 @@ def _blocked(b):
     return any(w in text for w in _COLLECTION_BLOCK)
 
 
+try:
+    EMBED_STATUS = {k: int(v) for k, v in json.loads((ROOT / "embed_status.json").read_text()).items()}
+except FileNotFoundError:
+    EMBED_STATUS = {}
+
+
+def _embed_broken(b) -> bool:
+    """True if this title's YouTube embed is disabled/removed (from embed_status.json)."""
+    return video_id(b) in EMBED_STATUS
+
+
+def _embed_dead(b) -> bool:
+    """True if the source video is gone (404) — page gets noindex + is left out of the sitemap."""
+    return EMBED_STATUS.get(video_id(b)) == 404
+
+
 COLLECTIONS = [
     dict(slug="audiolibri-per-bambini",
          h1="Audiolibri per bambini e fiabe",
@@ -810,7 +837,7 @@ def related_for(b, authors, genres, limit=12):
     def add_from(pool):
         for rb in sorted(pool, key=lambda x: x.get("view_count") or 0, reverse=True):
             rid = rb.get("id")
-            if rid and rid not in seen and not _blocked(rb):
+            if rid and rid not in seen and not _blocked(rb) and not _embed_broken(rb):
                 seen.add(rid)
                 out.append(rb)
                 if len(out) >= limit:
@@ -833,7 +860,7 @@ def build_home_explore(valid, genre_entries, coll_entries):
     gens = "".join(f'<a href="/genere/{slug}/">{e(label)}</a>' for label, slug, _ in genre_entries)
     top = [b for b in sorted(valid, key=lambda x: x.get("view_count") or 0, reverse=True)
            if not ((b.get("duration") or 0) < 600 and (b.get("view_count") or 0) > 1_000_000)
-           and not _blocked(b)][:24]
+           and not _blocked(b) and not _embed_broken(b)][:24]
     titles = "".join(f'<a href="/audiolibro/{book_slug(b)}/">{e(display_title_of(b))}</a>' for b in top)
     parts = []
     if colls:
@@ -887,7 +914,7 @@ def build_guide(valid, genre_entries, coll_entries):
 
     by_genre = {}
     for b in valid:
-        if not _blocked(b):
+        if not _blocked(b) and not _embed_broken(b):
             by_genre.setdefault(genre_of(b), []).append(b)
     colls = {slug: h1c for h1c, slug, _ in coll_entries}
 
@@ -1072,7 +1099,9 @@ def main():
     for b in valid:
         in_s, sname = series_args(b)
         rel_dir, page = build_book_page(b, related_for(b, authors, genres), in_series=in_s, series_name=sname)
-        paths.append((write(rel_dir, page), iso_date(b.get("upload_date", "")) or TODAY))
+        w = write(rel_dir, page)
+        if not _embed_dead(b):
+            paths.append((w, iso_date(b.get("upload_date", "")) or TODAY))
 
     genre_entries = []
     for g, items in sorted(genres.items(), key=lambda kv: len(kv[1]), reverse=True):
