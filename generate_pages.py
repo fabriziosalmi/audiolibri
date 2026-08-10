@@ -344,7 +344,9 @@ def author_bio(author):
 
 def build_book_page(b: dict, related=(), in_series=False, series_name=None):
     vid = video_id(b)
-    estatus = EMBED_STATUS.get(vid)  # 401/403 = embed off (video exists); 404 = video gone; None = ok
+    replacement = EMBED_REPLACEMENTS.get(vid)
+    embed_vid = replacement or vid  # the id the PLAYER loads; slug/URL stay on `vid`
+    estatus = None if replacement else EMBED_STATUS.get(vid)  # a replacement fixes the break
     title, author, genre = display_title_of(b), author_of(b), genre_of(b)
     # real_synopsis is written by augment.py / synopsis_reprocessor.py, which
     # ask a local language model to rewrite the source material. When it is
@@ -357,11 +359,12 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
     channel = (b.get("channel") or "").strip()
     dur, views, likes = b.get("duration") or 0, b.get("view_count") or 0, b.get("like_count") or 0
     published = iso_date(b.get("upload_date", ""))
-    cover = f"https://i.ytimg.com/vi/{vid}/maxresdefault.jpg" if vid else b.get("thumbnail", "")
+    cover = f"https://i.ytimg.com/vi/{embed_vid}/maxresdefault.jpg" if embed_vid else b.get("thumbnail", "")
     rel_dir = f"audiolibro/{book_slug(b)}"
     canonical = f"{SITE}/{rel_dir}/"
     embed_type = b.get("embed_type", "youtube" if vid else "audio")
-    embed_url = b.get("embed_url", f"https://www.youtube-nocookie.com/embed/{vid}" if vid else "")
+    embed_url = (f"https://www.youtube-nocookie.com/embed/{embed_vid}" if replacement
+                 else b.get("embed_url", f"https://www.youtube-nocookie.com/embed/{vid}" if vid else ""))
     audio_url = b.get("audio_url", b.get("audio_file", ""))
     audio_chapters = b.get("audio_chapters", [])
     source = b.get("source", "youtube" if vid else "unknown")
@@ -491,7 +494,7 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
             embed_url,
             "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
             "YouTube",
-            f"https://www.youtube.com/watch?v={vid}",
+            f"https://www.youtube.com/watch?v={embed_vid}",
         )
     elif embed_type == "iframe" and embed_url:
         allow = "autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" if source == "facebook" else ""
@@ -719,15 +722,25 @@ try:
 except FileNotFoundError:
     EMBED_STATUS = {}
 
+# Maps a broken video id -> an embeddable replacement id. The page keeps the
+# ORIGINAL id in its slug/URL/metadata (so nothing 404s); only the player loads
+# the replacement. Populated by hand after vetting alternatives.
+try:
+    EMBED_REPLACEMENTS = {k: str(v) for k, v in json.loads((ROOT / "embed_replacements.json").read_text()).items()}
+except FileNotFoundError:
+    EMBED_REPLACEMENTS = {}
+
 
 def _embed_broken(b) -> bool:
-    """True if this title's YouTube embed is disabled/removed (from embed_status.json)."""
-    return video_id(b) in EMBED_STATUS
+    """True if the embed is disabled/removed AND there's no working replacement."""
+    v = video_id(b)
+    return v in EMBED_STATUS and v not in EMBED_REPLACEMENTS
 
 
 def _embed_dead(b) -> bool:
-    """True if the source video is gone (404) — page gets noindex + is left out of the sitemap."""
-    return EMBED_STATUS.get(video_id(b)) == 404
+    """True if the source video is gone (404) and has no replacement — page gets noindex + no sitemap."""
+    v = video_id(b)
+    return EMBED_STATUS.get(v) == 404 and v not in EMBED_REPLACEMENTS
 
 
 COLLECTIONS = [
