@@ -53,6 +53,31 @@ THEME_SVG = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-
              'cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor" stroke="none"/></svg>')
 
 # Grey-placeholder fallback for deleted videos, shared by hubs/indexes.
+# Click-to-load. Nothing is requested from the embed provider until a visitor
+# asks for the recording: the request becomes the consent, and the site needs
+# no banner to ask for something it never does unprompted.
+FACADE_SCRIPT = """<script>
+(function () {
+  document.addEventListener('click', function (ev) {
+    var btn = ev.target.closest ? ev.target.closest('.bp-facade-play') : null;
+    if (!btn) return;
+    var box = btn.closest('.bp-facade');
+    var src = box && box.getAttribute('data-embed');
+    if (!src) return;
+    var frame = document.createElement('iframe');
+    frame.className = 'bp-player';
+    frame.src = src + (src.indexOf('?') === -1 ? '?' : '&') + 'autoplay=1';
+    frame.title = box.getAttribute('data-title') || '';
+    var allow = box.getAttribute('data-allow');
+    if (allow) frame.setAttribute('allow', allow);
+    frame.setAttribute('allowfullscreen', '');
+    frame.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+    box.replaceWith(frame);
+    frame.focus();
+  });
+})();
+</script>"""
+
 FALLBACK_SCRIPT = """<script>
 document.querySelectorAll('.nf-card-img').forEach(function(img){
   function fb(){var c=img.closest('.nf-card-cover');if(c)c.classList.add('is-fallback');}
@@ -136,6 +161,12 @@ PAGE_CSS = """<style>
 .bp-series a:hover { text-decoration:underline; }
 .bp-chips { display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:1.5rem; }
 .bp-chip { padding:.25rem .8rem; border-radius:var(--radius-pill); background:rgba(var(--primary-rgb),.1); color:var(--primary-color); font-size:var(--text-xs); font-weight:600; text-decoration:none; }
+.bp-facade { position:relative; aspect-ratio:16/9; width:100%; max-width:760px; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--card-shadow); margin-bottom:2rem; background:linear-gradient(140deg,#1b1b20,#0b0b0e); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem; padding:1.5rem; text-align:center; }
+.bp-facade-play { width:74px; height:74px; border-radius:50%; border:0; cursor:pointer; background:var(--primary-color); color:#fff; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 24px rgba(0,0,0,.45); transition:transform .15s ease; }
+.bp-facade-play:hover, .bp-facade-play:focus-visible { transform:scale(1.07); }
+.bp-facade-play svg { width:30px; height:30px; margin-left:4px; fill:currentColor; }
+.bp-facade-note { margin:0; max-width:52ch; font-size:var(--text-xs); line-height:1.5; color:rgba(255,255,255,.72); }
+.bp-facade-note a { color:#fff; }
 .bp-player { aspect-ratio:16/9; width:100%; max-width:760px; border:0; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--card-shadow); margin-bottom:2rem; background:#000; }
 .bp-synopsis h2, .bp-faqs h2 { font-family:var(--font-display); font-size:var(--text-2xl); margin:0 0 .8rem; }
 .bp-synopsis p { font-size:var(--text-lg); line-height:1.7; max-width:70ch; }
@@ -421,15 +452,39 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
                   + (f' › <a href="/serie/{series_slug}/">{e(series_name)}</a>' if series_slug else '')
                   + f' › <span>{e(title)}</span>')
     series_link_html = f'\n    <p class="bp-series">Parte di <a href="/serie/{series_slug}/">«{e(series_name)}»</a></p>' if series_slug else ''
+    def facade(url: str, allow: str, provider: str, watch_url: str = "") -> str:
+        """A play control that loads nothing until it is pressed.
+
+        The embed is what makes this site need a consent banner: it contacts the
+        provider, and sets its cookies, before the visitor has asked for
+        anything. Deferring it to an explicit press turns the request into the
+        act of asking, and the banner becomes unnecessary rather than merely
+        compliant.
+        """
+        fallback = (f'<noscript><p class="bp-facade-note">Attiva JavaScript oppure '
+                    f'<a href="{e(watch_url or url)}" rel="noopener noreferrer" target="_blank">'
+                    f'apri l\'audiolibro su {e(provider)}</a>.</p></noscript>') if (watch_url or url) else ""
+        return (f'<div class="bp-facade" data-embed="{e(url)}" data-title="Audiolibro: {e(title)}" '
+                f'data-allow="{e(allow)}">'
+                f'<button type="button" class="bp-facade-play" aria-label="Riproduci: {e(title)}">'
+                f'<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z"/></svg>'
+                f'</button>'
+                f'<p class="bp-facade-note">Premi play per caricare il lettore. Solo allora '
+                f'{e(provider)} riceve il tuo indirizzo IP e puo\u0300 impostare cookie: '
+                f'finche\u0301 non premi, questa pagina non contatta nessun servizio esterno.</p>'
+                f'{fallback}</div>{FACADE_SCRIPT}')
+
     player = ""
     if embed_type == "youtube" and vid:
-        player = (f'<iframe class="bp-player" src="{e(embed_url)}" title="Audiolibro: {e(title)}" loading="lazy" '
-                  'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" '
-                  'allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>')
+        player = facade(
+            embed_url,
+            "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture",
+            "YouTube",
+            f"https://www.youtube.com/watch?v={vid}",
+        )
     elif embed_type == "iframe" and embed_url:
-        allow_attr = 'allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" ' if source == "facebook" else ''
-        player = (f'<iframe class="bp-player" src="{e(embed_url)}" title="Audiolibro: {e(title)}" loading="lazy" '
-                  f'style="border:0;" {allow_attr}allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>')
+        allow = "autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" if source == "facebook" else ""
+        player = facade(embed_url, allow, source.capitalize(), source_url)
     elif embed_type == "link_out":
         btn_label = "Ascolta su Spotify" if source == "spotify" else ("Ascolta su Facebook" if source == "facebook" else f"Ascolta su {source.capitalize()}")
         btn_color = "#1DB954" if source == "spotify" else ("#1877F2" if source == "facebook" else "var(--primary-color)")

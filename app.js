@@ -897,16 +897,41 @@ document.addEventListener('DOMContentLoaded', () => {
         let mediaHtml = '';
         const hasControls = book.embedType === 'youtube' || book.embedType === 'audio';
 
+        /**
+         * A play control that loads nothing until it is pressed.
+         *
+         * What made this site need a consent banner was not the recordings but
+         * the moment they were fetched: the hero renders on every page load, so
+         * every visitor reached Google before choosing to listen to anything.
+         * Once the request only happens on a press, the press is the consent,
+         * and there is nothing left to ask permission for.
+         */
+        function facadeHtml(target, provider) {
+            // sanitizeText escapes for text nodes and leaves quotes intact, which
+            // is not safe inside an attribute — a title containing " would break
+            // out of it. Titles here come from a third-party catalogue.
+            const attr = (s) => String(s == null ? '' : s)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+            return `<div class="bp-facade" data-provider="${attr(provider)}">
+                <button type="button" class="bp-facade-play" aria-label="Riproduci: ${attr(target.title || '')}">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z"/></svg>
+                </button>
+                <p class="bp-facade-note">Premi play per caricare il lettore. Solo allora ${sanitizeText(provider)}
+                riceve il tuo indirizzo IP e può impostare cookie: finché non premi, questa pagina non
+                contatta nessun servizio esterno.</p>
+            </div>`;
+        }
+
         if (book.embedType === 'youtube') {
-            mediaHtml = `<div id="youtube-player" role="region" aria-label="Lettore video YouTube"></div>`;
+            // The container stays empty until a visitor presses play: the hero is
+            // rendered on every page load, so creating the player here would
+            // contact Google for everyone who merely opened the home page.
+            mediaHtml = `<div id="youtube-player" role="region" aria-label="Lettore video YouTube">
+                ${facadeHtml(book, 'YouTube')}
+            </div>`;
         } else if (book.embedType === 'iframe') {
-            const allowAttr = book.source === 'facebook' ? 'allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"' : 'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"';
-            mediaHtml = `
-                <iframe class="bp-player" src="${encodeURI(book.embedUrl)}" 
-                  style="width:100%; height:180px; border:0; border-radius:var(--radius-md);" 
-                  ${allowAttr}
-                  allowfullscreen title="Lettore alternativo"></iframe>
-            `;
+            mediaHtml = facadeHtml(book, book.source ? book.source.charAt(0).toUpperCase() + book.source.slice(1) : 'servizio esterno');
         } else if (book.embedType === 'link_out') {
             const btnLabel = book.source === 'spotify' ? 'Ascolta su Spotify' : (book.source === 'facebook' ? 'Ascolta su Facebook' : 'Ascolta sul sito originale');
             const btnColor = book.source === 'spotify' ? '#1DB954' : (book.source === 'facebook' ? '#1877F2' : 'var(--primary-color)');
@@ -1029,8 +1054,29 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Set up YouTube player if video ID is available
         if (book.embedType === 'youtube' && book.videoId) {
-            document.getElementById('youtube-player').innerHTML = '';
-            loadYouTubeVideo(book.videoId);
+            const facade = document.querySelector('#youtube-player .bp-facade-play');
+            if (facade) {
+                facade.addEventListener('click', () => {
+                    document.getElementById('youtube-player').innerHTML = '';
+                    loadYouTubeVideo(book.videoId);
+                }, { once: true });
+            }
+        } else if (book.embedType === 'iframe' && book.embedUrl) {
+            const facade = document.querySelector('.bp-facade[data-provider]:not(#youtube-player .bp-facade)');
+            facade?.querySelector('.bp-facade-play')?.addEventListener('click', () => {
+                const allow = book.source === 'facebook'
+                    ? 'autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share'
+                    : 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope';
+                const frame = document.createElement('iframe');
+                frame.className = 'bp-player';
+                frame.src = book.embedUrl;
+                frame.title = 'Lettore alternativo';
+                frame.setAttribute('style', 'width:100%; height:180px; border:0; border-radius:var(--radius-md);');
+                frame.setAttribute('allow', allow);
+                frame.setAttribute('allowfullscreen', '');
+                frame.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+                facade.replaceWith(frame);
+            }, { once: true });
         }
 
         // Hero CTAs
@@ -1196,8 +1242,19 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             
             playPauseButton.addEventListener('click', function() {
-                if (!youtubePlayer) return;
-                
+                // First press on a page that has not loaded the player yet: this
+                // is the moment the visitor asks, so it is the moment we fetch.
+                if (!youtubePlayer) {
+                    if (book.videoId) {
+                        const container = document.getElementById('youtube-player');
+                        if (container) container.innerHTML = '';
+                        loadYouTubeVideo(book.videoId);
+                        this.innerHTML = '<i class="pause-icon"></i>';
+                        playerState.isPlaying = true;
+                    }
+                    return;
+                }
+
                 if (playerState.isPlaying) {
                     youtubePlayer.pauseVideo();
                     this.innerHTML = '<i class="play-icon"></i>';
@@ -1261,32 +1318,49 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // Initialize YouTube player
-    window.onYouTubeIframeAPIReady = function() {
-        try {
-            // The API will call this function when it's ready
-            if (currentBook && currentBook.videoId) {
-                loadYouTubeVideo(currentBook.videoId);
-            }
-        } catch (error) {
-            console.error('YouTube API initialization failed:', error);
-            showYouTubeError('Errore durante l\'inizializzazione del lettore video');
-        }
-    };
+    // The YouTube API is fetched on the first play, never on page load.
+    //
+    // Loading it from the document head contacted Google for every visitor of
+    // every page, and — because the player was created with autoplay as soon
+    // as the API announced itself — a recording began buffering before anyone
+    // had asked for one. Deferring the fetch to an explicit play makes the
+    // request the act of asking, which is why this site no longer needs a
+    // banner to consent to something it does not do unprompted.
+    let youtubeApiPromise = null;
+
+    function ensureYouTubeApi() {
+        if (window.YT && window.YT.Player) return Promise.resolve();
+        if (youtubeApiPromise) return youtubeApiPromise;
+
+        youtubeApiPromise = new Promise((resolve, reject) => {
+            window.onYouTubeIframeAPIReady = resolve;
+            const script = document.createElement('script');
+            script.src = 'https://www.youtube.com/iframe_api';
+            script.async = true;
+            script.onerror = () => {
+                youtubeApiPromise = null;  // a later press may still succeed
+                reject(new Error('YouTube API could not be loaded'));
+            };
+            document.head.appendChild(script);
+        });
+        return youtubeApiPromise;
+    }
     
     /**
      * Load and initialize a YouTube video player
      * @param {string} videoId - The YouTube video ID
      * @returns {void}
      */
-    function loadYouTubeVideo(videoId) {
+    async function loadYouTubeVideo(videoId) {
         try {
-            // Check if YouTube API is available
-            if (typeof YT === 'undefined' || typeof YT.Player === 'undefined') {
+            // Fetch the API now, on the visitor's own initiative.
+            try {
+                await ensureYouTubeApi();
+            } catch (apiError) {
                 showYouTubeError('L\'API di YouTube non è disponibile. Controlla la connessione.');
                 return;
             }
-            
+
             // Clear previous player
             if (youtubePlayer) {
                 try {
