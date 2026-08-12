@@ -52,8 +52,8 @@ jobs:
       # (Both scripts have already run and consumed augmented.json above.)
       - name: Prune non-public files
         run: |
-          rm -f augmented.json requirements.txt *.py
-          rm -rf docs deploy
+          rm -f augmented.json requirements.txt *.py embed_status.json embed_replacements.json
+          rm -rf docs deploy .claude .github
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
