@@ -486,8 +486,9 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
                 f'<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z"/></svg>'
                 f'</button>'
                 f'<p class="bp-facade-note">Premi play per caricare il lettore. Solo allora '
-                f'{e(provider)} riceve il tuo indirizzo IP e puo\u0300 impostare cookie: '
-                f'finche\u0301 non premi, questa pagina non contatta nessun servizio esterno.</p>'
+                f'{e(provider)} riceve il tuo indirizzo IP e puo\u0300 impostare cookie. '
+                f'Fino a quel momento questa pagina non contatta alcun servizio esterno: '
+                f'copertina, testo e risorse sono serviti da audiolibri.org.</p>'
                 f'{fallback}</div>{FACADE_SCRIPT}')
 
     player = ""
@@ -1063,7 +1064,7 @@ def build_about():
     <ul>
       <li><strong>Gratis e senza registrazione.</strong> Nessun account, nessun abbonamento, nessuna carta di credito: apri e ascolti.</li>
       <li><strong>Nel rispetto delle regole.</strong> Il catalogo raccoglie opere di pubblico dominio e registrazioni condivise liberamente.</li>
-      <li><strong>Rispettoso della tua privacy.</strong> Nessun cookie di tracciamento e nessuna terza parte contattata finché non premi play.</li>
+      <li><strong>Rispettoso della tua privacy.</strong> Nessun cookie di tracciamento e nessuna terza parte contattata finché non premi play: anche le copertine sono servite dal nostro dominio.</li>
       <li><strong>Aperto e trasparente.</strong> Un progetto open source e senza scopo di lucro: il codice è pubblico e chiunque può contribuire.</li>
     </ul>
 
