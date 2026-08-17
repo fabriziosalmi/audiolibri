@@ -19,6 +19,7 @@ Output: index.min.json  (app.js fetches this instead of augmented.json)
 import json
 import gzip
 import os
+import re
 import sys
 
 SRC_CANDIDATES = ["augmented.json", "audiobooks.json"]
@@ -36,7 +37,7 @@ TAGS_MAX = 12
 KEEP = {
     "real_title", "title", "part_display", "series", "part",
     "real_author", "real_genre",
-    "thumbnail", "audio_url", "audio_file", "audio_chapters",
+    "audio_url", "audio_file", "audio_chapters",
     "duration", "url", "channel", "channel_url", "categories",
     "upload_date", "view_count", "like_count",
     "source", "embed_type", "embed_url", "license",
@@ -48,6 +49,21 @@ def pick_source():
         if os.path.exists(name):
             return name
     sys.exit(f"No source dataset found (looked for {SRC_CANDIDATES}).")
+
+
+def _video_id(url):
+    m = re.search(r"(?:v=|youtu\.be/|embed/)([\w-]{11})", url or "")
+    return m.group(1) if m else ""
+
+
+def thumb_path(url):
+    """Local cover path for the home SPA (320w for cards; app.js derives 640w by
+    swapping the suffix). Falls back to the local placeholder when the thumbnail
+    could not be fetched, so the browser never touches i.ytimg.com and never 404s."""
+    vid = _video_id(url)
+    if vid and os.path.exists(f"assets/thumbs/{vid}-320.webp"):
+        return f"/assets/thumbs/{vid}-320.webp"
+    return "/assets/thumbs/placeholder-320.webp"
 
 
 def reduce_record(book):
@@ -63,6 +79,9 @@ def reduce_record(book):
     tags = book.get("tags")
     if isinstance(tags, list) and tags:
         out["tags"] = tags[:TAGS_MAX]
+
+    # Local, self-hosted cover path (replaces the client building an i.ytimg URL).
+    out["thumb"] = thumb_path(book.get("url", ""))
 
     return out
 

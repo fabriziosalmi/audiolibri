@@ -279,11 +279,22 @@ def shell(head_html, main_html, with_fallback=False):
             + (FALLBACK_SCRIPT if with_fallback else "") + "\n</body>\n</html>")
 
 
+def thumb_local(vid, w, absolute=False):
+    """Local self-hosted cover path (WebP), replacing the i.ytimg.com URL. Falls
+    back to the placeholder when the thumbnail was not fetched, so the browser
+    never contacts Google and never gets a 404."""
+    if vid and (ROOT / f"assets/thumbs/{vid}-{w}.webp").exists():
+        rel = f"/assets/thumbs/{vid}-{w}.webp"
+    else:
+        rel = f"/assets/thumbs/placeholder-{w}.webp"
+    return f"{SITE}{rel}" if absolute else rel
+
+
 def card_link(b) -> str:
     vid = video_id(b)
     t, a = display_title_of(b), author_of(b)
     hue = sum(ord(c) for c in (vid or t)) % 360
-    thumb = f"https://i.ytimg.com/vi/{vid}/mqdefault.jpg" if vid else b.get("thumbnail", "")
+    thumb = thumb_local(vid, 320)
     initial = e((t or "?").strip()[:1].upper())
     return f"""<a class="nf-card" href="/audiolibro/{book_slug(b)}/" aria-label="{e(t)} di {e(a)}">
   <span class="nf-card-cover" style="--cover-hue:{hue}" data-initial="{initial}">
@@ -359,7 +370,7 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
     channel = (b.get("channel") or "").strip()
     dur, views, likes = b.get("duration") or 0, b.get("view_count") or 0, b.get("like_count") or 0
     published = iso_date(b.get("upload_date", ""))
-    cover = f"https://i.ytimg.com/vi/{embed_vid}/maxresdefault.jpg" if embed_vid else b.get("thumbnail", "")
+    cover = thumb_local(embed_vid, 640, absolute=True)
     rel_dir = f"audiolibro/{book_slug(b)}"
     canonical = f"{SITE}/{rel_dir}/"
     embed_type = b.get("embed_type", "youtube" if vid else "audio")
@@ -558,7 +569,7 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
             """
             
         player = f"""
-        <audio id="audio-player-static" class="bp-player" style="height:54px; width:100%; border-radius:var(--radius-md); margin-bottom:1rem;" controls preload="metadata">
+        <audio id="audio-player-static" class="bp-player" style="height:54px; width:100%; border-radius:var(--radius-md); margin-bottom:1rem;" controls preload="none">
             <source src="{e(audio_url)}" type="audio/mpeg">
             Il tuo browser non supporta l'elemento audio.
         </audio>

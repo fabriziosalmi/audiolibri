@@ -192,6 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 description: book.real_synopsis || book.description || 'No description available.',
                 genre: book.real_genre || '',
                 coverImage: book.thumbnail || '',
+                thumb: book.thumb || '',
                 audioUrl: book.audio_url || book.audio_file || '',
                 audioChapters: book.audio_chapters || [],
                 duration: book.duration || 0,
@@ -503,7 +504,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="nf-row-scroller">
                         ${row.books.map(b => {
                             const hue = [...String(b.id)].reduce((h, c) => h + c.charCodeAt(0), 0) % 360;
-                            const thumb = b.videoId ? `https://i.ytimg.com/vi/${b.videoId}/mqdefault.jpg` : b.coverImage;
+                            const thumb = b.thumb || b.coverImage;
                             const initial = esc((b.title || '?').trim().charAt(0).toUpperCase());
                             return `
                             <button type="button" class="nf-card" data-id="${esc(b.id)}" aria-label="${esc(b.title)} di ${esc(b.author)}">
@@ -1029,10 +1030,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const heroBackdrop = bookCard.querySelector('.hero-backdrop');
         if (heroBackdrop) {
-            if (book.coverImage) {
-                // The backdrop is heavily blurred, so a small thumbnail looks identical
-                // to maxres — swap it in to cut ~1 MB off the LCP image on mobile.
-                const bg = book.coverImage.replace('/maxresdefault.', '/mqdefault.').replace('/hqdefault.', '/mqdefault.');
+            if (book.thumb || book.coverImage) {
+                // Local, self-hosted cover (heavily blurred here, so 320w is plenty).
+                // Never contacts any third party.
+                const bg = book.thumb || book.coverImage;
                 heroBackdrop.style.backgroundImage = `url('${bg}')`;
             } else {
                 heroBackdrop.style.background = 'linear-gradient(135deg, #2b303c 0%, #171b26 100%)';
@@ -1590,7 +1591,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function nfCardHTML(book) {
         const esc = (s) => sanitizeText(String(s == null ? '' : s));
         const hue = [...String(book.id)].reduce((h, c) => h + c.charCodeAt(0), 0) % 360;
-        const thumb = book.videoId ? `https://i.ytimg.com/vi/${book.videoId}/mqdefault.jpg` : book.coverImage;
+        const thumb = book.thumb || book.coverImage;
         const initial = esc((book.title || '?').trim().charAt(0).toUpperCase());
         return `
             <button type="button" class="nf-card" data-id="${esc(book.id)}" aria-label="${esc(book.title)} di ${esc(book.author)}">
