@@ -743,6 +743,18 @@ try:
 except FileNotFoundError:
     EMBED_REPLACEMENTS = {}
 
+# Manual denylist (video id or augmented key), one per line; entries listed here are
+# excluded from the whole site. Reversible: remove a line to restore the entry.
+try:
+    DENYLIST = {ln.strip() for ln in (ROOT / "denylist.txt").read_text().splitlines()
+                if ln.strip() and not ln.lstrip().startswith("#")}
+except FileNotFoundError:
+    DENYLIST = set()
+
+
+def _denied(b) -> bool:
+    return video_id(b) in DENYLIST or b.get("id", "") in DENYLIST
+
 
 def _embed_broken(b) -> bool:
     """True if the embed is disabled/removed AND there's no working replacement."""
@@ -1121,7 +1133,7 @@ def main():
     books = json.loads(DATA.read_text())
     for k, b in books.items():
         b["id"] = k
-    valid = [b for b in books.values() if (video_id(b) or b.get("audio_url") or b.get("audio_file") or b.get("embed_url") or b.get("embed_type") == "link_out")]
+    valid = [b for b in books.values() if (video_id(b) or b.get("audio_url") or b.get("audio_file") or b.get("embed_url") or b.get("embed_type") == "link_out") and not _denied(b)]
 
     # Group once: drives both the hub pages and the "related" lists on book pages.
     genres, authors = {}, {}
