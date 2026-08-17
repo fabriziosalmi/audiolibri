@@ -24,3 +24,7 @@ __pycache__/
 # thumbnail build cache + reports (rigenerabili, non serviti)
 .cache/
 build/
+
+# internal docs (audit, CF settings, growth plan): keep out of the public repo
+docs/
+infra/
