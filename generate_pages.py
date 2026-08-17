@@ -260,6 +260,7 @@ def footer_html():
         <a class="footer-link" href="/autori/">Autori</a>
         <a class="footer-link" href="https://github.com/fabriziosalmi/audiolibri/blob/main/ACCESSIBILITY.md" target="_blank" rel="noopener noreferrer">Accessibilità</a>
         <a class="footer-link" href="/privacy.html">Privacy</a>
+        <a class="footer-link" href="/segnalazioni/">Segnalazioni</a>
       </nav>
       <div class="footer-actions">
         <a class="ghost-btn" href="https://github.com/fabriziosalmi/audiolibri" target="_blank" rel="noopener noreferrer" aria-label="Codice sorgente su GitHub">{GITHUB_SVG}<span>GitHub</span></a>
@@ -1077,6 +1078,45 @@ def build_about():
     return rel_dir, shell(head_html, GUIDE_CSS + body, with_fallback=True)
 
 
+def build_takedown(alias=False):
+    """Notice-and-takedown / reporting page. /segnalazioni/ is canonical;
+    /takedown/ is a noindex alias pointing back to it."""
+    rel_dir = "takedown" if alias else "segnalazioni"
+    canonical = f"{SITE}/segnalazioni/"
+    title = "Segnalazioni e rimozioni | Audiolibri.org"
+    description = ("Come segnalare un contenuto e richiederne la rimozione da audiolibri.org: "
+                   "cosa serve, a chi scrivere, tempi di risposta.")
+    breadcrumb = {"@context": "https://schema.org", "@type": "BreadcrumbList",
+                  "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
+                                      {"@type": "ListItem", "position": 2, "name": "Segnalazioni e rimozioni", "item": canonical}]}
+    body = """<div class="bp-wrap bp-guide">
+    <nav class="bp-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <span>Segnalazioni e rimozioni</span></nav>
+    <p class="bp-eyebrow">Segnalazioni</p>
+    <h1 class="bp-title">Segnalazioni e rimozioni</h1>
+    <p class="bp-lead">Audiolibri.org raccoglie audiolibri di pubblico dominio e letture condivise liberamente. Se ritieni che un contenuto violi un diritto, puoi segnalarcelo: valuteremo la rimozione in buona fede.</p>
+
+    <h2>Cosa serve per una segnalazione valida</h2>
+    <ul>
+      <li><strong>URL della scheda</strong> interessata (l'indirizzo della pagina su audiolibri.org).</li>
+      <li><strong>L'opera</strong>: titolo e autore.</li>
+      <li><strong>La titolarita' dei diritti</strong>: chi sei e a che titolo agisci (titolare, editore, avente diritto o suo rappresentante), con una dichiarazione di buona fede.</li>
+      <li><strong>Un recapito</strong> a cui possiamo risponderti.</li>
+    </ul>
+
+    <h2>A chi scrivere</h2>
+    <p>Scrivi a <a href="mailto:fabrizio.salmi@gmail.com?subject=Segnalazione%20audiolibri.org">fabrizio.salmi@gmail.com</a>, indicando "Segnalazione" nell'oggetto.</p>
+
+    <h2>Tempi e procedura</h2>
+    <p>Rispondiamo di norma <strong>entro 7 giorni</strong>. Se la segnalazione e' fondata, rimuoviamo la scheda o la rendiamo non indicizzabile; la rimozione e' tracciata (denylist versionata) e reversibile. Ti aggiorneremo sull'esito.</p>
+
+    <p>Il progetto e' senza scopo di lucro: l'obiettivo e' rispettare i diritti di tutti, mantenendo accessibile cio' che e' liberamente diffondibile.</p>
+
+    <a class="bp-back" href="/">← Torna al catalogo</a>
+  </div>"""
+    head_html = head(title, description, canonical, f"{SITE}/og-cover.png", "website", (breadcrumb,), noindex=alias)
+    return rel_dir, shell(head_html, GUIDE_CSS + body, with_fallback=True)
+
+
 def main():
     books = json.loads(DATA.read_text())
     for k, b in books.items():
@@ -1171,6 +1211,8 @@ def main():
 
     paths.append((write(*build_guide(valid, genre_entries, coll_entries)), TODAY))
     paths.append((write(*build_about()), TODAY))
+    paths.append((write(*build_takedown()), TODAY))
+    write(*build_takedown(alias=True))  # /takedown/ alias: noindex, not in sitemap
 
     (ROOT / "sitemap.xml").write_text(build_sitemap(paths), encoding="utf-8")
     (ROOT / "robots.txt").write_text(
