@@ -1,0 +1,43 @@
+name: Verify
+
+# Build the site and gate on the privacy/security invariants. Runs on every PR and
+# on push to main. Actions are pinned to major tags here; pin to full SHAs via
+# Dependabot for supply-chain hardening.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Build the site
+        run: |
+          python3 build_index.py
+          python3 generate_pages.py all
+
+      - name: No third-party auto-loading hosts
+        run: python3 scripts/verify_no_third_party.py .
+
+      - name: CSP inline-script hashes in sync
+        run: python3 scripts/check_csp_hashes.py .
+
+      - name: security.txt not expiring
+        run: python3 scripts/check_security_txt.py .
+
+      - name: Internal links resolve
+        run: python3 scripts/check_links.py .

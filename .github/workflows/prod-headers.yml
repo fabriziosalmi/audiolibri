@@ -1,0 +1,38 @@
+name: Production headers
+
+# Assert the security headers actually served in production (Cloudflare + GitHub
+# Pages). Runs after a deploy, weekly, and on demand. Independent from the build:
+# it checks the live response, since the CSP and friends are served by Cloudflare.
+
+on:
+  workflow_run:
+    workflows: ["Build & deploy to GitHub Pages"]
+    types: [completed]
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  headers:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check live security headers on audiolibri.org
+        run: |
+          H=$(curl -sSI https://audiolibri.org/)
+          echo "$H"
+          fail=0
+          present() { echo "$H" | grep -qi "$1" && echo "ok present: $1" || { echo "MISSING: $1"; fail=1; }; }
+          absent()  { echo "$H" | grep -qi "$1" && { echo "SHOULD BE ABSENT: $1"; fail=1; } || echo "ok absent: $1"; }
+          present "strict-transport-security"
+          present "content-security-policy"
+          present "x-content-type-options: nosniff"
+          present "referrer-policy"
+          present "permissions-policy"
+          present "cross-origin-opener-policy: same-origin"
+          present "cross-origin-resource-policy: same-origin"
+          absent  "x-xss-protection"
+          absent  "access-control-allow-origin"
+          exit $fail

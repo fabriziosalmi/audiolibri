@@ -291,6 +291,14 @@ def thumb_local(vid, w, absolute=False):
     return f"{SITE}{rel}" if absolute else rel
 
 
+def author_link(author, authored):
+    """Link to /autore/<slug>/ only when that hub page exists (author has >=2
+    titles); otherwise render the name as plain text, to avoid a 404 link."""
+    if author and author != "Autore sconosciuto" and slugify(author) in authored:
+        return f'<a href="/autore/{slugify(author)}/">{e(author)}</a>'
+    return e(author)
+
+
 def card_link(b) -> str:
     vid = video_id(b)
     t, a = display_title_of(b), author_of(b)
@@ -354,7 +362,7 @@ def author_bio(author):
     return ""
 
 
-def build_book_page(b: dict, related=(), in_series=False, series_name=None):
+def build_book_page(b: dict, related=(), in_series=False, series_name=None, authored=frozenset()):
     vid = video_id(b)
     replacement = EMBED_REPLACEMENTS.get(vid)
     embed_vid = replacement or vid  # the id the PLAYER loads; slug/URL stay on `vid`
@@ -445,7 +453,7 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
 
     # Factual "Scheda" block: real, per-title data (reader, year, language, ...)
     # that gives thin pages unique substance without inventing prose.
-    facts = [("Autore", f'<a href="/autore/{slugify(author)}/">{e(author)}</a>')]
+    facts = [("Autore", author_link(author, authored))]
     if channel: facts.append(("Lettore", e(channel)))
     if genre_label: facts.append(("Genere", f'<a href="/genere/{slugify(genre)}/">{e(genre_label)}</a>'))
     if series_slug: facts.append(("Serie", f'<a href="/serie/{series_slug}/">{e(series_name)}</a>'))
@@ -583,7 +591,7 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
     <nav class="bp-crumbs" aria-label="Breadcrumb">{crumb_html}</nav>
     <p class="bp-eyebrow">Audiolibro gratis</p>
     <h1 class="bp-title">{e(title)}</h1>
-    <p class="bp-author">di <b><a href="/autore/{slugify(author)}/">{e(author)}</a></b></p>{series_link_html}
+    <p class="bp-author">di <b>{author_link(author, authored)}</b></p>{series_link_html}
     <div class="bp-chips">{chips}</div>
     {player}
     <section class="bp-synopsis"><h2>Trama</h2><p>{e(synopsis)}</p>{ai_notice}</section>
@@ -1143,6 +1151,9 @@ def main():
             genres.setdefault(g, []).append(b)
         authors.setdefault(author_of(b), []).append(b)
 
+    authored = {slugify(a) for a, items in authors.items()
+                if len(items) >= 2 and a != "Autore sconosciuto"}
+
     # Multi-part series get their own page. Group by SLUG (case/spacing-insensitive)
     # so casing variants of one title ("L'innocenza"/"L'Innocenza") merge into a
     # single page instead of colliding on the same /serie/<slug>/ URL.
@@ -1168,14 +1179,14 @@ def main():
             sys.exit(f"id {vid} not found")
         b = books[vid]
         in_s, sname = series_args(b)
-        rel_dir, page = build_book_page(b, related_for(b, authors, genres), in_series=in_s, series_name=sname)
+        rel_dir, page = build_book_page(b, related_for(b, authors, genres), in_series=in_s, series_name=sname, authored=authored)
         print("wrote", write(rel_dir, page))
         return
 
     paths = []
     for b in valid:
         in_s, sname = series_args(b)
-        rel_dir, page = build_book_page(b, related_for(b, authors, genres), in_series=in_s, series_name=sname)
+        rel_dir, page = build_book_page(b, related_for(b, authors, genres), in_series=in_s, series_name=sname, authored=authored)
         w = write(rel_dir, page)
         if not _embed_dead(b):
             paths.append((w, iso_date(b.get("upload_date", "")) or TODAY))
