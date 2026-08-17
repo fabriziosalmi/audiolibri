@@ -1,0 +1,4 @@
+Contact: mailto:fabrizio.salmi@gmail.com
+Expires: 2027-08-12T00:00:00.000Z
+Preferred-Languages: it, en
+Canonical: https://audiolibri.org/.well-known/security.txt

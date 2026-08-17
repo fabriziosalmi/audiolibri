@@ -260,6 +260,7 @@ def footer_html():
         <a class="footer-link" href="/autori/">Autori</a>
         <a class="footer-link" href="https://github.com/fabriziosalmi/audiolibri/blob/main/ACCESSIBILITY.md" target="_blank" rel="noopener noreferrer">Accessibilità</a>
         <a class="footer-link" href="/privacy.html">Privacy</a>
+        <a class="footer-link" href="/segnalazioni/">Segnalazioni</a>
       </nav>
       <div class="footer-actions">
         <a class="ghost-btn" href="https://github.com/fabriziosalmi/audiolibri" target="_blank" rel="noopener noreferrer" aria-label="Codice sorgente su GitHub">{GITHUB_SVG}<span>GitHub</span></a>
@@ -279,11 +280,30 @@ def shell(head_html, main_html, with_fallback=False):
             + (FALLBACK_SCRIPT if with_fallback else "") + "\n</body>\n</html>")
 
 
+def thumb_local(vid, w, absolute=False):
+    """Local self-hosted cover path (WebP), replacing the i.ytimg.com URL. Falls
+    back to the placeholder when the thumbnail was not fetched, so the browser
+    never contacts Google and never gets a 404."""
+    if vid and (ROOT / f"assets/thumbs/{vid}-{w}.webp").exists():
+        rel = f"/assets/thumbs/{vid}-{w}.webp"
+    else:
+        rel = f"/assets/thumbs/placeholder-{w}.webp"
+    return f"{SITE}{rel}" if absolute else rel
+
+
+def author_link(author, authored):
+    """Link to /autore/<slug>/ only when that hub page exists (author has >=2
+    titles); otherwise render the name as plain text, to avoid a 404 link."""
+    if author and author != "Autore sconosciuto" and slugify(author) in authored:
+        return f'<a href="/autore/{slugify(author)}/">{e(author)}</a>'
+    return e(author)
+
+
 def card_link(b) -> str:
     vid = video_id(b)
     t, a = display_title_of(b), author_of(b)
     hue = sum(ord(c) for c in (vid or t)) % 360
-    thumb = f"https://i.ytimg.com/vi/{vid}/mqdefault.jpg" if vid else b.get("thumbnail", "")
+    thumb = thumb_local(vid, 320)
     initial = e((t or "?").strip()[:1].upper())
     return f"""<a class="nf-card" href="/audiolibro/{book_slug(b)}/" aria-label="{e(t)} di {e(a)}">
   <span class="nf-card-cover" style="--cover-hue:{hue}" data-initial="{initial}">
@@ -342,7 +362,7 @@ def author_bio(author):
     return ""
 
 
-def build_book_page(b: dict, related=(), in_series=False, series_name=None):
+def build_book_page(b: dict, related=(), in_series=False, series_name=None, authored=frozenset()):
     vid = video_id(b)
     replacement = EMBED_REPLACEMENTS.get(vid)
     embed_vid = replacement or vid  # the id the PLAYER loads; slug/URL stay on `vid`
@@ -359,7 +379,7 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
     channel = (b.get("channel") or "").strip()
     dur, views, likes = b.get("duration") or 0, b.get("view_count") or 0, b.get("like_count") or 0
     published = iso_date(b.get("upload_date", ""))
-    cover = f"https://i.ytimg.com/vi/{embed_vid}/maxresdefault.jpg" if embed_vid else b.get("thumbnail", "")
+    cover = thumb_local(embed_vid, 640, absolute=True)
     rel_dir = f"audiolibro/{book_slug(b)}"
     canonical = f"{SITE}/{rel_dir}/"
     embed_type = b.get("embed_type", "youtube" if vid else "audio")
@@ -433,7 +453,7 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
 
     # Factual "Scheda" block: real, per-title data (reader, year, language, ...)
     # that gives thin pages unique substance without inventing prose.
-    facts = [("Autore", f'<a href="/autore/{slugify(author)}/">{e(author)}</a>')]
+    facts = [("Autore", author_link(author, authored))]
     if channel: facts.append(("Lettore", e(channel)))
     if genre_label: facts.append(("Genere", f'<a href="/genere/{slugify(genre)}/">{e(genre_label)}</a>'))
     if series_slug: facts.append(("Serie", f'<a href="/serie/{series_slug}/">{e(series_name)}</a>'))
@@ -475,8 +495,9 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
                 f'<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z"/></svg>'
                 f'</button>'
                 f'<p class="bp-facade-note">Premi play per caricare il lettore. Solo allora '
-                f'{e(provider)} riceve il tuo indirizzo IP e puo\u0300 impostare cookie: '
-                f'finche\u0301 non premi, questa pagina non contatta nessun servizio esterno.</p>'
+                f'{e(provider)} riceve il tuo indirizzo IP e puo\u0300 impostare cookie. '
+                f'Fino a quel momento questa pagina non contatta alcun servizio esterno: '
+                f'copertina, testo e risorse sono serviti da audiolibri.org.</p>'
                 f'{fallback}</div>{FACADE_SCRIPT}')
 
     player = ""
@@ -558,7 +579,7 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
             """
             
         player = f"""
-        <audio id="audio-player-static" class="bp-player" style="height:54px; width:100%; border-radius:var(--radius-md); margin-bottom:1rem;" controls preload="metadata">
+        <audio id="audio-player-static" class="bp-player" style="height:54px; width:100%; border-radius:var(--radius-md); margin-bottom:1rem;" controls preload="none">
             <source src="{e(audio_url)}" type="audio/mpeg">
             Il tuo browser non supporta l'elemento audio.
         </audio>
@@ -570,7 +591,7 @@ def build_book_page(b: dict, related=(), in_series=False, series_name=None):
     <nav class="bp-crumbs" aria-label="Breadcrumb">{crumb_html}</nav>
     <p class="bp-eyebrow">Audiolibro gratis</p>
     <h1 class="bp-title">{e(title)}</h1>
-    <p class="bp-author">di <b><a href="/autore/{slugify(author)}/">{e(author)}</a></b></p>{series_link_html}
+    <p class="bp-author">di <b>{author_link(author, authored)}</b></p>{series_link_html}
     <div class="bp-chips">{chips}</div>
     {player}
     <section class="bp-synopsis"><h2>Trama</h2><p>{e(synopsis)}</p>{ai_notice}</section>
@@ -729,6 +750,18 @@ try:
     EMBED_REPLACEMENTS = {k: str(v) for k, v in json.loads((ROOT / "embed_replacements.json").read_text()).items()}
 except FileNotFoundError:
     EMBED_REPLACEMENTS = {}
+
+# Manual denylist (video id or augmented key), one per line; entries listed here are
+# excluded from the whole site. Reversible: remove a line to restore the entry.
+try:
+    DENYLIST = {ln.strip() for ln in (ROOT / "denylist.txt").read_text().splitlines()
+                if ln.strip() and not ln.lstrip().startswith("#")}
+except FileNotFoundError:
+    DENYLIST = set()
+
+
+def _denied(b) -> bool:
+    return video_id(b) in DENYLIST or b.get("id", "") in DENYLIST
 
 
 def _embed_broken(b) -> bool:
@@ -1052,7 +1085,7 @@ def build_about():
     <ul>
       <li><strong>Gratis e senza registrazione.</strong> Nessun account, nessun abbonamento, nessuna carta di credito: apri e ascolti.</li>
       <li><strong>Nel rispetto delle regole.</strong> Il catalogo raccoglie opere di pubblico dominio e registrazioni condivise liberamente.</li>
-      <li><strong>Rispettoso della tua privacy.</strong> Nessun cookie di tracciamento e nessuna terza parte contattata finché non premi play.</li>
+      <li><strong>Rispettoso della tua privacy.</strong> Nessun cookie di tracciamento e nessuna terza parte contattata finché non premi play: anche le copertine sono servite dal nostro dominio.</li>
       <li><strong>Aperto e trasparente.</strong> Un progetto open source e senza scopo di lucro: il codice è pubblico e chiunque può contribuire.</li>
     </ul>
 
@@ -1065,11 +1098,50 @@ def build_about():
     return rel_dir, shell(head_html, GUIDE_CSS + body, with_fallback=True)
 
 
+def build_takedown(alias=False):
+    """Notice-and-takedown / reporting page. /segnalazioni/ is canonical;
+    /takedown/ is a noindex alias pointing back to it."""
+    rel_dir = "takedown" if alias else "segnalazioni"
+    canonical = f"{SITE}/segnalazioni/"
+    title = "Segnalazioni e rimozioni | Audiolibri.org"
+    description = ("Come segnalare un contenuto e richiederne la rimozione da audiolibri.org: "
+                   "cosa serve, a chi scrivere, tempi di risposta.")
+    breadcrumb = {"@context": "https://schema.org", "@type": "BreadcrumbList",
+                  "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
+                                      {"@type": "ListItem", "position": 2, "name": "Segnalazioni e rimozioni", "item": canonical}]}
+    body = """<div class="bp-wrap bp-guide">
+    <nav class="bp-crumbs" aria-label="Breadcrumb"><a href="/">Home</a> › <span>Segnalazioni e rimozioni</span></nav>
+    <p class="bp-eyebrow">Segnalazioni</p>
+    <h1 class="bp-title">Segnalazioni e rimozioni</h1>
+    <p class="bp-lead">Audiolibri.org raccoglie audiolibri di pubblico dominio e letture condivise liberamente. Se ritieni che un contenuto violi un diritto, puoi segnalarcelo: valuteremo la rimozione in buona fede.</p>
+
+    <h2>Cosa serve per una segnalazione valida</h2>
+    <ul>
+      <li><strong>URL della scheda</strong> interessata (l'indirizzo della pagina su audiolibri.org).</li>
+      <li><strong>L'opera</strong>: titolo e autore.</li>
+      <li><strong>La titolarita' dei diritti</strong>: chi sei e a che titolo agisci (titolare, editore, avente diritto o suo rappresentante), con una dichiarazione di buona fede.</li>
+      <li><strong>Un recapito</strong> a cui possiamo risponderti.</li>
+    </ul>
+
+    <h2>A chi scrivere</h2>
+    <p>Scrivi a <a href="mailto:fabrizio.salmi@gmail.com?subject=Segnalazione%20audiolibri.org">fabrizio.salmi@gmail.com</a>, indicando "Segnalazione" nell'oggetto.</p>
+
+    <h2>Tempi e procedura</h2>
+    <p>Rispondiamo di norma <strong>entro 7 giorni</strong>. Se la segnalazione e' fondata, rimuoviamo la scheda o la rendiamo non indicizzabile; la rimozione e' tracciata (denylist versionata) e reversibile. Ti aggiorneremo sull'esito.</p>
+
+    <p>Il progetto e' senza scopo di lucro: l'obiettivo e' rispettare i diritti di tutti, mantenendo accessibile cio' che e' liberamente diffondibile.</p>
+
+    <a class="bp-back" href="/">← Torna al catalogo</a>
+  </div>"""
+    head_html = head(title, description, canonical, f"{SITE}/og-cover.png", "website", (breadcrumb,), noindex=alias)
+    return rel_dir, shell(head_html, GUIDE_CSS + body, with_fallback=True)
+
+
 def main():
     books = json.loads(DATA.read_text())
     for k, b in books.items():
         b["id"] = k
-    valid = [b for b in books.values() if (video_id(b) or b.get("audio_url") or b.get("audio_file") or b.get("embed_url") or b.get("embed_type") == "link_out")]
+    valid = [b for b in books.values() if (video_id(b) or b.get("audio_url") or b.get("audio_file") or b.get("embed_url") or b.get("embed_type") == "link_out") and not _denied(b)]
 
     # Group once: drives both the hub pages and the "related" lists on book pages.
     genres, authors = {}, {}
@@ -1078,6 +1150,9 @@ def main():
         if g:
             genres.setdefault(g, []).append(b)
         authors.setdefault(author_of(b), []).append(b)
+
+    authored = {slugify(a) for a, items in authors.items()
+                if len(items) >= 2 and a != "Autore sconosciuto"}
 
     # Multi-part series get their own page. Group by SLUG (case/spacing-insensitive)
     # so casing variants of one title ("L'innocenza"/"L'Innocenza") merge into a
@@ -1104,14 +1179,14 @@ def main():
             sys.exit(f"id {vid} not found")
         b = books[vid]
         in_s, sname = series_args(b)
-        rel_dir, page = build_book_page(b, related_for(b, authors, genres), in_series=in_s, series_name=sname)
+        rel_dir, page = build_book_page(b, related_for(b, authors, genres), in_series=in_s, series_name=sname, authored=authored)
         print("wrote", write(rel_dir, page))
         return
 
     paths = []
     for b in valid:
         in_s, sname = series_args(b)
-        rel_dir, page = build_book_page(b, related_for(b, authors, genres), in_series=in_s, series_name=sname)
+        rel_dir, page = build_book_page(b, related_for(b, authors, genres), in_series=in_s, series_name=sname, authored=authored)
         w = write(rel_dir, page)
         if not _embed_dead(b):
             paths.append((w, iso_date(b.get("upload_date", "")) or TODAY))
@@ -1159,6 +1234,8 @@ def main():
 
     paths.append((write(*build_guide(valid, genre_entries, coll_entries)), TODAY))
     paths.append((write(*build_about()), TODAY))
+    paths.append((write(*build_takedown()), TODAY))
+    write(*build_takedown(alias=True))  # /takedown/ alias: noindex, not in sitemap
 
     (ROOT / "sitemap.xml").write_text(build_sitemap(paths), encoding="utf-8")
     (ROOT / "robots.txt").write_text(

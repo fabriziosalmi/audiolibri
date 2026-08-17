@@ -1,0 +1,6 @@
+# denylist.txt - identificatori delle schede da ESCLUDERE dal sito, una per riga.
+# Ogni riga e' un video id di YouTube oppure la chiave in augmented.json.
+# Tracciato e reversibile: rimuovi una riga per ripristinare la scheda.
+# Da popolare a mano dopo aver rivisto i candidati in docs/audit/06-catalog-review.md
+# (report interno, non versionato). La rimozione e' una decisione umana: qui non si
+# conclude sulla liceita' di alcun contenuto.

@@ -20,3 +20,11 @@ test_sandbox/
 audiobooks.json.backup_*
 __pycache__/
 .claude/
+
+# thumbnail build cache + reports (rigenerabili, non serviti)
+.cache/
+build/
+
+# internal docs (audit, CF settings, growth plan): keep out of the public repo
+docs/
+infra/
