@@ -1,0 +1,3759 @@
+[
+  {
+    "week": 1,
+    "mese": "Gennaio",
+    "data_range": "1-7 Gennaio",
+    "dominio": "Letteratura Classica & Grandi Romanzi",
+    "tema": "Nuovi Inizi: I Capolavori Fondamentali della Letteratura Mondiale",
+    "scopo": "Intercettare i propositi di lettura di inizio anno con i massimi capolavori narrativi ottocenteschi.",
+    "kw": "audiolibri classici completi, romanzi russi gratis, dostoevskij tolstoj audiolibri",
+    "authors": [
+      {
+        "name": "Charles Dickens",
+        "slug": "charles-dickens",
+        "url": "https://audiolibri.org/autore/charles-dickens/"
+      },
+      {
+        "name": "Fëdor Dostoevskij",
+        "slug": "fedor-dostoevskij",
+        "url": "https://audiolibri.org/autore/fedor-dostoevskij/"
+      },
+      {
+        "name": "Lev Tolstoj",
+        "slug": "lev-tolstoj",
+        "url": "https://audiolibri.org/autore/lev-tolstoj/"
+      },
+      {
+        "name": "Victor Hugo",
+        "slug": "victor-hugo",
+        "url": "https://audiolibri.org/autore/victor-hugo/"
+      }
+    ],
+    "books": [
+      {
+        "title": "L'IDIOOTA",
+        "slug": "l-idioota-6EGRcKo79yg",
+        "url": "https://audiolibri.org/audiolibro/l-idioota-6EGRcKo79yg/",
+        "author": "Fëdor Dostoevskij",
+        "author_url": "https://audiolibri.org/autore/fedor-dostoevskij/",
+        "duration": 1725
+      },
+      {
+        "title": "L' ULTIMO GIORNO DI UN CONDANNATO A MORTE",
+        "slug": "l-ultimo-giorno-di-un-condannato-a-morte-N4c2Z7nOSSk",
+        "url": "https://audiolibri.org/audiolibro/l-ultimo-giorno-di-un-condannato-a-morte-N4c2Z7nOSSk/",
+        "author": "Victor Hugo",
+        "author_url": "https://audiolibri.org/autore/victor-hugo/",
+        "duration": 170
+      },
+      {
+        "title": "Il Naufragio della Golden Mary",
+        "slug": "il-naufragio-della-golden-mary-bEcvqaTTsrs",
+        "url": "https://audiolibri.org/audiolibro/il-naufragio-della-golden-mary-bEcvqaTTsrs/",
+        "author": "Charles Dickens",
+        "author_url": "https://audiolibri.org/autore/charles-dickens/",
+        "duration": 81
+      },
+      {
+        "title": "Il lavorante Emeljan e il tamburo vuoto",
+        "slug": "il-lavorante-emeljan-e-il-tamburo-vuoto-D4qS9Tmpixk",
+        "url": "https://audiolibri.org/audiolibro/il-lavorante-emeljan-e-il-tamburo-vuoto-D4qS9Tmpixk/",
+        "author": "Lev Tolstoj",
+        "author_url": "https://audiolibri.org/autore/lev-tolstoj/",
+        "duration": 24
+      }
+    ],
+    "ext": [
+      [
+        "Liber Liber",
+        "https://www.liberliber.it/"
+      ],
+      [
+        "Treccani Letteratura",
+        "https://www.treccani.it/"
+      ]
+    ]
+  },
+  {
+    "week": 2,
+    "mese": "Gennaio",
+    "data_range": "8-14 Gennaio",
+    "dominio": "Giallo Classico & Metodo Deduttivo",
+    "tema": "Logica, Indagine ed Enigmi: I Maestri del Giallo Deduttivo",
+    "scopo": "Coinvolgere l'utenza che rientra al lavoro con racconti gialli brillanti basati su logica e osservazione.",
+    "kw": "audiolibri gialli gratis, sherlock holmes audiolibro italiano, padre brown racconti",
+    "authors": [
+      {
+        "name": "Arthur Conan Doyle",
+        "slug": "arthur-conan-doyle",
+        "url": "https://audiolibri.org/autore/arthur-conan-doyle/"
+      },
+      {
+        "name": "Edgar Allan Poe",
+        "slug": "edgar-allan-poe",
+        "url": "https://audiolibri.org/autore/edgar-allan-poe/"
+      },
+      {
+        "name": "G.K. Chesterton",
+        "slug": "g-k-chesterton",
+        "url": "https://audiolibri.org/autore/g-k-chesterton/"
+      },
+      {
+        "name": "Georges Simenon",
+        "slug": "georges-simenon",
+        "url": "https://audiolibri.org/autore/georges-simenon/"
+      }
+    ],
+    "books": [
+      {
+        "title": "Metzengerstein",
+        "slug": "metzengerstein-Uzoyi3OTgsk",
+        "url": "https://audiolibri.org/audiolibro/metzengerstein-Uzoyi3OTgsk/",
+        "author": "Edgar Allan Poe",
+        "author_url": "https://audiolibri.org/autore/edgar-allan-poe/",
+        "duration": 22
+      },
+      {
+        "title": "Sherlock Holmes: La Valle della Paura",
+        "slug": "sherlock-holmes-la-valle-della-paura-iSK3C2d8rd4",
+        "url": "https://audiolibri.org/audiolibro/sherlock-holmes-la-valle-della-paura-iSK3C2d8rd4/",
+        "author": "Arthur Conan Doyle",
+        "author_url": "https://audiolibri.org/autore/arthur-conan-doyle/",
+        "duration": 338
+      },
+      {
+        "title": "La Saggezza di Padre Brown",
+        "slug": "la-saggezza-di-padre-brown-fPLcczHf5LI",
+        "url": "https://audiolibri.org/audiolibro/la-saggezza-di-padre-brown-fPLcczHf5LI/",
+        "author": "G.K. Chesterton",
+        "author_url": "https://audiolibri.org/autore/g-k-chesterton/",
+        "duration": 41
+      },
+      {
+        "title": "L'impiccato di Saint-Pholien",
+        "slug": "l-impiccato-di-saint-pholien-32zkrrhvy0k",
+        "url": "https://audiolibri.org/audiolibro/l-impiccato-di-saint-pholien-32zkrrhvy0k/",
+        "author": "Georges Simenon",
+        "author_url": "https://audiolibri.org/autore/georges-simenon/",
+        "duration": 243
+      }
+    ],
+    "ext": [
+      [
+        "Sherlock Holmes Society",
+        "https://www.sherlock-holmes.org.uk/"
+      ],
+      [
+        "Wikisource Gialli",
+        "https://it.wikisource.org/"
+      ]
+    ]
+  },
+  {
+    "week": 3,
+    "mese": "Gennaio",
+    "data_range": "15-21 Gennaio",
+    "dominio": "Horror Gotico & Terrore Psicologico",
+    "tema": "Le Notti d'Inverno e l'Inconscio: Il Brivido Gotico",
+    "scopo": "Sfruttare le serate fredde invernali con racconti di paura, brivido gotico e mistero psicologico.",
+    "kw": "racconti del terrore audiolibri, edgar allan poe gratis, horror gotico italiano",
+    "authors": [
+      {
+        "name": "Ambrose Bierce",
+        "slug": "ambrose-bierce",
+        "url": "https://audiolibri.org/autore/ambrose-bierce/"
+      },
+      {
+        "name": "Edgar Allan Poe",
+        "slug": "edgar-allan-poe",
+        "url": "https://audiolibri.org/autore/edgar-allan-poe/"
+      },
+      {
+        "name": "Guy de Maupassant",
+        "slug": "guy-de-maupassant",
+        "url": "https://audiolibri.org/autore/guy-de-maupassant/"
+      },
+      {
+        "name": "H.P. Lovecraft",
+        "slug": "h-p-lovecraft",
+        "url": "https://audiolibri.org/autore/h-p-lovecraft/"
+      }
+    ],
+    "books": [
+      {
+        "title": "LA HORLA I",
+        "slug": "la-horla-i-JwfnOdqhdXQ",
+        "url": "https://audiolibri.org/audiolibro/la-horla-i-JwfnOdqhdXQ/",
+        "author": "Guy de Maupassant",
+        "author_url": "https://audiolibri.org/autore/guy-de-maupassant/",
+        "duration": 21
+      },
+      {
+        "title": "L'ORRORE DI DUNWICH",
+        "slug": "l-orrore-di-dunwich-gvl9uFxcYi8",
+        "url": "https://audiolibri.org/audiolibro/l-orrore-di-dunwich-gvl9uFxcYi8/",
+        "author": "H.P. Lovecraft",
+        "author_url": "https://audiolibri.org/autore/h-p-lovecraft/",
+        "duration": 129
+      },
+      {
+        "title": "UN CITTADINO DI CARCOSA",
+        "slug": "un-cittadino-di-carcosa-cMcQ-_46ZpU",
+        "url": "https://audiolibri.org/audiolibro/un-cittadino-di-carcosa-cMcQ-_46ZpU/",
+        "author": "Ambrose Bierce",
+        "author_url": "https://audiolibri.org/autore/ambrose-bierce/",
+        "duration": 11
+      },
+      {
+        "title": "Mister Mistero di Marie Roget",
+        "slug": "mister-mistero-di-marie-roget-fHK7FYyItN8",
+        "url": "https://audiolibri.org/audiolibro/mister-mistero-di-marie-roget-fHK7FYyItN8/",
+        "author": "Edgar Allan Poe",
+        "author_url": "https://audiolibri.org/autore/edgar-allan-poe/",
+        "duration": 89
+      }
+    ],
+    "ext": [
+      [
+        "Poe Museum",
+        "https://poemuseum.org/"
+      ],
+      [
+        "H.P. Lovecraft Society",
+        "https://www.hplhs.org/"
+      ]
+    ]
+  },
+  {
+    "week": 4,
+    "mese": "Gennaio",
+    "data_range": "22-28 Gennaio",
+    "dominio": "Storia, Memoria & Testimonianza",
+    "tema": "Giorno della Memoria: Diari, Documenti e la Tragedia del Novecento",
+    "scopo": "Posizionarsi sul forte picco stagionale del 27 Gennaio (Giorno della Memoria) con testi storici ed educativi.",
+    "kw": "giorno della memoria audiolibri, diari storici ascoltare gratis, memoria olocausto",
+    "authors": [
+      {
+        "name": "Carlo Carretto",
+        "slug": "carlo-carretto",
+        "url": "https://audiolibri.org/autore/carlo-carretto/"
+      },
+      {
+        "name": "Fëdor Dostoevskij",
+        "slug": "fedor-dostoevskij",
+        "url": "https://audiolibri.org/autore/fedor-dostoevskij/"
+      },
+      {
+        "name": "Virginia Woolf",
+        "slug": "virginia-woolf",
+        "url": "https://audiolibri.org/autore/virginia-woolf/"
+      }
+    ],
+    "books": [
+      {
+        "title": "LA MITE",
+        "slug": "la-mite-FsCWRZJYIRk",
+        "url": "https://audiolibri.org/audiolibro/la-mite-FsCWRZJYIRk/",
+        "author": "Fëdor Dostoevskij",
+        "author_url": "https://audiolibri.org/autore/fedor-dostoevskij/",
+        "duration": 106
+      },
+      {
+        "title": "LE ONDE",
+        "slug": "le-onde-EwvJFvcm0iY",
+        "url": "https://audiolibri.org/audiolibro/le-onde-EwvJFvcm0iY/",
+        "author": "Virginia Woolf",
+        "author_url": "https://audiolibri.org/autore/virginia-woolf/",
+        "duration": 525
+      },
+      {
+        "title": "Lettere dal deserto",
+        "slug": "lettere-dal-deserto-A6eVYBV5SSc",
+        "url": "https://audiolibri.org/audiolibro/lettere-dal-deserto-A6eVYBV5SSc/",
+        "author": "Carlo Carretto",
+        "author_url": "https://audiolibri.org/autore/carlo-carretto/",
+        "duration": 8
+      }
+    ],
+    "ext": [
+      [
+        "Centro Documentazione Ebraica",
+        "https://www.cdec.it/"
+      ],
+      [
+        "Rai Cultura Speciale Memoria",
+        "https://www.raicultura.it/"
+      ]
+    ]
+  },
+  {
+    "week": 5,
+    "mese": "Febbraio",
+    "data_range": "29 Gen - 4 Feb",
+    "dominio": "Satira, Umorismo & Critica Sociale",
+    "tema": "La Commedia Sociale: Satira dei Costumi e Maschere del Potere",
+    "scopo": "Avvicinamento al Carnevale con opere satiriche che mettono alla berlina l'ipocrisia dell'alta società.",
+    "kw": "satira letteraria audiolibri, commedia classica gratis, thackeray fiera vanità",
+    "authors": [
+      {
+        "name": "Luigi Pirandello",
+        "slug": "luigi-pirandello",
+        "url": "https://audiolibri.org/autore/luigi-pirandello/"
+      },
+      {
+        "name": "Mark Twain",
+        "slug": "mark-twain",
+        "url": "https://audiolibri.org/autore/mark-twain/"
+      },
+      {
+        "name": "Oscar Wilde",
+        "slug": "oscar-wilde",
+        "url": "https://audiolibri.org/autore/oscar-wilde/"
+      },
+      {
+        "name": "William Makepeace Thackeray",
+        "slug": "william-makepeace-thackeray",
+        "url": "https://audiolibri.org/autore/william-makepeace-thackeray/"
+      }
+    ],
+    "books": [
+      {
+        "title": "DE PROFUNDIS",
+        "slug": "de-profundis-FmXXHB9vPnw",
+        "url": "https://audiolibri.org/audiolibro/de-profundis-FmXXHB9vPnw/",
+        "author": "Oscar Wilde",
+        "author_url": "https://audiolibri.org/autore/oscar-wilde/",
+        "duration": 115
+      },
+      {
+        "title": "IL GIARDINETTO LASSU'",
+        "slug": "il-giardinetto-lassu-tPok-8zK_GY",
+        "url": "https://audiolibri.org/audiolibro/il-giardinetto-lassu-tPok-8zK_GY/",
+        "author": "Luigi Pirandello",
+        "author_url": "https://audiolibri.org/autore/luigi-pirandello/",
+        "duration": 19
+      },
+      {
+        "title": "LA GUIDA",
+        "slug": "la-guida-wNJKw3jqvtc",
+        "url": "https://audiolibri.org/audiolibro/la-guida-wNJKw3jqvtc/",
+        "author": "Mark Twain",
+        "author_url": "https://audiolibri.org/autore/mark-twain/",
+        "duration": 44
+      },
+      {
+        "title": "La fiera della vanità",
+        "slug": "la-fiera-della-vanita-_LYEbdrRPQc",
+        "url": "https://audiolibri.org/audiolibro/la-fiera-della-vanita-_LYEbdrRPQc/",
+        "author": "William Makepeace Thackeray",
+        "author_url": "https://audiolibri.org/autore/william-makepeace-thackeray/",
+        "duration": 43
+      }
+    ],
+    "ext": [
+      [
+        "Treccani - Thackeray",
+        "https://www.treccani.it/"
+      ],
+      [
+        "Wikisource Satira",
+        "https://it.wikisource.org/"
+      ]
+    ]
+  },
+  {
+    "week": 6,
+    "mese": "Febbraio",
+    "data_range": "5-11 Febbraio",
+    "dominio": "Romanticismo, Passione & Sentimenti",
+    "tema": "San Valentino: La Passione, l'Attesa e il Dolore dell'Amore",
+    "scopo": "Cavalcare il picco annuale di query amorose nella settimana del 14 Febbraio con grandi classici del cuore.",
+    "kw": "audiolibri romantici gratis, storie damore classiche da ascoltare, poesie damore",
+    "authors": [
+      {
+        "name": "Giacomo Leopardi",
+        "slug": "giacomo-leopardi",
+        "url": "https://audiolibri.org/autore/giacomo-leopardi/"
+      },
+      {
+        "name": "Guy de Maupassant",
+        "slug": "guy-de-maupassant",
+        "url": "https://audiolibri.org/autore/guy-de-maupassant/"
+      },
+      {
+        "name": "Jane Austen",
+        "slug": "jane-austen",
+        "url": "https://audiolibri.org/autore/jane-austen/"
+      },
+      {
+        "name": "Virginia Woolf",
+        "slug": "virginia-woolf",
+        "url": "https://audiolibri.org/autore/virginia-woolf/"
+      }
+    ],
+    "books": [
+      {
+        "title": "LA CONFIDENZA",
+        "slug": "la-confidenza-ttR7f-HjLxg",
+        "url": "https://audiolibri.org/audiolibro/la-confidenza-ttR7f-HjLxg/",
+        "author": "Guy de Maupassant",
+        "author_url": "https://audiolibri.org/autore/guy-de-maupassant/",
+        "duration": 12
+      },
+      {
+        "title": "Cavalleria Rusticana",
+        "slug": "cavalleria-rusticana-IlHFO61leuE",
+        "url": "https://audiolibri.org/audiolibro/cavalleria-rusticana-IlHFO61leuE/",
+        "author": "Giacomo Leopardi",
+        "author_url": "https://audiolibri.org/autore/giacomo-leopardi/",
+        "duration": 14
+      },
+      {
+        "title": "Ragione e Sentimento",
+        "slug": "ragione-e-sentimento-vedj9CwJuqk",
+        "url": "https://audiolibri.org/audiolibro/ragione-e-sentimento-vedj9CwJuqk/",
+        "author": "Jane Austen",
+        "author_url": "https://audiolibri.org/autore/jane-austen/",
+        "duration": 714
+      },
+      {
+        "title": "La Signora Dalloway in Bond Street",
+        "slug": "la-signora-dalloway-in-bond-street-a10UFLHM3kE",
+        "url": "https://audiolibri.org/audiolibro/la-signora-dalloway-in-bond-street-a10UFLHM3kE/",
+        "author": "Virginia Woolf",
+        "author_url": "https://audiolibri.org/autore/virginia-woolf/",
+        "duration": 25
+      }
+    ],
+    "ext": [
+      [
+        "The Virginia Woolf Society",
+        "https://virginiawoolfsociety.co.uk/"
+      ],
+      [
+        "Liber Liber",
+        "https://www.liberliber.it/"
+      ]
+    ]
+  },
+  {
+    "week": 7,
+    "mese": "Febbraio",
+    "data_range": "12-18 Febbraio",
+    "dominio": "Teatro & Letteratura dell'Assurdo",
+    "tema": "Settimana di Carnevale: L'Identità Frantumata e le Maschere Nude",
+    "scopo": "Collegamento tra il Carnevale folkloristico e il tema pirandelliano della maschera sociale.",
+    "kw": "luigi pirandello audiolibri, novelle per un anno gratis, uno nessuno centomila ascoltare",
+    "authors": [
+      {
+        "name": "Fëdor Dostoevskij",
+        "slug": "fedor-dostoevskij",
+        "url": "https://audiolibri.org/autore/fedor-dostoevskij/"
+      },
+      {
+        "name": "Italo Svevo",
+        "slug": "italo-svevo",
+        "url": "https://audiolibri.org/autore/italo-svevo/"
+      },
+      {
+        "name": "Italo Svevo (alias Ettore Schmitz)",
+        "slug": "italo-svevo-alias-ettore-schmitz",
+        "url": "https://audiolibri.org/autore/italo-svevo-alias-ettore-schmitz/"
+      },
+      {
+        "name": "Luigi Pirandello",
+        "slug": "luigi-pirandello",
+        "url": "https://audiolibri.org/autore/luigi-pirandello/"
+      }
+    ],
+    "books": [
+      {
+        "title": "LE FESTE DI NATALE",
+        "slug": "le-feste-di-natale-nTDDd3m7kbA",
+        "url": "https://audiolibri.org/audiolibro/le-feste-di-natale-nTDDd3m7kbA/",
+        "author": "Fëdor Dostoevskij",
+        "author_url": "https://audiolibri.org/autore/fedor-dostoevskij/",
+        "duration": 43
+      },
+      {
+        "title": "Il Fu Mattia Pascal",
+        "slug": "il-fu-mattia-pascal-9zdxtDv5smY",
+        "url": "https://audiolibri.org/audiolibro/il-fu-mattia-pascal-9zdxtDv5smY/",
+        "author": "Luigi Pirandello",
+        "author_url": "https://audiolibri.org/autore/luigi-pirandello/",
+        "duration": 463
+      },
+      {
+        "title": "La Coscienza di Zeno",
+        "slug": "la-coscienza-di-zeno-Bo4TxnzbP6Y",
+        "url": "https://audiolibri.org/audiolibro/la-coscienza-di-zeno-Bo4TxnzbP6Y/",
+        "author": "Italo Svevo",
+        "author_url": "https://audiolibri.org/autore/italo-svevo/",
+        "duration": 875
+      },
+      {
+        "title": "Una burla riuscita",
+        "slug": "una-burla-riuscita-",
+        "url": "https://audiolibri.org/audiolibro/una-burla-riuscita-/",
+        "author": "Italo Svevo (alias Ettore Schmitz)",
+        "author_url": "https://audiolibri.org/autore/italo-svevo-alias-ettore-schmitz/",
+        "duration": 147
+      }
+    ],
+    "ext": [
+      [
+        "Istituto Studi Pirandelliani",
+        "https://www.studiodiluigipirandello.it/"
+      ],
+      [
+        "Casa Goldoni",
+        "https://carlogoldoni.visitmuve.it/"
+      ]
+    ]
+  },
+  {
+    "week": 8,
+    "mese": "Febbraio",
+    "data_range": "19-25 Febbraio",
+    "dominio": "Estetismo & Dialoghi Filosofici",
+    "tema": "L'Arguzia, la Bellezza e il Dandy: Il Mondo di Oscar Wilde",
+    "scopo": "Attirare gli amanti dei dialoghi brillanti, degli aforismi e della riflessione morale sulla vanità.",
+    "kw": "oscar wilde audiolibri gratis, il ritratto di dorian gray italiano, aforismi wilde",
+    "authors": [
+      {
+        "name": "Arthur Conan Doyle",
+        "slug": "arthur-conan-doyle",
+        "url": "https://audiolibri.org/autore/arthur-conan-doyle/"
+      },
+      {
+        "name": "Charles Baudelaire",
+        "slug": "charles-baudelaire",
+        "url": "https://audiolibri.org/autore/charles-baudelaire/"
+      },
+      {
+        "name": "Guy de Maupassant",
+        "slug": "guy-de-maupassant",
+        "url": "https://audiolibri.org/autore/guy-de-maupassant/"
+      },
+      {
+        "name": "Oscar Wilde",
+        "slug": "oscar-wilde",
+        "url": "https://audiolibri.org/autore/oscar-wilde/"
+      }
+    ],
+    "books": [
+      {
+        "title": "ODISEEA DI UNA RAGAZZA",
+        "slug": "odiseea-di-una-ragazza-UuVHriqjcXI",
+        "url": "https://audiolibri.org/audiolibro/odiseea-di-una-ragazza-UuVHriqjcXI/",
+        "author": "Guy de Maupassant",
+        "author_url": "https://audiolibri.org/autore/guy-de-maupassant/",
+        "duration": 13
+      },
+      {
+        "title": "Il Giovane Re",
+        "slug": "il-giovane-re-nfRT9NtCzAs",
+        "url": "https://audiolibri.org/audiolibro/il-giovane-re-nfRT9NtCzAs/",
+        "author": "Oscar Wilde",
+        "author_url": "https://audiolibri.org/autore/oscar-wilde/",
+        "duration": 36
+      },
+      {
+        "title": "Il Viaggio",
+        "slug": "il-viaggio-J5fQqBiDb-o",
+        "url": "https://audiolibri.org/audiolibro/il-viaggio-J5fQqBiDb-o/",
+        "author": "Charles Baudelaire",
+        "author_url": "https://audiolibri.org/autore/charles-baudelaire/",
+        "duration": 10
+      },
+      {
+        "title": "Il mondo perduto di Arthur C. Doyle",
+        "slug": "il-mondo-perduto-di-arthur-c-doyle-yq-8Kp9SYd0",
+        "url": "https://audiolibri.org/audiolibro/il-mondo-perduto-di-arthur-c-doyle-yq-8Kp9SYd0/",
+        "author": "Arthur Conan Doyle",
+        "author_url": "https://audiolibri.org/autore/arthur-conan-doyle/",
+        "duration": 40
+      }
+    ],
+    "ext": [
+      [
+        "Oscar Wilde Society",
+        "https://oscarwildesociety.co.uk/"
+      ],
+      [
+        "Treccani Estetismo",
+        "https://www.treccani.it/"
+      ]
+    ]
+  },
+  {
+    "week": 9,
+    "mese": "Marzo",
+    "data_range": "26 Feb - 4 Mar",
+    "dominio": "Scienza, Medicina & Corpo Umano",
+    "tema": "Medicina e Cura: Il Dottore, la Malattia e la Ricerca nella Narrativa",
+    "scopo": "Rispondere alla curiosità verso la storia della medicina, il rapporto medico-paziente e la scienza clinica.",
+    "kw": "medicina e letteratura audiolibri, racconti medici, scienza salute narrativa",
+    "authors": [
+      {
+        "name": "Arthur Conan Doyle",
+        "slug": "arthur-conan-doyle",
+        "url": "https://audiolibri.org/autore/arthur-conan-doyle/"
+      },
+      {
+        "name": "Fëdor Dostoevskij",
+        "slug": "fedor-dostoevskij",
+        "url": "https://audiolibri.org/autore/fedor-dostoevskij/"
+      },
+      {
+        "name": "Guy de Maupassant",
+        "slug": "guy-de-maupassant",
+        "url": "https://audiolibri.org/autore/guy-de-maupassant/"
+      },
+      {
+        "name": "Luigi Pirandello",
+        "slug": "luigi-pirandello",
+        "url": "https://audiolibri.org/autore/luigi-pirandello/"
+      }
+    ],
+    "books": [
+      {
+        "title": "LA PICCOLA ROQUE",
+        "slug": "la-piccola-roque-6FfomLiE68A",
+        "url": "https://audiolibri.org/audiolibro/la-piccola-roque-6FfomLiE68A/",
+        "author": "Guy de Maupassant",
+        "author_url": "https://audiolibri.org/autore/guy-de-maupassant/",
+        "duration": 31
+      },
+      {
+        "title": "I FRATELLI KARAMAZOV",
+        "slug": "i-fratelli-karamazov-z08RQXmETSI",
+        "url": "https://audiolibri.org/audiolibro/i-fratelli-karamazov-z08RQXmETSI/",
+        "author": "Fëdor Dostoevskij",
+        "author_url": "https://audiolibri.org/autore/fedor-dostoevskij/",
+        "duration": 1142
+      },
+      {
+        "title": "Uno, Nessuno e Centomila",
+        "slug": "uno-nessuno-e-centomila-nyC7nnBS4eY",
+        "url": "https://audiolibri.org/audiolibro/uno-nessuno-e-centomila-nyC7nnBS4eY/",
+        "author": "Luigi Pirandello",
+        "author_url": "https://audiolibri.org/autore/luigi-pirandello/",
+        "duration": 276
+      },
+      {
+        "title": "Lo specchio d'argento",
+        "slug": "lo-specchio-d-argento-GXysvSaWrb4",
+        "url": "https://audiolibri.org/audiolibro/lo-specchio-d-argento-GXysvSaWrb4/",
+        "author": "Arthur Conan Doyle",
+        "author_url": "https://audiolibri.org/autore/arthur-conan-doyle/",
+        "duration": 27
+      }
+    ],
+    "ext": [
+      [
+        "Società Italiana Storia Medicina",
+        "https://www.storiadellamedicina.net/"
+      ],
+      [
+        "Accademia Medica",
+        "https://accademiamedica.it/"
+      ]
+    ]
+  },
+  {
+    "week": 10,
+    "mese": "Marzo",
+    "data_range": "5-11 Marzo",
+    "dominio": "Fantascienza & Visioni del Futuro",
+    "tema": "Oltre i Confini del Mondo: I Padri Fondatori della Fantascienza",
+    "scopo": "Posizionarsi sulla fantascienza classica per appassionati di viaggi spaziali, utopie e scoperte scientifiche.",
+    "kw": "fantascienza classica audiolibri, jules verne ascoltare gratis, hg wells viaggi tempo",
+    "authors": [
+      {
+        "name": "A. L. Knorr",
+        "slug": "a-l-knorr",
+        "url": "https://audiolibri.org/autore/a-l-knorr/"
+      },
+      {
+        "name": "Edgar Allan Poe",
+        "slug": "edgar-allan-poe",
+        "url": "https://audiolibri.org/autore/edgar-allan-poe/"
+      },
+      {
+        "name": "H.G. Wells",
+        "slug": "h-g-wells",
+        "url": "https://audiolibri.org/autore/h-g-wells/"
+      },
+      {
+        "name": "Jules Verne",
+        "slug": "jules-verne",
+        "url": "https://audiolibri.org/autore/jules-verne/"
+      }
+    ],
+    "books": [
+      {
+        "title": "IL BACILLO RUBATO",
+        "slug": "il-bacillo-rubato-qwfZAJXR46M",
+        "url": "https://audiolibri.org/audiolibro/il-bacillo-rubato-qwfZAJXR46M/",
+        "author": "H.G. Wells",
+        "author_url": "https://audiolibri.org/autore/h-g-wells/",
+        "duration": 18
+      },
+      {
+        "title": "Dalla Terra alla Luna",
+        "slug": "dalla-terra-alla-luna-dcPdXFf4PTI",
+        "url": "https://audiolibri.org/audiolibro/dalla-terra-alla-luna-dcPdXFf4PTI/",
+        "author": "Jules Verne",
+        "author_url": "https://audiolibri.org/autore/jules-verne/",
+        "duration": 343
+      },
+      {
+        "title": "Il Corvo di Edgar Allan Poe",
+        "slug": "il-corvo-di-edgar-allan-poe--jZm37zVnek",
+        "url": "https://audiolibri.org/audiolibro/il-corvo-di-edgar-allan-poe--jZm37zVnek/",
+        "author": "Edgar Allan Poe",
+        "author_url": "https://audiolibri.org/autore/edgar-allan-poe/",
+        "duration": 9
+      },
+      {
+        "title": "Figlia del mare",
+        "slug": "figlia-del-mare-Yazx0PkPg_w",
+        "url": "https://audiolibri.org/audiolibro/figlia-del-mare-Yazx0PkPg_w/",
+        "author": "A. L. Knorr",
+        "author_url": "https://audiolibri.org/autore/a-l-knorr/",
+        "duration": 2
+      }
+    ],
+    "ext": [
+      [
+        "Centre Jules Verne",
+        "https://www.jules-verne.net/"
+      ],
+      [
+        "The H.G. Wells Society",
+        "https://hgwellssociety.com/"
+      ]
+    ]
+  },
+  {
+    "week": 11,
+    "mese": "Marzo",
+    "data_range": "12-18 Marzo",
+    "dominio": "Poesia Lirica & Armonia del Verso",
+    "tema": "Giornata Mondiale della Poesia: La Sublime Parola in Versi",
+    "scopo": "Massimizzare la visibilità in occasione del 21 Marzo (Giornata UNESCO della Poesia) con liriche immortali.",
+    "kw": "giornata della poesia audiolibri, poesie leopardi ascoltare, versi pascoli carducci",
+    "authors": [
+      {
+        "name": "Dante Alighieri",
+        "slug": "dante-alighieri",
+        "url": "https://audiolibri.org/autore/dante-alighieri/"
+      },
+      {
+        "name": "Giacomo Leopardi",
+        "slug": "giacomo-leopardi",
+        "url": "https://audiolibri.org/autore/giacomo-leopardi/"
+      },
+      {
+        "name": "Giosuè Carducci",
+        "slug": "giosue-carducci",
+        "url": "https://audiolibri.org/autore/giosue-carducci/"
+      },
+      {
+        "name": "Giovanni Pascoli",
+        "slug": "giovanni-pascoli",
+        "url": "https://audiolibri.org/autore/giovanni-pascoli/"
+      }
+    ],
+    "books": [
+      {
+        "title": "QUELLI DEL COLERA",
+        "slug": "quelli-del-colera-TpncnZBL3Co",
+        "url": "https://audiolibri.org/audiolibro/quelli-del-colera-TpncnZBL3Co/",
+        "author": "Giacomo Leopardi",
+        "author_url": "https://audiolibri.org/autore/giacomo-leopardi/",
+        "duration": 22
+      },
+      {
+        "title": "La volpe e il corvo",
+        "slug": "la-volpe-e-il-corvo-pkZaF7yktC4",
+        "url": "https://audiolibri.org/audiolibro/la-volpe-e-il-corvo-pkZaF7yktC4/",
+        "author": "Dante Alighieri",
+        "author_url": "https://audiolibri.org/autore/dante-alighieri/",
+        "duration": 3
+      },
+      {
+        "title": "Myricae",
+        "slug": "myricae-",
+        "url": "https://audiolibri.org/audiolibro/myricae-/",
+        "author": "Giovanni Pascoli",
+        "author_url": "https://audiolibri.org/autore/giovanni-pascoli/",
+        "duration": 163
+      },
+      {
+        "title": "Odi Barbare",
+        "slug": "odi-barbare-",
+        "url": "https://audiolibri.org/audiolibro/odi-barbare-/",
+        "author": "Giosuè Carducci",
+        "author_url": "https://audiolibri.org/autore/giosue-carducci/",
+        "duration": 60
+      }
+    ],
+    "ext": [
+      [
+        "Centro Studi Leopardiani",
+        "https://www.leopardiani.it/"
+      ],
+      [
+        "Portale Treccani Poesia",
+        "https://www.treccani.it/"
+      ]
+    ]
+  },
+  {
+    "week": 12,
+    "mese": "Marzo",
+    "data_range": "19-25 Marzo",
+    "dominio": "Letteratura Medievale & Teologia Poetica",
+    "tema": "Dantedì: La Somma Commedia e le Radici della Lingua Italiana",
+    "scopo": "Intercettare l'enorme picco di ricerche del 25 Marzo dedicato a Dante Alighieri in scuole e accademie.",
+    "kw": "dantedì audiolibro divina commedia, inferno dante canti mp3, dante alighieri gratis",
+    "authors": [
+      {
+        "name": "Dante Alighieri",
+        "slug": "dante-alighieri",
+        "url": "https://audiolibri.org/autore/dante-alighieri/"
+      },
+      {
+        "name": "Francesco Petrarca",
+        "slug": "francesco-petrarca",
+        "url": "https://audiolibri.org/autore/francesco-petrarca/"
+      },
+      {
+        "name": "Giovanni Boccaccio",
+        "slug": "giovanni-boccaccio",
+        "url": "https://audiolibri.org/autore/giovanni-boccaccio/"
+      }
+    ],
+    "books": [
+      {
+        "title": "ZIO LUPO",
+        "slug": "zio-lupo-ThHlpQuLWtc",
+        "url": "https://audiolibri.org/audiolibro/zio-lupo-ThHlpQuLWtc/",
+        "author": "Giovanni Boccaccio",
+        "author_url": "https://audiolibri.org/autore/giovanni-boccaccio/",
+        "duration": 5
+      },
+      {
+        "title": "Aldo in Arcadia",
+        "slug": "aldo-in-arcadia-f8-RwAHUnGo",
+        "url": "https://audiolibri.org/audiolibro/aldo-in-arcadia-f8-RwAHUnGo/",
+        "author": "Dante Alighieri",
+        "author_url": "https://audiolibri.org/autore/dante-alighieri/",
+        "duration": 4
+      },
+      {
+        "title": "Canzoniere (Rerum vulgarium fragmenta), vol. 1",
+        "slug": "canzoniere-rerum-vulgarium-fragmenta-vol-1-",
+        "url": "https://audiolibri.org/audiolibro/canzoniere-rerum-vulgarium-fragmenta-vol-1-/",
+        "author": "Francesco Petrarca",
+        "author_url": "https://audiolibri.org/autore/francesco-petrarca/",
+        "duration": 332
+      }
+    ],
+    "ext": [
+      [
+        "Società Dantesca Italiana",
+        "https://www.dantesca.it/"
+      ],
+      [
+        "Rai Cultura Speciale Dante",
+        "https://www.raicultura.it/"
+      ]
+    ]
+  },
+  {
+    "week": 13,
+    "mese": "Marzo",
+    "data_range": "26 Mar - 1 Apr",
+    "dominio": "Naturalismo & Realismo Ottocentesco",
+    "tema": "Lo Sguardo Spietato sul Vero: I Maestri del Racconto Breve",
+    "scopo": "Offrire storie incisive e realistiche sulla natura umana, le ipocrisie borghesi e le passioni di provincia.",
+    "kw": "guy de maupassant novelle audiolibri, giovanni verga novelle rusticane, realismo",
+    "authors": [
+      {
+        "name": "Anton Cechov",
+        "slug": "anton-cechov",
+        "url": "https://audiolibri.org/autore/anton-cechov/"
+      },
+      {
+        "name": "Giovanni Verga",
+        "slug": "giovanni-verga",
+        "url": "https://audiolibri.org/autore/giovanni-verga/"
+      },
+      {
+        "name": "Guy de Maupassant",
+        "slug": "guy-de-maupassant",
+        "url": "https://audiolibri.org/autore/guy-de-maupassant/"
+      },
+      {
+        "name": "Luigi Pirandello",
+        "slug": "luigi-pirandello",
+        "url": "https://audiolibri.org/autore/luigi-pirandello/"
+      }
+    ],
+    "books": [
+      {
+        "title": "IDROFOBIA",
+        "slug": "idrofobia-tUgr5Lz-pvQ",
+        "url": "https://audiolibri.org/audiolibro/idrofobia-tUgr5Lz-pvQ/",
+        "author": "Guy de Maupassant",
+        "author_url": "https://audiolibri.org/autore/guy-de-maupassant/",
+        "duration": 17
+      },
+      {
+        "title": "L'Imbecille",
+        "slug": "l-imbecille-AzILICMuYbM",
+        "url": "https://audiolibri.org/audiolibro/l-imbecille-AzILICMuYbM/",
+        "author": "Luigi Pirandello",
+        "author_url": "https://audiolibri.org/autore/luigi-pirandello/",
+        "duration": 24
+      },
+      {
+        "title": "Un Essere Indifeso",
+        "slug": "un-essere-indifeso-9FaU_6e1hFg",
+        "url": "https://audiolibri.org/audiolibro/un-essere-indifeso-9FaU_6e1hFg/",
+        "author": "Anton Cechov",
+        "author_url": "https://audiolibri.org/autore/anton-cechov/",
+        "duration": 12
+      },
+      {
+        "title": "ROSSO MALPELO",
+        "slug": "rosso-malpelo-jC1JCfXrkho",
+        "url": "https://audiolibri.org/audiolibro/rosso-malpelo-jC1JCfXrkho/",
+        "author": "Giovanni Verga",
+        "author_url": "https://audiolibri.org/autore/giovanni-verga/",
+        "duration": 35
+      }
+    ],
+    "ext": [
+      [
+        "Association Amis Maupassant",
+        "https://maupassant.free.fr/"
+      ],
+      [
+        "Fondazione Verga",
+        "https://www.fondazioneverga.it/"
+      ]
+    ]
+  },
+  {
+    "week": 14,
+    "mese": "Aprile",
+    "data_range": "2-8 Aprile",
+    "dominio": "Letteratura per Ragazzi & Fiaba",
+    "tema": "La Magia della Fiaba Classica: Da Pinocchio ai Fratelli Grimm",
+    "scopo": "Sfruttare la Giornata del Libro per Ragazzi (2 Aprile) e il periodo pasquale per l'ascolto in famiglia.",
+    "kw": "fiabe sonore gratis ascoltare, pinocchio collodi audiolibro, fratelli grimm fiabe",
+    "authors": [
+      {
+        "name": "Carlo Collodi",
+        "slug": "carlo-collodi",
+        "url": "https://audiolibri.org/autore/carlo-collodi/"
+      },
+      {
+        "name": "Carlo Collodi (alias Carlo Lorenzini)",
+        "slug": "carlo-collodi-alias-carlo-lorenzini",
+        "url": "https://audiolibri.org/autore/carlo-collodi-alias-carlo-lorenzini/"
+      },
+      {
+        "name": "Fratelli Grimm",
+        "slug": "fratelli-grimm",
+        "url": "https://audiolibri.org/autore/fratelli-grimm/"
+      },
+      {
+        "name": "Hans Christian Andersen",
+        "slug": "hans-christian-andersen",
+        "url": "https://audiolibri.org/autore/hans-christian-andersen/"
+      }
+    ],
+    "books": [
+      {
+        "title": "PINOCCHIO",
+        "slug": "pinocchio-RpQgqiuW4NA",
+        "url": "https://audiolibri.org/audiolibro/pinocchio-RpQgqiuW4NA/",
+        "author": "Carlo Collodi",
+        "author_url": "https://audiolibri.org/autore/carlo-collodi/",
+        "duration": 267
+      },
+      {
+        "title": "La Sirenetta",
+        "slug": "la-sirenetta-_kHz1GLczec",
+        "url": "https://audiolibri.org/audiolibro/la-sirenetta-_kHz1GLczec/",
+        "author": "Hans Christian Andersen",
+        "author_url": "https://audiolibri.org/autore/hans-christian-andersen/",
+        "duration": 56
+      },
+      {
+        "title": "LE TRE PIUME",
+        "slug": "le-tre-piume-PWabbuEcjWI",
+        "url": "https://audiolibri.org/audiolibro/le-tre-piume-PWabbuEcjWI/",
+        "author": "Fratelli Grimm",
+        "author_url": "https://audiolibri.org/autore/fratelli-grimm/",
+        "duration": 8
+      },
+      {
+        "title": "Pinocchio",
+        "slug": "pinocchio-",
+        "url": "https://audiolibri.org/audiolibro/pinocchio-/",
+        "author": "Carlo Collodi (alias Carlo Lorenzini)",
+        "author_url": "https://audiolibri.org/autore/carlo-collodi-alias-carlo-lorenzini/",
+        "duration": 288
+      }
+    ],
+    "ext": [
+      [
+        "Fondazione Nazionale Collodi",
+        "https://www.pinocchio.it/"
+      ],
+      [
+        "Hans Christian Andersen Center",
+        "https://andersen.sdu.dk/"
+      ]
+    ]
+  },
+  {
+    "week": 15,
+    "mese": "Aprile",
+    "data_range": "9-15 Aprile",
+    "dominio": "Giallo Contemporaneo & Noir Regionale",
+    "tema": "Misteri sotto il Sole del Sud: Andrea Camilleri e il Giallo Siciliano",
+    "scopo": "Fornire letture d'evasione intelligenti durante le vacanze pasquali con lo humour e l'acume siciliano.",
+    "kw": "andrea camilleri audiolibri gratis, racconti montalbano sicilia, giallo allitaliana",
+    "authors": [
+      {
+        "name": "Andrea Camilleri",
+        "slug": "andrea-camilleri",
+        "url": "https://audiolibri.org/autore/andrea-camilleri/"
+      },
+      {
+        "name": "Georges Simenon",
+        "slug": "georges-simenon",
+        "url": "https://audiolibri.org/autore/georges-simenon/"
+      },
+      {
+        "name": "Luigi Pirandello",
+        "slug": "luigi-pirandello",
+        "url": "https://audiolibri.org/autore/luigi-pirandello/"
+      }
+    ],
+    "books": [
+      {
+        "title": "La patente",
+        "slug": "la-patente-hGVr-H2i7zA",
+        "url": "https://audiolibri.org/audiolibro/la-patente-hGVr-H2i7zA/",
+        "author": "Luigi Pirandello",
+        "author_url": "https://audiolibri.org/autore/luigi-pirandello/",
+        "duration": 24
+      },
+      {
+        "title": "Il commissario Montalbano 'il Patto'",
+        "slug": "il-commissario-montalbano-il-patto-rS8Sf1TEXqs",
+        "url": "https://audiolibri.org/audiolibro/il-commissario-montalbano-il-patto-rS8Sf1TEXqs/",
+        "author": "Andrea Camilleri",
+        "author_url": "https://audiolibri.org/autore/andrea-camilleri/",
+        "duration": 16
+      },
+      {
+        "title": "Liberty Bar",
+        "slug": "liberty-bar-J8FH_J4xPAg",
+        "url": "https://audiolibri.org/audiolibro/liberty-bar-J8FH_J4xPAg/",
+        "author": "Georges Simenon",
+        "author_url": "https://audiolibri.org/autore/georges-simenon/",
+        "duration": 64
+      }
+    ],
+    "ext": [
+      [
+        "Fondo Andrea Camilleri",
+        "https://www.fondoandreacamilleri.it/"
+      ],
+      [
+        "RaiPlay Sound",
+        "https://www.raiplaysound.it/"
+      ]
+    ]
+  },
+  {
+    "week": 16,
+    "mese": "Aprile",
+    "data_range": "16-22 Aprile",
+    "dominio": "Bibliofilia & Grandi Storie",
+    "tema": "Giornata Mondiale del Libro: Le Opere che Hanno Cambiato la Storia",
+    "scopo": "Celebrare la Giornata UNESCO del 23 Aprile con una rassegna di pietre miliari irrinunciabili.",
+    "kw": "giornata mondiale del libro audiolibri, capolavori della letteratura ascoltare",
+    "authors": [
+      {
+        "name": "Alexandre Dumas",
+        "slug": "alexandre-dumas",
+        "url": "https://audiolibri.org/autore/alexandre-dumas/"
+      },
+      {
+        "name": "Alexandre Dumas [père]",
+        "slug": "alexandre-dumas-pere",
+        "url": "https://audiolibri.org/autore/alexandre-dumas-pere/"
+      },
+      {
+        "name": "Fëdor Dostoevskij",
+        "slug": "fedor-dostoevskij",
+        "url": "https://audiolibri.org/autore/fedor-dostoevskij/"
+      },
+      {
+        "name": "Lev Tolstoj",
+        "slug": "lev-tolstoj",
+        "url": "https://audiolibri.org/autore/lev-tolstoj/"
+      }
+    ],
+    "books": [
+      {
+        "title": "Uno Spievolo Episodio",
+        "slug": "uno-spievolo-episodio-ZgTnOznKkxs",
+        "url": "https://audiolibri.org/audiolibro/uno-spievolo-episodio-ZgTnOznKkxs/",
+        "author": "Fëdor Dostoevskij",
+        "author_url": "https://audiolibri.org/autore/fedor-dostoevskij/",
+        "duration": 153
+      },
+      {
+        "title": "I Tre Moschettieri",
+        "slug": "i-tre-moschettieri-ywAmUkW1hGI",
+        "url": "https://audiolibri.org/audiolibro/i-tre-moschettieri-ywAmUkW1hGI/",
+        "author": "Alexandre Dumas",
+        "author_url": "https://audiolibri.org/autore/alexandre-dumas/",
+        "duration": 1368
+      },
+      {
+        "title": "La Morte di Ivan Ilic",
+        "slug": "la-morte-di-ivan-ilic-Aqvj_dB-7oY",
+        "url": "https://audiolibri.org/audiolibro/la-morte-di-ivan-ilic-Aqvj_dB-7oY/",
+        "author": "Lev Tolstoj",
+        "author_url": "https://audiolibri.org/autore/lev-tolstoj/",
+        "duration": 134
+      },
+      {
+        "title": "Il Conte di Montecristo",
+        "slug": "il-conte-di-montecristo-",
+        "url": "https://audiolibri.org/audiolibro/il-conte-di-montecristo-/",
+        "author": "Alexandre Dumas [père]",
+        "author_url": "https://audiolibri.org/autore/alexandre-dumas-pere/",
+        "duration": 2883
+      }
+    ],
+    "ext": [
+      [
+        "UNESCO World Book Day",
+        "https://www.unesco.org/en/days/book-and-copyright"
+      ],
+      [
+        "Associazione Italiana Biblioteche",
+        "https://www.aib.it/"
+      ]
+    ]
+  },
+  {
+    "week": 17,
+    "mese": "Aprile",
+    "data_range": "23-29 Aprile",
+    "dominio": "Storia, Libertà & Diritti Civili",
+    "tema": "25 Aprile e Resistenza: La Lotta per la Libertà e la Dignità",
+    "scopo": "Presidiare il picco di ricerche per la Festa della Liberazione con opere di impegno civile e storico.",
+    "kw": "audiolibri resistenza 25 aprile, libri liberazione racconti, libertà storia italiana",
+    "authors": [
+      {
+        "name": "Carlo Carretto",
+        "slug": "carlo-carretto",
+        "url": "https://audiolibri.org/autore/carlo-carretto/"
+      },
+      {
+        "name": "Fëdor Dostoevskij",
+        "slug": "fedor-dostoevskij",
+        "url": "https://audiolibri.org/autore/fedor-dostoevskij/"
+      },
+      {
+        "name": "Giacomo Leopardi",
+        "slug": "giacomo-leopardi",
+        "url": "https://audiolibri.org/autore/giacomo-leopardi/"
+      }
+    ],
+    "books": [
+      {
+        "title": "Il sogno di un uomo ridicolo",
+        "slug": "il-sogno-di-un-uomo-ridicolo-DHDeQmcObno",
+        "url": "https://audiolibri.org/audiolibro/il-sogno-di-un-uomo-ridicolo-DHDeQmcObno/",
+        "author": "Fëdor Dostoevskij",
+        "author_url": "https://audiolibri.org/autore/fedor-dostoevskij/",
+        "duration": 59
+      },
+      {
+        "title": "D' ANNUNZIO - LA PASSEGGIATA",
+        "slug": "d-annunzio-la-passeggiata-mCbMIiDOsqo",
+        "url": "https://audiolibri.org/audiolibro/d-annunzio-la-passeggiata-mCbMIiDOsqo/",
+        "author": "Giacomo Leopardi",
+        "author_url": "https://audiolibri.org/autore/giacomo-leopardi/",
+        "duration": 6
+      },
+      {
+        "title": "Ho cercato e ho trovato",
+        "slug": "ho-cercato-e-ho-trovato-x4IAJN0j--s",
+        "url": "https://audiolibri.org/audiolibro/ho-cercato-e-ho-trovato-x4IAJN0j--s/",
+        "author": "Carlo Carretto",
+        "author_url": "https://audiolibri.org/autore/carlo-carretto/",
+        "duration": 12
+      }
+    ],
+    "ext": [
+      [
+        "ANPI Nazionale",
+        "https://www.anpi.it/"
+      ],
+      [
+        "Archivio Storico della Resistenza",
+        "https://www.storiaxxisecolo.it/"
+      ]
+    ]
+  },
+  {
+    "week": 18,
+    "mese": "Maggio",
+    "data_range": "30 Apr - 6 Mag",
+    "dominio": "Novellistica Medievale & Rinascimentale",
+    "tema": "Il Maggio dei Libri: Il Decameron e l'Arte del Racconto Italiano",
+    "scopo": "Inaugurare la campagna ministeriale 'Il Maggio dei Libri' con la ricchezza delle novelle del Trecento.",
+    "kw": "il maggio dei libri audiolibri, boccaccio decameron novelle ascoltare, novellistica",
+    "authors": [
+      {
+        "name": "Dante Alighieri",
+        "slug": "dante-alighieri",
+        "url": "https://audiolibri.org/autore/dante-alighieri/"
+      },
+      {
+        "name": "Giovanni Boccaccio",
+        "slug": "giovanni-boccaccio",
+        "url": "https://audiolibri.org/autore/giovanni-boccaccio/"
+      },
+      {
+        "name": "Luigi Pirandello",
+        "slug": "luigi-pirandello",
+        "url": "https://audiolibri.org/autore/luigi-pirandello/"
+      }
+    ],
+    "books": [
+      {
+        "title": "Scialle Nero",
+        "slug": "scialle-nero-ByiOslEdUqM",
+        "url": "https://audiolibri.org/audiolibro/scialle-nero-ByiOslEdUqM/",
+        "author": "Luigi Pirandello",
+        "author_url": "https://audiolibri.org/autore/luigi-pirandello/",
+        "duration": 63
+      },
+      {
+        "title": "Decameron, Giornata prima, Novella 4",
+        "slug": "decameron-giornata-prima-novella-4-i-nl5iniQZ0",
+        "url": "https://audiolibri.org/audiolibro/decameron-giornata-prima-novella-4-i-nl5iniQZ0/",
+        "author": "Giovanni Boccaccio",
+        "author_url": "https://audiolibri.org/autore/giovanni-boccaccio/",
+        "duration": 12
+      },
+      {
+        "title": "La Divina Commedia",
+        "slug": "la-divina-commedia-m_SyGuEaYBk",
+        "url": "https://audiolibri.org/audiolibro/la-divina-commedia-m_SyGuEaYBk/",
+        "author": "Dante Alighieri",
+        "author_url": "https://audiolibri.org/autore/dante-alighieri/",
+        "duration": 611
+      }
+    ],
+    "ext": [
+      [
+        "Ente Nazionale Giovanni Boccaccio",
+        "https://www.casaboccaccio.it/"
+      ],
+      [
+        "Campagna Il Maggio dei Libri",
+        "https://www.ilmaggiodeilibri.cepell.it/"
+      ]
+    ]
+  },
+  {
+    "week": 19,
+    "mese": "Maggio",
+    "data_range": "7-13 Maggio",
+    "dominio": "Critica Letteraria, Filosofia & Idee",
+    "tema": "Settimana del Salone di Torino: Le Grandi Idee del Pensiero Umano",
+    "scopo": "Intercettare l'attenzione culturale generata dal Salone Internazionale del Libro di Torino.",
+    "kw": "salone del libro torino audiolibri, saggi filosofici ascoltare, grandi idee letteratura",
+    "authors": [
+      {
+        "name": "Carlo Carretto",
+        "slug": "carlo-carretto",
+        "url": "https://audiolibri.org/autore/carlo-carretto/"
+      },
+      {
+        "name": "Oscar Wilde",
+        "slug": "oscar-wilde",
+        "url": "https://audiolibri.org/autore/oscar-wilde/"
+      },
+      {
+        "name": "Virginia Woolf",
+        "slug": "virginia-woolf",
+        "url": "https://audiolibri.org/autore/virginia-woolf/"
+      }
+    ],
+    "books": [
+      {
+        "title": "IL PESCATORE E LA SUA ANIMA",
+        "slug": "il-pescatore-e-la-sua-anima-T8E5ENsyhGc",
+        "url": "https://audiolibri.org/audiolibro/il-pescatore-e-la-sua-anima-T8E5ENsyhGc/",
+        "author": "Oscar Wilde",
+        "author_url": "https://audiolibri.org/autore/oscar-wilde/",
+        "duration": 17
+      },
+      {
+        "title": "Ho cercato e ho trovato - io in loro tu in me perché siano perfetti nell’unità",
+        "slug": "ho-cercato-e-ho-trovato-io-in-loro-tu-in-me-perche-siano-perfetti-nellunita-QTDIyiX5UWg",
+        "url": "https://audiolibri.org/audiolibro/ho-cercato-e-ho-trovato-io-in-loro-tu-in-me-perche-siano-perfetti-nellunita-QTDIyiX5UWg/",
+        "author": "Carlo Carretto",
+        "author_url": "https://audiolibri.org/autore/carlo-carretto/",
+        "duration": 17
+      },
+      {
+        "title": "Gita al faro",
+        "slug": "gita-al-faro-mw_SxAvs5cQ",
+        "url": "https://audiolibri.org/audiolibro/gita-al-faro-mw_SxAvs5cQ/",
+        "author": "Virginia Woolf",
+        "author_url": "https://audiolibri.org/autore/virginia-woolf/",
+        "duration": 25
+      }
+    ],
+    "ext": [
+      [
+        "Salone del Libro di Torino",
+        "https://www.salonelibro.it/"
+      ],
+      [
+        "Rai Radio 3 Fahrenheit",
+        "https://www.raiplaysound.it/radio3"
+      ]
+    ]
+  },
+  {
+    "week": 20,
+    "mese": "Maggio",
+    "data_range": "14-20 Maggio",
+    "dominio": "Romanzo Storico & Cappa e Spada",
+    "tema": "Spade, Onore e Intrighi: L'Avventura Storica di Dumas e Oltre",
+    "scopo": "Soddisfare la domanda di narrativa avventurosa, epica e cavalleresca a sfondo storico.",
+    "kw": "tre moschettieri audiolibro gratis, conte di montecristo ascoltare, romanzo cappa e spada",
+    "authors": [
+      {
+        "name": "Alexandre Dumas",
+        "slug": "alexandre-dumas",
+        "url": "https://audiolibri.org/autore/alexandre-dumas/"
+      },
+      {
+        "name": "Alexandre Dumas figlio",
+        "slug": "alexandre-dumas-figlio",
+        "url": "https://audiolibri.org/autore/alexandre-dumas-figlio/"
+      },
+      {
+        "name": "Emilio Salgari",
+        "slug": "emilio-salgari",
+        "url": "https://audiolibri.org/autore/emilio-salgari/"
+      },
+      {
+        "name": "Robert Louis Stevenson",
+        "slug": "robert-louis-stevenson",
+        "url": "https://audiolibri.org/autore/robert-louis-stevenson/"
+      }
+    ],
+    "books": [
+      {
+        "title": "La Regina dei Caraibi",
+        "slug": "la-regina-dei-caraibi-WTPGOvXObSg",
+        "url": "https://audiolibri.org/audiolibro/la-regina-dei-caraibi-WTPGOvXObSg/",
+        "author": "Emilio Salgari",
+        "author_url": "https://audiolibri.org/autore/emilio-salgari/",
+        "duration": 599
+      },
+      {
+        "title": "L'Isola del Tesoro",
+        "slug": "l-isola-del-tesoro-Hl9utHHsbL8",
+        "url": "https://audiolibri.org/audiolibro/l-isola-del-tesoro-Hl9utHHsbL8/",
+        "author": "Robert Louis Stevenson",
+        "author_url": "https://audiolibri.org/autore/robert-louis-stevenson/",
+        "duration": 393
+      },
+      {
+        "title": "Robin Hood, Principe dei Ladri",
+        "slug": "robin-hood-principe-dei-ladri-pJKWACz7ZNk",
+        "url": "https://audiolibri.org/audiolibro/robin-hood-principe-dei-ladri-pJKWACz7ZNk/",
+        "author": "Alexandre Dumas",
+        "author_url": "https://audiolibri.org/autore/alexandre-dumas/",
+        "duration": 524
+      },
+      {
+        "title": "La signora delle camelie",
+        "slug": "la-signora-delle-camelie-_dKEZOuc-uA",
+        "url": "https://audiolibri.org/audiolibro/la-signora-delle-camelie-_dKEZOuc-uA/",
+        "author": "Alexandre Dumas figlio",
+        "author_url": "https://audiolibri.org/autore/alexandre-dumas-figlio/",
+        "duration": 12
+      }
+    ],
+    "ext": [
+      [
+        "Société Alexandre Dumas",
+        "https://www.dumaspere.com/"
+      ],
+      [
+        "Liber Liber Dumas",
+        "https://www.liberliber.it/"
+      ]
+    ]
+  },
+  {
+    "week": 21,
+    "mese": "Maggio",
+    "data_range": "21-27 Maggio",
+    "dominio": "Giallo Psicologico & Teologia Investigativa",
+    "tema": "L'Occhio della Fede e del Paradosso: Padre Brown e il Delitto Perfetto",
+    "scopo": "Focalizzarsi sull'investigazione etica e sui paradossi filosofici nelle storie poliziesche.",
+    "kw": "padre brown audiolibri gratis italiano, gk chesterton racconti, mistero deduzione",
+    "authors": [
+      {
+        "name": "Arthur Conan Doyle",
+        "slug": "arthur-conan-doyle",
+        "url": "https://audiolibri.org/autore/arthur-conan-doyle/"
+      },
+      {
+        "name": "Edgar Allan Poe",
+        "slug": "edgar-allan-poe",
+        "url": "https://audiolibri.org/autore/edgar-allan-poe/"
+      },
+      {
+        "name": "G.K. Chesterton",
+        "slug": "g-k-chesterton",
+        "url": "https://audiolibri.org/autore/g-k-chesterton/"
+      },
+      {
+        "name": "Georges Simenon",
+        "slug": "georges-simenon",
+        "url": "https://audiolibri.org/autore/georges-simenon/"
+      }
+    ],
+    "books": [
+      {
+        "title": "Lo Scarabeo d'Oro",
+        "slug": "lo-scarabeo-d-oro-k7vLloryYtY",
+        "url": "https://audiolibri.org/audiolibro/lo-scarabeo-d-oro-k7vLloryYtY/",
+        "author": "Edgar Allan Poe",
+        "author_url": "https://audiolibri.org/autore/edgar-allan-poe/",
+        "duration": 79
+      },
+      {
+        "title": "L'innocenza di Padre Brown",
+        "slug": "l-innocenza-di-padre-brown-3kIgywyViH4",
+        "url": "https://audiolibri.org/audiolibro/l-innocenza-di-padre-brown-3kIgywyViH4/",
+        "author": "Arthur Conan Doyle",
+        "author_url": "https://audiolibri.org/autore/arthur-conan-doyle/",
+        "duration": 42
+      },
+      {
+        "title": "L'incredulità di Padre Brown",
+        "slug": "l-incredulita-di-padre-brown-LL75-JBfFfs",
+        "url": "https://audiolibri.org/audiolibro/l-incredulita-di-padre-brown-LL75-JBfFfs/",
+        "author": "G.K. Chesterton",
+        "author_url": "https://audiolibri.org/autore/g-k-chesterton/",
+        "duration": 63
+      },
+      {
+        "title": "Maigret chez le ministres - Maigret e il Ministro 8 di 12",
+        "slug": "maigret-chez-le-ministres-maigret-e-il-ministro-8-di-12-NAewBcQxURw",
+        "url": "https://audiolibri.org/audiolibro/maigret-chez-le-ministres-maigret-e-il-ministro-8-di-12-NAewBcQxURw/",
+        "author": "Georges Simenon",
+        "author_url": "https://audiolibri.org/autore/georges-simenon/",
+        "duration": 25
+      }
+    ],
+    "ext": [
+      [
+        "Società Chestertoniana Italiana",
+        "https://www.chesterton.it/"
+      ],
+      [
+        "Wikisource",
+        "https://it.wikisource.org/"
+      ]
+    ]
+  },
+  {
+    "week": 22,
+    "mese": "Maggio",
+    "data_range": "28 Mag - 3 Giu",
+    "dominio": "Spiritualità & Mistica del Silenzio",
+    "tema": "La Ricerca Interiore: Carlo Carretto e le Lettere dal Deserto",
+    "scopo": "Offrire ascolti meditativi e profondi per staccare dal rumore della vita moderna e ritrovare se stessi.",
+    "kw": "carlo carretto lettere dal deserto audiolibro, meditazioni spirituali gratis",
+    "authors": [
+      {
+        "name": "Carlo Carretto",
+        "slug": "carlo-carretto",
+        "url": "https://audiolibri.org/autore/carlo-carretto/"
+      },
+      {
+        "name": "Dante Alighieri",
+        "slug": "dante-alighieri",
+        "url": "https://audiolibri.org/autore/dante-alighieri/"
+      },
+      {
+        "name": "Lev Tolstoj",
+        "slug": "lev-tolstoj",
+        "url": "https://audiolibri.org/autore/lev-tolstoj/"
+      }
+    ],
+    "books": [
+      {
+        "title": "Ho cercato e ho trovato - Siamo tutti sacerdoti",
+        "slug": "ho-cercato-e-ho-trovato-siamo-tutti-sacerdoti-gL9iD5aOmvk",
+        "url": "https://audiolibri.org/audiolibro/ho-cercato-e-ho-trovato-siamo-tutti-sacerdoti-gL9iD5aOmvk/",
+        "author": "Carlo Carretto",
+        "author_url": "https://audiolibri.org/autore/carlo-carretto/",
+        "duration": 15
+      },
+      {
+        "title": "Anna Karenina",
+        "slug": "anna-karenina-j7qSesrZyF8",
+        "url": "https://audiolibri.org/audiolibro/anna-karenina-j7qSesrZyF8/",
+        "author": "Lev Tolstoj",
+        "author_url": "https://audiolibri.org/autore/lev-tolstoj/",
+        "duration": 7
+      },
+      {
+        "title": "La Divina Commedia - Edizione Petrocchi",
+        "slug": "la-divina-commedia-edizione-petrocchi-",
+        "url": "https://audiolibri.org/audiolibro/la-divina-commedia-edizione-petrocchi-/",
+        "author": "Dante Alighieri",
+        "author_url": "https://audiolibri.org/autore/dante-alighieri/",
+        "duration": 756
+      }
+    ],
+    "ext": [
+      [
+        "Piccoli Fratelli di Jesus",
+        "https://www.piccolifratellidijesus.com/"
+      ],
+      [
+        "Treccani Mistica",
+        "https://www.treccani.it/"
+      ]
+    ]
+  },
+  {
+    "week": 23,
+    "mese": "Giugno",
+    "data_range": "4-10 Giugno",
+    "dominio": "Classici Scolastici & Esami di Stato",
+    "tema": "Verso la Maturità: Verga, Svevo, D'Annunzio e i Giganti del '900",
+    "scopo": "Aiutare gli studenti dell'ultimo anno delle scuole superiori che ripassano i programmi d'esame.",
+    "kw": "autori maturità audiolibri, giovanni verga malavoglia, italo svevo coscienza zeno",
+    "authors": [
+      {
+        "name": "Gabriele D'Annunzio",
+        "slug": "gabriele-d-annunzio",
+        "url": "https://audiolibri.org/autore/gabriele-d-annunzio/"
+      },
+      {
+        "name": "Giovanni Verga",
+        "slug": "giovanni-verga",
+        "url": "https://audiolibri.org/autore/giovanni-verga/"
+      },
+      {
+        "name": "Italo Svevo",
+        "slug": "italo-svevo",
+        "url": "https://audiolibri.org/autore/italo-svevo/"
+      },
+      {
+        "name": "Luigi Pirandello",
+        "slug": "luigi-pirandello",
+        "url": "https://audiolibri.org/autore/luigi-pirandello/"
+      }
+    ],
+    "books": [
+      {
+        "title": "LA MORTE DEL CERVO",
+        "slug": "la-morte-del-cervo-0NoBJtoUz4U",
+        "url": "https://audiolibri.org/audiolibro/la-morte-del-cervo-0NoBJtoUz4U/",
+        "author": "Gabriele D'Annunzio",
+        "author_url": "https://audiolibri.org/autore/gabriele-d-annunzio/",
+        "duration": 8
+      },
+      {
+        "title": "NOVELLE PER UN ANNO",
+        "slug": "novelle-per-un-anno-lE3insq8jYg",
+        "url": "https://audiolibri.org/audiolibro/novelle-per-un-anno-lE3insq8jYg/",
+        "author": "Luigi Pirandello",
+        "author_url": "https://audiolibri.org/autore/luigi-pirandello/",
+        "duration": 22
+      },
+      {
+        "title": "JELI IL PASTORE",
+        "slug": "jeli-il-pastore-PnTyBkSD84A",
+        "url": "https://audiolibri.org/audiolibro/jeli-il-pastore-PnTyBkSD84A/",
+        "author": "Giovanni Verga",
+        "author_url": "https://audiolibri.org/autore/giovanni-verga/",
+        "duration": 74
+      },
+      {
+        "title": "Una burla riuscita di",
+        "slug": "una-burla-riuscita-di-rNi4Fh06HR8",
+        "url": "https://audiolibri.org/audiolibro/una-burla-riuscita-di-rNi4Fh06HR8/",
+        "author": "Italo Svevo",
+        "author_url": "https://audiolibri.org/autore/italo-svevo/",
+        "duration": 148
+      }
+    ],
+    "ext": [
+      [
+        "Ministero dell'Istruzione Maturità",
+        "https://www.miur.gov.it/"
+      ],
+      [
+        "Treccani Scuola",
+        "https://www.treccani.it/scuola/"
+      ]
+    ]
+  },
+  {
+    "week": 24,
+    "mese": "Giugno",
+    "data_range": "11-17 Giugno",
+    "dominio": "Narrativa Marinaresca & Odissee d'Acqua",
+    "tema": "Uomini e Oceani: Il Richiamo del Mare Aperto",
+    "scopo": "Accompagnare l'arrivo dell'estate con l'epica marina, grandi battaglie navali e tempeste.",
+    "kw": "storie di mare audiolibri, moby dick ascoltare gratis, romanzi oceano tempeste",
+    "authors": [
+      {
+        "name": "Herman Melville",
+        "slug": "herman-melville",
+        "url": "https://audiolibri.org/autore/herman-melville/"
+      },
+      {
+        "name": "Joseph Conrad",
+        "slug": "joseph-conrad",
+        "url": "https://audiolibri.org/autore/joseph-conrad/"
+      },
+      {
+        "name": "Jules Verne",
+        "slug": "jules-verne",
+        "url": "https://audiolibri.org/autore/jules-verne/"
+      },
+      {
+        "name": "Robert Louis Stevenson",
+        "slug": "robert-louis-stevenson",
+        "url": "https://audiolibri.org/autore/robert-louis-stevenson/"
+      }
+    ],
+    "books": [
+      {
+        "title": "Bartleby lo Scrivano",
+        "slug": "bartleby-lo-scrivano-Qmrb7bomBMw",
+        "url": "https://audiolibri.org/audiolibro/bartleby-lo-scrivano-Qmrb7bomBMw/",
+        "author": "Herman Melville",
+        "author_url": "https://audiolibri.org/autore/herman-melville/",
+        "duration": 90
+      },
+      {
+        "title": "Cuore di Tenebra",
+        "slug": "cuore-di-tenebra-z2YpFRJXntk",
+        "url": "https://audiolibri.org/audiolibro/cuore-di-tenebra-z2YpFRJXntk/",
+        "author": "Joseph Conrad",
+        "author_url": "https://audiolibri.org/autore/joseph-conrad/",
+        "duration": 248
+      },
+      {
+        "title": "Il Giro del Mondo in Ottanta Giorni",
+        "slug": "il-giro-del-mondo-in-ottanta-giorni-XERHBAfqdvw",
+        "url": "https://audiolibri.org/audiolibro/il-giro-del-mondo-in-ottanta-giorni-XERHBAfqdvw/",
+        "author": "Jules Verne",
+        "author_url": "https://audiolibri.org/autore/jules-verne/",
+        "duration": 445
+      },
+      {
+        "title": "La Freccia Nera",
+        "slug": "la-freccia-nera-yylfnEo6wjE",
+        "url": "https://audiolibri.org/audiolibro/la-freccia-nera-yylfnEo6wjE/",
+        "author": "Robert Louis Stevenson",
+        "author_url": "https://audiolibri.org/autore/robert-louis-stevenson/",
+        "duration": 464
+      }
+    ],
+    "ext": [
+      [
+        "Galata Museo del Mare",
+        "https://www.galatamuseodelmare.it/"
+      ],
+      [
+        "Liber Liber Mare",
+        "https://www.liberliber.it/"
+      ]
+    ]
+  },
+  {
+    "week": 25,
+    "mese": "Giugno",
+    "data_range": "18-24 Giugno",
+    "dominio": "Urban Fantasy & Magia Elementale",
+    "tema": "Segreti Sommersi e Incantesimi: L'Urban Fantasy Moderno",
+    "scopo": "Coinvolgere il pubblico giovane all'inizio delle vacanze con saghe moderne d'evasione magica.",
+    "kw": "al knorr audiolibri italiano gratis, urban fantasy magia sirene",
+    "authors": [
+      {
+        "name": "A. L. Knorr",
+        "slug": "a-l-knorr",
+        "url": "https://audiolibri.org/autore/a-l-knorr/"
+      },
+      {
+        "name": "Carlo Collodi",
+        "slug": "carlo-collodi",
+        "url": "https://audiolibri.org/autore/carlo-collodi/"
+      },
+      {
+        "name": "Edgar Allan Poe",
+        "slug": "edgar-allan-poe",
+        "url": "https://audiolibri.org/autore/edgar-allan-poe/"
+      },
+      {
+        "name": "H.P. Lovecraft",
+        "slug": "h-p-lovecraft",
+        "url": "https://audiolibri.org/autore/h-p-lovecraft/"
+      }
+    ],
+    "books": [
+      {
+        "title": "L'ALBERO",
+        "slug": "l-albero-_k2QK1vkZms",
+        "url": "https://audiolibri.org/audiolibro/l-albero-_k2QK1vkZms/",
+        "author": "H.P. Lovecraft",
+        "author_url": "https://audiolibri.org/autore/h-p-lovecraft/",
+        "duration": 15
+      },
+      {
+        "title": "Pinocchio",
+        "slug": "pinocchio-dQqzVo2v7N4",
+        "url": "https://audiolibri.org/audiolibro/pinocchio-dQqzVo2v7N4/",
+        "author": "Carlo Collodi",
+        "author_url": "https://audiolibri.org/autore/carlo-collodi/",
+        "duration": 248
+      },
+      {
+        "title": "Il ritratto ovale",
+        "slug": "il-ritratto-ovale-myLCMY3102M",
+        "url": "https://audiolibri.org/audiolibro/il-ritratto-ovale-myLCMY3102M/",
+        "author": "Edgar Allan Poe",
+        "author_url": "https://audiolibri.org/autore/edgar-allan-poe/",
+        "duration": 10
+      },
+      {
+        "title": "Figlia del mare",
+        "slug": "figlia-del-mare-nm4pWnrluwk",
+        "url": "https://audiolibri.org/audiolibro/figlia-del-mare-nm4pWnrluwk/",
+        "author": "A. L. Knorr",
+        "author_url": "https://audiolibri.org/autore/a-l-knorr/",
+        "duration": 2
+      }
+    ],
+    "ext": [
+      [
+        "Goodreads Author Page",
+        "https://www.goodreads.com/"
+      ],
+      [
+        "Fantasy Magazine Italia",
+        "https://www.fantasymagazine.it/"
+      ]
+    ]
+  },
+  {
+    "week": 26,
+    "mese": "Giugno",
+    "data_range": "25 Giu - 1 Lug",
+    "dominio": "Poliziesco Psicologico & Atmosfera",
+    "tema": "I Vicoli di Parigi e le Nebbie di Provincia: Georges Simenon",
+    "scopo": "Offrire gialli sofisticati d'atmosfera per i primi fine settimana di vacanza estiva.",
+    "kw": "georges simenon audiolibri gratis italiano, commissario maigret indagini",
+    "authors": [
+      {
+        "name": "Andrea Camilleri",
+        "slug": "andrea-camilleri",
+        "url": "https://audiolibri.org/autore/andrea-camilleri/"
+      },
+      {
+        "name": "Arthur Conan Doyle",
+        "slug": "arthur-conan-doyle",
+        "url": "https://audiolibri.org/autore/arthur-conan-doyle/"
+      },
+      {
+        "name": "Georges Simenon",
+        "slug": "georges-simenon",
+        "url": "https://audiolibri.org/autore/georges-simenon/"
+      },
+      {
+        "name": "Guy de Maupassant",
+        "slug": "guy-de-maupassant",
+        "url": "https://audiolibri.org/autore/guy-de-maupassant/"
+      }
+    ],
+    "books": [
+      {
+        "title": "IL DOLCE SONNO",
+        "slug": "il-dolce-sonno-ZynTJ8NqMgU",
+        "url": "https://audiolibri.org/audiolibro/il-dolce-sonno-ZynTJ8NqMgU/",
+        "author": "Guy de Maupassant",
+        "author_url": "https://audiolibri.org/autore/guy-de-maupassant/",
+        "duration": 21
+      },
+      {
+        "title": "Il Commissario Montalbano 'La lettera anonima'",
+        "slug": "il-commissario-montalbano-la-lettera-anonima-yIKpa1Z9sKU",
+        "url": "https://audiolibri.org/audiolibro/il-commissario-montalbano-la-lettera-anonima-yIKpa1Z9sKU/",
+        "author": "Andrea Camilleri",
+        "author_url": "https://audiolibri.org/autore/andrea-camilleri/",
+        "duration": 23
+      },
+      {
+        "title": "Sherlock Holmes e lo scapolo aristocratico",
+        "slug": "sherlock-holmes-e-lo-scapolo-aristocratico-Wf23Ag1y8qY",
+        "url": "https://audiolibri.org/audiolibro/sherlock-holmes-e-lo-scapolo-aristocratico-Wf23Ag1y8qY/",
+        "author": "Arthur Conan Doyle",
+        "author_url": "https://audiolibri.org/autore/arthur-conan-doyle/",
+        "duration": 2
+      },
+      {
+        "title": "Maigret si difende",
+        "slug": "maigret-si-difende-i9eCgLfU1Eg",
+        "url": "https://audiolibri.org/audiolibro/maigret-si-difende-i9eCgLfU1Eg/",
+        "author": "Georges Simenon",
+        "author_url": "https://audiolibri.org/autore/georges-simenon/",
+        "duration": 33
+      }
+    ],
+    "ext": [
+      [
+        "Centre Georges Simenon",
+        "https://www.centre-simenon.ulg.ac.be/"
+      ],
+      [
+        "Le Figaro Culture",
+        "https://www.lefigaro.fr/culture"
+      ]
+    ]
+  },
+  {
+    "week": 27,
+    "mese": "Luglio",
+    "data_range": "2-8 Luglio",
+    "dominio": "Short Stories & Ascolti Rapidi",
+    "tema": "Pillole di Genio sotto l'Ombrellone: Racconti Lampo (<15 min)",
+    "scopo": "Rispondere alla domanda di fruizione rapida durante i bagni di sole in spiaggia.",
+    "kw": "audiolibri brevi 10 minuti, racconti veloci spiaggia, storie lampo ascoltare",
+    "authors": [
+      {
+        "name": "Anton Cechov",
+        "slug": "anton-cechov",
+        "url": "https://audiolibri.org/autore/anton-cechov/"
+      },
+      {
+        "name": "Edgar Allan Poe",
+        "slug": "edgar-allan-poe",
+        "url": "https://audiolibri.org/autore/edgar-allan-poe/"
+      },
+      {
+        "name": "Guy de Maupassant",
+        "slug": "guy-de-maupassant",
+        "url": "https://audiolibri.org/autore/guy-de-maupassant/"
+      },
+      {
+        "name": "Luigi Pirandello",
+        "slug": "luigi-pirandello",
+        "url": "https://audiolibri.org/autore/luigi-pirandello/"
+      }
+    ],
+    "books": [
+      {
+        "title": "ALTRI TEMPI",
+        "slug": "altri-tempi-QnYFvCYJORk",
+        "url": "https://audiolibri.org/audiolibro/altri-tempi-QnYFvCYJORk/",
+        "author": "Guy de Maupassant",
+        "author_url": "https://audiolibri.org/autore/guy-de-maupassant/",
+        "duration": 8
+      },
+      {
+        "title": "Un'Opera d'Arte",
+        "slug": "un-opera-d-arte-CgXf_4Rrs4g",
+        "url": "https://audiolibri.org/audiolibro/un-opera-d-arte-CgXf_4Rrs4g/",
+        "author": "Anton Cechov",
+        "author_url": "https://audiolibri.org/autore/anton-cechov/",
+        "duration": 8
+      },
+      {
+        "title": "IL VIAGGIO di Luigi Pirandello",
+        "slug": "il-viaggio-di-luigi-pirandello-MZDQno4l1G0",
+        "url": "https://audiolibri.org/audiolibro/il-viaggio-di-luigi-pirandello-MZDQno4l1G0/",
+        "author": "Luigi Pirandello",
+        "author_url": "https://audiolibri.org/autore/luigi-pirandello/",
+        "duration": 39
+      },
+      {
+        "title": "Il Barile di Amontillado",
+        "slug": "il-barile-di-amontillado-136KAxjbC-Y",
+        "url": "https://audiolibri.org/audiolibro/il-barile-di-amontillado-136KAxjbC-Y/",
+        "author": "Edgar Allan Poe",
+        "author_url": "https://audiolibri.org/autore/edgar-allan-poe/",
+        "duration": 17
+      }
+    ],
+    "ext": [
+      [
+        "Wikisource Racconti Brevi",
+        "https://it.wikisource.org/"
+      ],
+      [
+        "Liber Liber Racconti",
+        "https://www.liberliber.it/"
+      ]
+    ]
+  },
+  {
+    "week": 28,
+    "mese": "Luglio",
+    "data_range": "9-15 Luglio",
+    "dominio": "Avventura Esotica & Pirateria",
+    "tema": "Giungle Misteriose e Mari del Sud: Emilio Salgari e i Pirati",
+    "scopo": "Rinvigorire l'amore per l'avventura pura e le terre inesplorate della Malesia.",
+    "kw": "emilio salgari audiolibri gratis, sandokan tigre malesia, pirati avventura ascoltare",
+    "authors": [
+      {
+        "name": "Alexandre Dumas",
+        "slug": "alexandre-dumas",
+        "url": "https://audiolibri.org/autore/alexandre-dumas/"
+      },
+      {
+        "name": "Emilio Salgari",
+        "slug": "emilio-salgari",
+        "url": "https://audiolibri.org/autore/emilio-salgari/"
+      },
+      {
+        "name": "Jules Verne",
+        "slug": "jules-verne",
+        "url": "https://audiolibri.org/autore/jules-verne/"
+      },
+      {
+        "name": "Robert Louis Stevenson",
+        "slug": "robert-louis-stevenson",
+        "url": "https://audiolibri.org/autore/robert-louis-stevenson/"
+      }
+    ],
+    "books": [
+      {
+        "title": "Il Corsaro Nero",
+        "slug": "il-corsaro-nero-ZPHwEpqggYU",
+        "url": "https://audiolibri.org/audiolibro/il-corsaro-nero-ZPHwEpqggYU/",
+        "author": "Emilio Salgari",
+        "author_url": "https://audiolibri.org/autore/emilio-salgari/",
+        "duration": 644
+      },
+      {
+        "title": "Viaggio al centro della Terra",
+        "slug": "viaggio-al-centro-della-terra-vxLjb9y5QAg",
+        "url": "https://audiolibri.org/audiolibro/viaggio-al-centro-della-terra-vxLjb9y5QAg/",
+        "author": "Jules Verne",
+        "author_url": "https://audiolibri.org/autore/jules-verne/",
+        "duration": 318
+      },
+      {
+        "title": "Il ladro di cadaveri",
+        "slug": "il-ladro-di-cadaveri-9G39JJNyDfA",
+        "url": "https://audiolibri.org/audiolibro/il-ladro-di-cadaveri-9G39JJNyDfA/",
+        "author": "Robert Louis Stevenson",
+        "author_url": "https://audiolibri.org/autore/robert-louis-stevenson/",
+        "duration": 59
+      },
+      {
+        "title": "Il conte di Montecristo",
+        "slug": "il-conte-di-montecristo-NNHzLkXSeoM",
+        "url": "https://audiolibri.org/audiolibro/il-conte-di-montecristo-NNHzLkXSeoM/",
+        "author": "Alexandre Dumas",
+        "author_url": "https://audiolibri.org/autore/alexandre-dumas/",
+        "duration": 21
+      }
+    ],
+    "ext": [
+      [
+        "Associazione Emilio Salgari",
+        "https://www.emiliosalgari.it/"
+      ],
+      [
+        "Liber Liber Salgari",
+        "https://www.liberliber.it/"
+      ]
+    ]
+  },
+  {
+    "week": 29,
+    "mese": "Luglio",
+    "data_range": "16-22 Luglio",
+    "dominio": "Mitologia Antica & Poemi Epici",
+    "tema": "L'Epica degli Eroi: Dei dell'Olimpo, Mostri e l'Odissea",
+    "scopo": "Connettere le vacanze nel Mediterraneo alle radici del mito greco e romano.",
+    "kw": "miti greci audiolibro gratis, odissea omero canti ascoltare, dei olimpo leggende",
+    "authors": [
+      {
+        "name": "Carlo Collodi",
+        "slug": "carlo-collodi",
+        "url": "https://audiolibri.org/autore/carlo-collodi/"
+      },
+      {
+        "name": "Carlo Collodi (alias Carlo Lorenzini)",
+        "slug": "carlo-collodi-alias-carlo-lorenzini",
+        "url": "https://audiolibri.org/autore/carlo-collodi-alias-carlo-lorenzini/"
+      },
+      {
+        "name": "Omero",
+        "slug": "omero",
+        "url": "https://audiolibri.org/autore/omero/"
+      },
+      {
+        "name": "Virgilio",
+        "slug": "virgilio",
+        "url": "https://audiolibri.org/autore/virgilio/"
+      }
+    ],
+    "books": [
+      {
+        "title": "OMERO - ODISSEA",
+        "slug": "omero-odissea-Evqy8FtxWv4",
+        "url": "https://audiolibri.org/audiolibro/omero-odissea-Evqy8FtxWv4/",
+        "author": "Omero",
+        "author_url": "https://audiolibri.org/autore/omero/",
+        "duration": 808
+      },
+      {
+        "title": "Cappuccetto Rosso",
+        "slug": "cappuccetto-rosso-1cmn3qPaMv8",
+        "url": "https://audiolibri.org/audiolibro/cappuccetto-rosso-1cmn3qPaMv8/",
+        "author": "Carlo Collodi",
+        "author_url": "https://audiolibri.org/autore/carlo-collodi/",
+        "duration": 12
+      },
+      {
+        "title": "Il madornale errore di Virgilio",
+        "slug": "il-madornale-errore-di-virgilio-9lbGU-3NqvU",
+        "url": "https://audiolibri.org/audiolibro/il-madornale-errore-di-virgilio-9lbGU-3NqvU/",
+        "author": "Virgilio",
+        "author_url": "https://audiolibri.org/autore/virgilio/",
+        "duration": 4
+      },
+      {
+        "title": "I racconti delle fate",
+        "slug": "i-racconti-delle-fate-",
+        "url": "https://audiolibri.org/audiolibro/i-racconti-delle-fate-/",
+        "author": "Carlo Collodi (alias Carlo Lorenzini)",
+        "author_url": "https://audiolibri.org/autore/carlo-collodi-alias-carlo-lorenzini/",
+        "duration": 661
+      }
+    ],
+    "ext": [
+      [
+        "Beni Culturali Mitologia",
+        "https://cultura.gov.it/"
+      ],
+      [
+        "Treccani Mitologia Greca",
+        "https://www.treccani.it/"
+      ]
+    ]
+  },
+  {
+    "week": 30,
+    "mese": "Luglio",
+    "data_range": "23-29 Luglio",
+    "dominio": "Teatro & Commedia dell'Arte",
+    "tema": "Palcoscenico d'Estate: Carlo Goldoni e la Vita Veneziana",
+    "scopo": "Accompagnare la stagione estiva dei festival all'aperto con la vivacità teatrale italiana.",
+    "kw": "teatro goldoni audiolibro, locandiera commedia ascoltare gratis, teatro veneto",
+    "authors": [
+      {
+        "name": "Carlo Goldoni",
+        "slug": "carlo-goldoni",
+        "url": "https://audiolibri.org/autore/carlo-goldoni/"
+      },
+      {
+        "name": "Luigi Pirandello",
+        "slug": "luigi-pirandello",
+        "url": "https://audiolibri.org/autore/luigi-pirandello/"
+      },
+      {
+        "name": "William Shakespeare",
+        "slug": "william-shakespeare",
+        "url": "https://audiolibri.org/autore/william-shakespeare/"
+      }
+    ],
+    "books": [
+      {
+        "title": "Giulio Cesare",
+        "slug": "giulio-cesare-behwgXITnJs",
+        "url": "https://audiolibri.org/audiolibro/giulio-cesare-behwgXITnJs/",
+        "author": "William Shakespeare",
+        "author_url": "https://audiolibri.org/autore/william-shakespeare/",
+        "duration": 67
+      },
+      {
+        "title": "LA BALIA",
+        "slug": "la-balia-xFA3kUjC8eM",
+        "url": "https://audiolibri.org/audiolibro/la-balia-xFA3kUjC8eM/",
+        "author": "Luigi Pirandello",
+        "author_url": "https://audiolibri.org/autore/luigi-pirandello/",
+        "duration": 58
+      },
+      {
+        "title": "Locandiera",
+        "slug": "locandiera-",
+        "url": "https://audiolibri.org/audiolibro/locandiera-/",
+        "author": "Carlo Goldoni",
+        "author_url": "https://audiolibri.org/autore/carlo-goldoni/",
+        "duration": 168
+      }
+    ],
+    "ext": [
+      [
+        "Casa di Carlo Goldoni",
+        "https://carlogoldoni.visitmuve.it/"
+      ],
+      [
+        "Piccolo Teatro",
+        "https://www.piccoloteatro.org/"
+      ]
+    ]
+  },
+  {
+    "week": 31,
+    "mese": "Agosto",
+    "data_range": "30 Lug - 5 Ago",
+    "dominio": "Astronomia, Cosmo & Visioni Celesti",
+    "tema": "La Notte di San Lorenzo: Guardare le Stelle tra Scienza e Fantasia",
+    "scopo": "Sfruttare la fascinazione per la Notte di San Lorenzo (10 Agosto) con storie cosmiche e celesti.",
+    "kw": "audiolibri astronomia stelle, spazio cosmo romanzi fantascienza, notte san lorenzo",
+    "authors": [
+      {
+        "name": "Dante Alighieri",
+        "slug": "dante-alighieri",
+        "url": "https://audiolibri.org/autore/dante-alighieri/"
+      },
+      {
+        "name": "Giacomo Leopardi",
+        "slug": "giacomo-leopardi",
+        "url": "https://audiolibri.org/autore/giacomo-leopardi/"
+      },
+      {
+        "name": "H.G. Wells",
+        "slug": "h-g-wells",
+        "url": "https://audiolibri.org/autore/h-g-wells/"
+      },
+      {
+        "name": "Jules Verne",
+        "slug": "jules-verne",
+        "url": "https://audiolibri.org/autore/jules-verne/"
+      }
+    ],
+    "books": [
+      {
+        "title": "TENTAZIONE",
+        "slug": "tentazione-MN0-9nrehhs",
+        "url": "https://audiolibri.org/audiolibro/tentazione-MN0-9nrehhs/",
+        "author": "Giacomo Leopardi",
+        "author_url": "https://audiolibri.org/autore/giacomo-leopardi/",
+        "duration": 11
+      },
+      {
+        "title": "La Guerra dei Mondi",
+        "slug": "la-guerra-dei-mondi-Pz3cDLDRE00",
+        "url": "https://audiolibri.org/audiolibro/la-guerra-dei-mondi-Pz3cDLDRE00/",
+        "author": "H.G. Wells",
+        "author_url": "https://audiolibri.org/autore/h-g-wells/",
+        "duration": 394
+      },
+      {
+        "title": "Intorno alla luna",
+        "slug": "intorno-alla-luna-Ct8hksiFKa0",
+        "url": "https://audiolibri.org/audiolibro/intorno-alla-luna-Ct8hksiFKa0/",
+        "author": "Jules Verne",
+        "author_url": "https://audiolibri.org/autore/jules-verne/",
+        "duration": 411
+      },
+      {
+        "title": "Divina Commedia",
+        "slug": "divina-commedia-",
+        "url": "https://audiolibri.org/audiolibro/divina-commedia-/",
+        "author": "Dante Alighieri",
+        "author_url": "https://audiolibri.org/autore/dante-alighieri/",
+        "duration": 742
+      }
+    ],
+    "ext": [
+      [
+        "INAF - Istituto Nazionale Astrofisica",
+        "https://www.inaf.it/"
+      ],
+      [
+        "Società Astronomica Italiana",
+        "https://www.sait.it/"
+      ]
+    ]
+  },
+  {
+    "week": 32,
+    "mese": "Agosto",
+    "data_range": "6-12 Agosto",
+    "dominio": "Giallo d'Evasione & Thriller Estivo",
+    "tema": "Ferragosto con Delitto: Crimini e Misteri da Risolvere in Vacanza",
+    "scopo": "Presidiare il picco di letture da spiaggia a ridosso del Ferragosto con delitti perfetti.",
+    "kw": "gialli estate audiolibri gratis, ferragosto delitto ascoltare, misteri vacanze",
+    "authors": [
+      {
+        "name": "Andrea Camilleri",
+        "slug": "andrea-camilleri",
+        "url": "https://audiolibri.org/autore/andrea-camilleri/"
+      },
+      {
+        "name": "Arthur Conan Doyle",
+        "slug": "arthur-conan-doyle",
+        "url": "https://audiolibri.org/autore/arthur-conan-doyle/"
+      },
+      {
+        "name": "G.K. Chesterton",
+        "slug": "g-k-chesterton",
+        "url": "https://audiolibri.org/autore/g-k-chesterton/"
+      },
+      {
+        "name": "Georges Simenon",
+        "slug": "georges-simenon",
+        "url": "https://audiolibri.org/autore/georges-simenon/"
+      }
+    ],
+    "books": [
+      {
+        "title": "L'uomo che andava appresso ai funerali",
+        "slug": "l-uomo-che-andava-appresso-ai-funerali-vPlq5AqyrWc",
+        "url": "https://audiolibri.org/audiolibro/l-uomo-che-andava-appresso-ai-funerali-vPlq5AqyrWc/",
+        "author": "Andrea Camilleri",
+        "author_url": "https://audiolibri.org/autore/andrea-camilleri/",
+        "duration": 27
+      },
+      {
+        "title": "L' Innocenza di Padre Brown",
+        "slug": "l-innocenza-di-padre-brown-Ym9Kp-vbuKI",
+        "url": "https://audiolibri.org/audiolibro/l-innocenza-di-padre-brown-Ym9Kp-vbuKI/",
+        "author": "Arthur Conan Doyle",
+        "author_url": "https://audiolibri.org/autore/arthur-conan-doyle/",
+        "duration": 45
+      },
+      {
+        "title": "Lo Scandalo di Padre Brown",
+        "slug": "lo-scandalo-di-padre-brown-cpi2I4KZLzE",
+        "url": "https://audiolibri.org/audiolibro/lo-scandalo-di-padre-brown-cpi2I4KZLzE/",
+        "author": "G.K. Chesterton",
+        "author_url": "https://audiolibri.org/autore/g-k-chesterton/",
+        "duration": 38
+      },
+      {
+        "title": "Il Signor Lunedì",
+        "slug": "il-signor-lunedi-XYLp_whF_Bk",
+        "url": "https://audiolibri.org/audiolibro/il-signor-lunedi-XYLp_whF_Bk/",
+        "author": "Georges Simenon",
+        "author_url": "https://audiolibri.org/autore/georges-simenon/",
+        "duration": 32
+      }
+    ],
+    "ext": [
+      [
+        "Rivista Il Giallo Mondadori",
+        "https://www.mondadori.it/"
+      ],
+      [
+        "Sherlockian.net",
+        "https://sherlockian.net/"
+      ]
+    ]
+  },
+  {
+    "week": 33,
+    "mese": "Agosto",
+    "data_range": "13-19 Agosto",
+    "dominio": "Saghe Familiari & Romanzi Fiume",
+    "tema": "Grandi Saghe Generazionali: Passioni, Guerre e Rinascite",
+    "scopo": "Fornire lunghe sessioni di ascolto continuo nei caldi pomeriggi estivi.",
+    "kw": "via col vento audiolibro gratis completo, grandi saghe generazionali ascoltare",
+    "authors": [
+      {
+        "name": "Alessandro Manzoni",
+        "slug": "alessandro-manzoni",
+        "url": "https://audiolibri.org/autore/alessandro-manzoni/"
+      },
+      {
+        "name": "Lev Tolstoj",
+        "slug": "lev-tolstoj",
+        "url": "https://audiolibri.org/autore/lev-tolstoj/"
+      },
+      {
+        "name": "Margaret Mitchell",
+        "slug": "margaret-mitchell",
+        "url": "https://audiolibri.org/autore/margaret-mitchell/"
+      },
+      {
+        "name": "William Makepeace Thackeray",
+        "slug": "william-makepeace-thackeray",
+        "url": "https://audiolibri.org/autore/william-makepeace-thackeray/"
+      }
+    ],
+    "books": [
+      {
+        "title": "LA PESTE A MILANO",
+        "slug": "la-peste-a-milano-XPpoHH0kpGo",
+        "url": "https://audiolibri.org/audiolibro/la-peste-a-milano-XPpoHH0kpGo/",
+        "author": "Alessandro Manzoni",
+        "author_url": "https://audiolibri.org/autore/alessandro-manzoni/",
+        "duration": 87
+      },
+      {
+        "title": "TRE MORTI. Racconto di . Lettura di Luigi Loperfido.",
+        "slug": "tre-morti-racconto-di-lettura-di-luigi-loperfido-t3o3miah43A",
+        "url": "https://audiolibri.org/audiolibro/tre-morti-racconto-di-lettura-di-luigi-loperfido-t3o3miah43A/",
+        "author": "Lev Tolstoj",
+        "author_url": "https://audiolibri.org/autore/lev-tolstoj/",
+        "duration": 36
+      },
+      {
+        "title": "La fiera della vanità",
+        "slug": "la-fiera-della-vanita-gxO6KyFtE_w",
+        "url": "https://audiolibri.org/audiolibro/la-fiera-della-vanita-gxO6KyFtE_w/",
+        "author": "William Makepeace Thackeray",
+        "author_url": "https://audiolibri.org/autore/william-makepeace-thackeray/",
+        "duration": 19
+      },
+      {
+        "title": "Via col vento",
+        "slug": "via-col-vento-p2dBBnmBWH8",
+        "url": "https://audiolibri.org/audiolibro/via-col-vento-p2dBBnmBWH8/",
+        "author": "Margaret Mitchell",
+        "author_url": "https://audiolibri.org/autore/margaret-mitchell/",
+        "duration": 36
+      }
+    ],
+    "ext": [
+      [
+        "Margaret Mitchell House",
+        "https://www.atlantahistorycenter.com/"
+      ],
+      [
+        "Treccani Romanzo Storico",
+        "https://www.treccani.it/"
+      ]
+    ]
+  },
+  {
+    "week": 34,
+    "mese": "Agosto",
+    "data_range": "20-26 Agosto",
+    "dominio": "Viaggi nel Tempo & Sci-Fi Speculativa",
+    "tema": "I Paradossi del Tempo: Viaggi nel Futuro e nel Passato",
+    "scopo": "Chiudere il mese delle vacanze con la speculazione scientifica sui viaggi nel tempo.",
+    "kw": "macchina del tempo audiolibro gratis, viaggi nel tempo fantascienza, hg wells",
+    "authors": [
+      {
+        "name": "A. L. Knorr",
+        "slug": "a-l-knorr",
+        "url": "https://audiolibri.org/autore/a-l-knorr/"
+      },
+      {
+        "name": "Edgar Allan Poe",
+        "slug": "edgar-allan-poe",
+        "url": "https://audiolibri.org/autore/edgar-allan-poe/"
+      },
+      {
+        "name": "H.G. Wells",
+        "slug": "h-g-wells",
+        "url": "https://audiolibri.org/autore/h-g-wells/"
+      },
+      {
+        "name": "Jules Verne",
+        "slug": "jules-verne",
+        "url": "https://audiolibri.org/autore/jules-verne/"
+      }
+    ],
+    "books": [
+      {
+        "title": "L'Isola del Dr. Moreau",
+        "slug": "l-isola-del-dr-moreau-3M0BoXM_e6g",
+        "url": "https://audiolibri.org/audiolibro/l-isola-del-dr-moreau-3M0BoXM_e6g/",
+        "author": "H.G. Wells",
+        "author_url": "https://audiolibri.org/autore/h-g-wells/",
+        "duration": 268
+      },
+      {
+        "title": "La vita di Edgar Allan Poe",
+        "slug": "la-vita-di-edgar-allan-poe-G44DUbw5peQ",
+        "url": "https://audiolibri.org/audiolibro/la-vita-di-edgar-allan-poe-G44DUbw5peQ/",
+        "author": "Edgar Allan Poe",
+        "author_url": "https://audiolibri.org/autore/edgar-allan-poe/",
+        "duration": 27
+      },
+      {
+        "title": "Figlia del mare",
+        "slug": "figlia-del-mare-FUP2p6TE4JU",
+        "url": "https://audiolibri.org/audiolibro/figlia-del-mare-FUP2p6TE4JU/",
+        "author": "A. L. Knorr",
+        "author_url": "https://audiolibri.org/autore/a-l-knorr/",
+        "duration": 2
+      },
+      {
+        "title": "Dalla Terra alla Luna",
+        "slug": "dalla-terra-alla-luna-AUA_91nudiw",
+        "url": "https://audiolibri.org/audiolibro/dalla-terra-alla-luna-AUA_91nudiw/",
+        "author": "Jules Verne",
+        "author_url": "https://audiolibri.org/autore/jules-verne/",
+        "duration": 14
+      }
+    ],
+    "ext": [
+      [
+        "The H.G. Wells Society",
+        "https://hgwellssociety.com/"
+      ],
+      [
+        "Progetto Gutenberg",
+        "https://www.gutenberg.org/"
+      ]
+    ]
+  },
+  {
+    "week": 35,
+    "mese": "Settembre",
+    "data_range": "27 Ago - 2 Set",
+    "dominio": "Classici Scolastici & Manzoni",
+    "tema": "Back to School: I Promessi Sposi e la Fondazione dell'Italiano Moderno",
+    "scopo": "Cavalcare il rientro a scuola e le ricerche degli studenti italiani con il testo scolastico per eccellenza.",
+    "kw": "promessi sposi audiolibro capitoli, manzoni scuola gratis, riassunti promessi sposi",
+    "authors": [
+      {
+        "name": "Alessandro Manzoni",
+        "slug": "alessandro-manzoni",
+        "url": "https://audiolibri.org/autore/alessandro-manzoni/"
+      },
+      {
+        "name": "Carlo Collodi",
+        "slug": "carlo-collodi",
+        "url": "https://audiolibri.org/autore/carlo-collodi/"
+      },
+      {
+        "name": "Giacomo Leopardi",
+        "slug": "giacomo-leopardi",
+        "url": "https://audiolibri.org/autore/giacomo-leopardi/"
+      },
+      {
+        "name": "Giovanni Verga",
+        "slug": "giovanni-verga",
+        "url": "https://audiolibri.org/autore/giovanni-verga/"
+      }
+    ],
+    "books": [
+      {
+        "title": "I Promessi Sposi",
+        "slug": "i-promessi-sposi-EElngqFx5sg",
+        "url": "https://audiolibri.org/audiolibro/i-promessi-sposi-EElngqFx5sg/",
+        "author": "Alessandro Manzoni",
+        "author_url": "https://audiolibri.org/autore/alessandro-manzoni/",
+        "duration": 1312
+      },
+      {
+        "title": "GIACOMO LEOPARDI - CANTO NOTTURNO DI UN PASTORE ERRANTE DELL' ASIA",
+        "slug": "giacomo-leopardi-canto-notturno-di-un-pastore-errante-dell-asia-uYtK0nqDogk",
+        "url": "https://audiolibri.org/audiolibro/giacomo-leopardi-canto-notturno-di-un-pastore-errante-dell-asia-uYtK0nqDogk/",
+        "author": "Giacomo Leopardi",
+        "author_url": "https://audiolibri.org/autore/giacomo-leopardi/",
+        "duration": 8
+      },
+      {
+        "title": "I Raccontastorie n°25 - Cappuccetto Rosso 1-6",
+        "slug": "i-raccontastorie-n25-cappuccetto-rosso-1-6-XtE4wiTAK-o",
+        "url": "https://audiolibri.org/audiolibro/i-raccontastorie-n25-cappuccetto-rosso-1-6-XtE4wiTAK-o/",
+        "author": "Carlo Collodi",
+        "author_url": "https://audiolibri.org/autore/carlo-collodi/",
+        "duration": 7
+      },
+      {
+        "title": "Storia di una Capinera",
+        "slug": "storia-di-una-capinera-Q883t7mveT4",
+        "url": "https://audiolibri.org/audiolibro/storia-di-una-capinera-Q883t7mveT4/",
+        "author": "Giovanni Verga",
+        "author_url": "https://audiolibri.org/autore/giovanni-verga/",
+        "duration": 211
+      }
+    ],
+    "ext": [
+      [
+        "Casa del Manzoni Milano",
+        "https://www.casadelmanzoni.it/"
+      ],
+      [
+        "Treccani Manzoni",
+        "https://www.treccani.it/"
+      ]
+    ]
+  },
+  {
+    "week": 36,
+    "mese": "Settembre",
+    "data_range": "3-9 Settembre",
+    "dominio": "Psicoanalisi, Inconscio & Nevrosi",
+    "tema": "I Meandri della Mente: Il Sogno, la Nevrosi e l'Inconscio",
+    "scopo": "Intercettare la voglia di auto-analisi e consapevolezza psicologica tipica della ripartenza.",
+    "kw": "psicologia audiolibri freud inconscio, sogni e nevrosi letteratura, italo svevo",
+    "authors": [
+      {
+        "name": "Fëdor Dostoevskij",
+        "slug": "fedor-dostoevskij",
+        "url": "https://audiolibri.org/autore/fedor-dostoevskij/"
+      },
+      {
+        "name": "Italo Svevo",
+        "slug": "italo-svevo",
+        "url": "https://audiolibri.org/autore/italo-svevo/"
+      },
+      {
+        "name": "Italo Svevo (alias Ettore Schmitz)",
+        "slug": "italo-svevo-alias-ettore-schmitz",
+        "url": "https://audiolibri.org/autore/italo-svevo-alias-ettore-schmitz/"
+      },
+      {
+        "name": "Luigi Pirandello",
+        "slug": "luigi-pirandello",
+        "url": "https://audiolibri.org/autore/luigi-pirandello/"
+      }
+    ],
+    "books": [
+      {
+        "title": "I FRATELLI KARAMAZOV",
+        "slug": "i-fratelli-karamazov-V9NwpszP9xI",
+        "url": "https://audiolibri.org/audiolibro/i-fratelli-karamazov-V9NwpszP9xI/",
+        "author": "Fëdor Dostoevskij",
+        "author_url": "https://audiolibri.org/autore/fedor-dostoevskij/",
+        "duration": 1397
+      },
+      {
+        "title": "I Tre Pensieri della Sbiobbina",
+        "slug": "i-tre-pensieri-della-sbiobbina-YlDn2x5MjvI",
+        "url": "https://audiolibri.org/audiolibro/i-tre-pensieri-della-sbiobbina-YlDn2x5MjvI/",
+        "author": "Luigi Pirandello",
+        "author_url": "https://audiolibri.org/autore/luigi-pirandello/",
+        "duration": 14
+      },
+      {
+        "title": "La coscienza di Zeno",
+        "slug": "la-coscienza-di-zeno-",
+        "url": "https://audiolibri.org/audiolibro/la-coscienza-di-zeno-/",
+        "author": "Italo Svevo (alias Ettore Schmitz)",
+        "author_url": "https://audiolibri.org/autore/italo-svevo-alias-ettore-schmitz/",
+        "duration": 929
+      },
+      {
+        "title": "Senilità",
+        "slug": "senilita-",
+        "url": "https://audiolibri.org/audiolibro/senilita-/",
+        "author": "Italo Svevo",
+        "author_url": "https://audiolibri.org/autore/italo-svevo/",
+        "duration": 586
+      }
+    ],
+    "ext": [
+      [
+        "Società Psicoanalitica Italiana",
+        "https://www.spiweb.it/"
+      ],
+      [
+        "Treccani Psicoanalisi",
+        "https://www.treccani.it/"
+      ]
+    ]
+  },
+  {
+    "week": 37,
+    "mese": "Settembre",
+    "data_range": "10-16 Settembre",
+    "dominio": "Modernismo & Scrittura al Femminile",
+    "tema": "Il Flusso di Coscienza: Virginia Woolf e la Rivoluzione del Romanzo",
+    "scopo": "Esaltare le pietre miliari dell'introspezione e della voce femminile nel modernismo europeo.",
+    "kw": "virginia woolf audiolibri gratis italiano, signora dalloway gita al faro, modernismo",
+    "authors": [
+      {
+        "name": "Grazia Deledda",
+        "slug": "grazia-deledda",
+        "url": "https://audiolibri.org/autore/grazia-deledda/"
+      },
+      {
+        "name": "Jane Austen",
+        "slug": "jane-austen",
+        "url": "https://audiolibri.org/autore/jane-austen/"
+      },
+      {
+        "name": "Margaret Mitchell",
+        "slug": "margaret-mitchell",
+        "url": "https://audiolibri.org/autore/margaret-mitchell/"
+      },
+      {
+        "name": "Virginia Woolf",
+        "slug": "virginia-woolf",
+        "url": "https://audiolibri.org/autore/virginia-woolf/"
+      }
+    ],
+    "books": [
+      {
+        "title": "Orgoglio e Pregiudizio",
+        "slug": "orgoglio-e-pregiudizio-TEAwI762Q94",
+        "url": "https://audiolibri.org/audiolibro/orgoglio-e-pregiudizio-TEAwI762Q94/",
+        "author": "Jane Austen",
+        "author_url": "https://audiolibri.org/autore/jane-austen/",
+        "duration": 287
+      },
+      {
+        "title": "Macchiette",
+        "slug": "macchiette-7e6aEpzv-_8",
+        "url": "https://audiolibri.org/audiolibro/macchiette-7e6aEpzv-_8/",
+        "author": "Grazia Deledda",
+        "author_url": "https://audiolibri.org/autore/grazia-deledda/",
+        "duration": 14
+      },
+      {
+        "title": "Via col vento",
+        "slug": "via-col-vento-hI6wWKt1WZY",
+        "url": "https://audiolibri.org/audiolibro/via-col-vento-hI6wWKt1WZY/",
+        "author": "Margaret Mitchell",
+        "author_url": "https://audiolibri.org/autore/margaret-mitchell/",
+        "duration": 16
+      },
+      {
+        "title": "Gita al faro",
+        "slug": "gita-al-faro-H288HsngBrY",
+        "url": "https://audiolibri.org/audiolibro/gita-al-faro-H288HsngBrY/",
+        "author": "Virginia Woolf",
+        "author_url": "https://audiolibri.org/autore/virginia-woolf/",
+        "duration": 41
+      }
+    ],
+    "ext": [
+      [
+        "Virginia Woolf Society",
+        "https://virginiawoolfsociety.co.uk/"
+      ],
+      [
+        "British Library",
+        "https://www.bl.uk/"
+      ]
+    ]
+  },
+  {
+    "week": 38,
+    "mese": "Settembre",
+    "data_range": "17-23 Settembre",
+    "dominio": "Filosofia Morale & Stoicismo",
+    "tema": "L'Equinozio d'Autunno e la Serenità: La Saggezza Stoica di Seneca",
+    "scopo": "Guidare la riflessione sul tempo, sulla calma interiore e sul dominio delle passioni.",
+    "kw": "seneca lettere a lucilio audiolibro, filosofia stoica serenità tempo, saggezza classica",
+    "authors": [
+      {
+        "name": "Carlo Carretto",
+        "slug": "carlo-carretto",
+        "url": "https://audiolibri.org/autore/carlo-carretto/"
+      },
+      {
+        "name": "Lucio Anneo Seneca",
+        "slug": "lucio-anneo-seneca",
+        "url": "https://audiolibri.org/autore/lucio-anneo-seneca/"
+      },
+      {
+        "name": "Marco Aurelio",
+        "slug": "marco-aurelio",
+        "url": "https://audiolibri.org/autore/marco-aurelio/"
+      },
+      {
+        "name": "Platone",
+        "slug": "platone",
+        "url": "https://audiolibri.org/autore/platone/"
+      }
+    ],
+    "books": [
+      {
+        "title": "MARCO AURELIO - A se stesso",
+        "slug": "marco-aurelio-a-se-stesso-_slInrb46rg",
+        "url": "https://audiolibri.org/audiolibro/marco-aurelio-a-se-stesso-_slInrb46rg/",
+        "author": "Marco Aurelio",
+        "author_url": "https://audiolibri.org/autore/marco-aurelio/",
+        "duration": 27
+      },
+      {
+        "title": "Lettere a Lucilio",
+        "slug": "lettere-a-lucilio-v9x-vMqQQvs",
+        "url": "https://audiolibri.org/audiolibro/lettere-a-lucilio-v9x-vMqQQvs/",
+        "author": "Lucio Anneo Seneca",
+        "author_url": "https://audiolibri.org/autore/lucio-anneo-seneca/",
+        "duration": 5
+      },
+      {
+        "title": "SIMPOSIO - PLATONE",
+        "slug": "simposio-platone-hVOcIUtUyNA",
+        "url": "https://audiolibri.org/audiolibro/simposio-platone-hVOcIUtUyNA/",
+        "author": "Platone",
+        "author_url": "https://audiolibri.org/autore/platone/",
+        "duration": 154
+      },
+      {
+        "title": "Lettere dal deserto",
+        "slug": "lettere-dal-deserto-0QSv0Akps-8",
+        "url": "https://audiolibri.org/audiolibro/lettere-dal-deserto-0QSv0Akps-8/",
+        "author": "Carlo Carretto",
+        "author_url": "https://audiolibri.org/autore/carlo-carretto/",
+        "duration": 14
+      }
+    ],
+    "ext": [
+      [
+        "The Stoic Fellowship",
+        "https://stoicfellowship.com/"
+      ],
+      [
+        "Wikisource Seneca",
+        "https://it.wikisource.org/"
+      ]
+    ]
+  },
+  {
+    "week": 39,
+    "mese": "Ottobre",
+    "data_range": "24-30 Settembre",
+    "dominio": "Linguistica & Storia Culturale",
+    "tema": "Settimana della Lingua Italiana: Dalla Nascita del Volgare al Secolo Breve",
+    "scopo": "Allinearsi alla celebrazione globale promossa da Farnesina e Accademia della Crusca.",
+    "kw": "settimana lingua italiana audiolibri, storia lingua italiana dante manzoni",
+    "authors": [
+      {
+        "name": "Alessandro Manzoni",
+        "slug": "alessandro-manzoni",
+        "url": "https://audiolibri.org/autore/alessandro-manzoni/"
+      },
+      {
+        "name": "Dante Alighieri",
+        "slug": "dante-alighieri",
+        "url": "https://audiolibri.org/autore/dante-alighieri/"
+      },
+      {
+        "name": "Giovanni Boccaccio",
+        "slug": "giovanni-boccaccio",
+        "url": "https://audiolibri.org/autore/giovanni-boccaccio/"
+      },
+      {
+        "name": "Luigi Pirandello",
+        "slug": "luigi-pirandello",
+        "url": "https://audiolibri.org/autore/luigi-pirandello/"
+      }
+    ],
+    "books": [
+      {
+        "title": "LA SCIENZA DELLA FIACCA",
+        "slug": "la-scienza-della-fiacca-LZjZC6NuQ7w",
+        "url": "https://audiolibri.org/audiolibro/la-scienza-della-fiacca-LZjZC6NuQ7w/",
+        "author": "Giovanni Boccaccio",
+        "author_url": "https://audiolibri.org/autore/giovanni-boccaccio/",
+        "duration": 4
+      },
+      {
+        "title": "Il leone e il topo",
+        "slug": "il-leone-e-il-topo-iDWfDszZf4Q",
+        "url": "https://audiolibri.org/audiolibro/il-leone-e-il-topo-iDWfDszZf4Q/",
+        "author": "Alessandro Manzoni",
+        "author_url": "https://audiolibri.org/autore/alessandro-manzoni/",
+        "duration": 3
+      },
+      {
+        "title": "I RACCONTA STORIE N.66",
+        "slug": "i-racconta-storie-n-66-6o_nrZhcmho",
+        "url": "https://audiolibri.org/audiolibro/i-racconta-storie-n-66-6o_nrZhcmho/",
+        "author": "Luigi Pirandello",
+        "author_url": "https://audiolibri.org/autore/luigi-pirandello/",
+        "duration": 49
+      },
+      {
+        "title": "Divina Commedia - Il Purgatorio",
+        "slug": "divina-commedia-il-purgatorio-",
+        "url": "https://audiolibri.org/audiolibro/divina-commedia-il-purgatorio-/",
+        "author": "Dante Alighieri",
+        "author_url": "https://audiolibri.org/autore/dante-alighieri/",
+        "duration": 308
+      }
+    ],
+    "ext": [
+      [
+        "Accademia della Crusca",
+        "https://accademiadellacrusca.it/"
+      ],
+      [
+        "Farnesina Cultura",
+        "https://www.esteri.it/"
+      ]
+    ]
+  },
+  {
+    "week": 40,
+    "mese": "Ottobre",
+    "data_range": "1-7 Ottobre",
+    "dominio": "Fantascienza Gotica & Bioetica",
+    "tema": "La Creatura e il Creatore: Frankenstein e i Limiti della Scienza",
+    "scopo": "Aprire il mese di ottobre con il dibattito su etica, solitudine e progresso tecnologico.",
+    "kw": "frankenstein mary shelley audiolibro gratis, mostro frankenstein ascoltare",
+    "authors": [
+      {
+        "name": "Edgar Allan Poe",
+        "slug": "edgar-allan-poe",
+        "url": "https://audiolibri.org/autore/edgar-allan-poe/"
+      },
+      {
+        "name": "H.G. Wells",
+        "slug": "h-g-wells",
+        "url": "https://audiolibri.org/autore/h-g-wells/"
+      },
+      {
+        "name": "H.P. Lovecraft",
+        "slug": "h-p-lovecraft",
+        "url": "https://audiolibri.org/autore/h-p-lovecraft/"
+      },
+      {
+        "name": "Mary Shelley",
+        "slug": "mary-shelley",
+        "url": "https://audiolibri.org/autore/mary-shelley/"
+      }
+    ],
+    "books": [
+      {
+        "title": "LA CHIAVE D'ARGENTO",
+        "slug": "la-chiave-d-argento-5p0LHdmo1nk",
+        "url": "https://audiolibri.org/audiolibro/la-chiave-d-argento-5p0LHdmo1nk/",
+        "author": "H.P. Lovecraft",
+        "author_url": "https://audiolibri.org/autore/h-p-lovecraft/",
+        "duration": 37
+      },
+      {
+        "title": "Frankenstein",
+        "slug": "frankenstein-TV2Im2czC0s",
+        "url": "https://audiolibri.org/audiolibro/frankenstein-TV2Im2czC0s/",
+        "author": "Mary Shelley",
+        "author_url": "https://audiolibri.org/autore/mary-shelley/",
+        "duration": 463
+      },
+      {
+        "title": "Il Barile di Amontillado",
+        "slug": "il-barile-di-amontillado-0FUj6OhuNMw",
+        "url": "https://audiolibri.org/audiolibro/il-barile-di-amontillado-0FUj6OhuNMw/",
+        "author": "Edgar Allan Poe",
+        "author_url": "https://audiolibri.org/autore/edgar-allan-poe/",
+        "duration": 23
+      },
+      {
+        "title": "La Stella",
+        "slug": "la-stella-G9diwDYYdQA",
+        "url": "https://audiolibri.org/audiolibro/la-stella-G9diwDYYdQA/",
+        "author": "H.G. Wells",
+        "author_url": "https://audiolibri.org/autore/h-g-wells/",
+        "duration": 31
+      }
+    ],
+    "ext": [
+      [
+        "Keats-Shelley House Roma",
+        "https://www.ksh.roma.it/"
+      ],
+      [
+        "British Library Frankenstein",
+        "https://www.bl.uk/"
+      ]
+    ]
+  },
+  {
+    "week": 41,
+    "mese": "Ottobre",
+    "data_range": "8-14 Ottobre",
+    "dominio": "Noir Autunnale & Indagine Sociale",
+    "tema": "Nebbia d'Autunno: I Casi più Umani del Commissario Maigret",
+    "scopo": "Creare atmosfere calde e raccolte per le prime giornate di pioggia autunnale.",
+    "kw": "commissario maigret audiolibri gratis italiano, simenon romanzi indagini",
+    "authors": [
+      {
+        "name": "Andrea Camilleri",
+        "slug": "andrea-camilleri",
+        "url": "https://audiolibri.org/autore/andrea-camilleri/"
+      },
+      {
+        "name": "Arthur Conan Doyle",
+        "slug": "arthur-conan-doyle",
+        "url": "https://audiolibri.org/autore/arthur-conan-doyle/"
+      },
+      {
+        "name": "G.K. Chesterton",
+        "slug": "g-k-chesterton",
+        "url": "https://audiolibri.org/autore/g-k-chesterton/"
+      },
+      {
+        "name": "Georges Simenon",
+        "slug": "georges-simenon",
+        "url": "https://audiolibri.org/autore/georges-simenon/"
+      }
+    ],
+    "books": [
+      {
+        "title": "La Saggezza di Padre Brown",
+        "slug": "la-saggezza-di-padre-brown-g6w0EIUDK7c",
+        "url": "https://audiolibri.org/audiolibro/la-saggezza-di-padre-brown-g6w0EIUDK7c/",
+        "author": "G.K. Chesterton",
+        "author_url": "https://audiolibri.org/autore/g-k-chesterton/",
+        "duration": 44
+      },
+      {
+        "title": "Sherlock Holmes - L'Avventura del Costruttore di Norwood",
+        "slug": "sherlock-holmes-l-avventura-del-costruttore-di-norwood-uFpgPLljV0M",
+        "url": "https://audiolibri.org/audiolibro/sherlock-holmes-l-avventura-del-costruttore-di-norwood-uFpgPLljV0M/",
+        "author": "Arthur Conan Doyle",
+        "author_url": "https://audiolibri.org/autore/arthur-conan-doyle/",
+        "duration": 68
+      },
+      {
+        "title": "La prova generale",
+        "slug": "la-prova-generale-nIqR4Qrc9To",
+        "url": "https://audiolibri.org/audiolibro/la-prova-generale-nIqR4Qrc9To/",
+        "author": "Andrea Camilleri",
+        "author_url": "https://audiolibri.org/autore/andrea-camilleri/",
+        "duration": 39
+      },
+      {
+        "title": "Il Dottor Beccamorti",
+        "slug": "il-dottor-beccamorti-xMKmGB1VhL4",
+        "url": "https://audiolibri.org/audiolibro/il-dottor-beccamorti-xMKmGB1VhL4/",
+        "author": "Georges Simenon",
+        "author_url": "https://audiolibri.org/autore/georges-simenon/",
+        "duration": 65
+      }
+    ],
+    "ext": [
+      [
+        "Centre Simenon",
+        "https://www.centre-simenon.ulg.ac.be/"
+      ],
+      [
+        "Liber Liber Simenon",
+        "https://www.liberliber.it/"
+      ]
+    ]
+  },
+  {
+    "week": 42,
+    "mese": "Ottobre",
+    "data_range": "15-21 Ottobre",
+    "dominio": "Orrore Cosmico & Mistero Archetipico",
+    "tema": "L'Abisso Inconoscibile: H.P. Lovecraft e i Miti di Cthulhu",
+    "scopo": "Entrare nel pieno dell'atmosfera prepasquale di Halloween con l'orrore ancestrale.",
+    "kw": "hp lovecraft audiolibri italiano gratis, richiamo cthulhu dagon ascoltare",
+    "authors": [
+      {
+        "name": "Ambrose Bierce",
+        "slug": "ambrose-bierce",
+        "url": "https://audiolibri.org/autore/ambrose-bierce/"
+      },
+      {
+        "name": "Edgar Allan Poe",
+        "slug": "edgar-allan-poe",
+        "url": "https://audiolibri.org/autore/edgar-allan-poe/"
+      },
+      {
+        "name": "Guy de Maupassant",
+        "slug": "guy-de-maupassant",
+        "url": "https://audiolibri.org/autore/guy-de-maupassant/"
+      },
+      {
+        "name": "H.P. Lovecraft",
+        "slug": "h-p-lovecraft",
+        "url": "https://audiolibri.org/autore/h-p-lovecraft/"
+      }
+    ],
+    "books": [
+      {
+        "title": "L'ORIENTE",
+        "slug": "l-oriente-Y5sCjDojphk",
+        "url": "https://audiolibri.org/audiolibro/l-oriente-Y5sCjDojphk/",
+        "author": "Guy de Maupassant",
+        "author_url": "https://audiolibri.org/autore/guy-de-maupassant/",
+        "duration": 9
+      },
+      {
+        "title": "La casa misteriosa lassù nella nebbia",
+        "slug": "la-casa-misteriosa-lassu-nella-nebbia--mG2xhFWldo",
+        "url": "https://audiolibri.org/audiolibro/la-casa-misteriosa-lassu-nella-nebbia--mG2xhFWldo/",
+        "author": "H.P. Lovecraft",
+        "author_url": "https://audiolibri.org/autore/h-p-lovecraft/",
+        "duration": 28
+      },
+      {
+        "title": "Due Esecuzioni Militari",
+        "slug": "due-esecuzioni-militari-_JVTi_1oi70",
+        "url": "https://audiolibri.org/audiolibro/due-esecuzioni-militari-_JVTi_1oi70/",
+        "author": "Ambrose Bierce",
+        "author_url": "https://audiolibri.org/autore/ambrose-bierce/",
+        "duration": 9
+      },
+      {
+        "title": "Il cuore rivelatore",
+        "slug": "il-cuore-rivelatore-9MSikIKWjQ0",
+        "url": "https://audiolibri.org/audiolibro/il-cuore-rivelatore-9MSikIKWjQ0/",
+        "author": "Edgar Allan Poe",
+        "author_url": "https://audiolibri.org/autore/edgar-allan-poe/",
+        "duration": 20
+      }
+    ],
+    "ext": [
+      [
+        "H.P. Lovecraft Society",
+        "https://www.hplhs.org/"
+      ],
+      [
+        "Wikisource Lovecraft",
+        "https://it.wikisource.org/"
+      ]
+    ]
+  },
+  {
+    "week": 43,
+    "mese": "Ottobre",
+    "data_range": "22-31 Ottobre",
+    "dominio": "Horror Classico & Notte di Halloween",
+    "tema": "Speciale Halloween: Dracula, Spiriti e Creature della Notte",
+    "scopo": "Massimizzare il gigantesco picco di traffico del 31 Ottobre per audiolibri horror e di vampiri.",
+    "kw": "audiolibri halloween gratis, dracula bram stoker audiolibro, storie di paura",
+    "authors": [
+      {
+        "name": "Bram Stoker",
+        "slug": "bram-stoker",
+        "url": "https://audiolibri.org/autore/bram-stoker/"
+      },
+      {
+        "name": "Edgar Allan Poe",
+        "slug": "edgar-allan-poe",
+        "url": "https://audiolibri.org/autore/edgar-allan-poe/"
+      },
+      {
+        "name": "H.P. Lovecraft",
+        "slug": "h-p-lovecraft",
+        "url": "https://audiolibri.org/autore/h-p-lovecraft/"
+      },
+      {
+        "name": "Mary Shelley",
+        "slug": "mary-shelley",
+        "url": "https://audiolibri.org/autore/mary-shelley/"
+      }
+    ],
+    "books": [
+      {
+        "title": "Dracula",
+        "slug": "dracula-rBK_NmAp3Js",
+        "url": "https://audiolibri.org/audiolibro/dracula-rBK_NmAp3Js/",
+        "author": "Bram Stoker",
+        "author_url": "https://audiolibri.org/autore/bram-stoker/",
+        "duration": 981
+      },
+      {
+        "title": "La Ricerca Onirica del Misterioso Kadath",
+        "slug": "la-ricerca-onirica-del-misterioso-kadath-EjkQT3sqFyY",
+        "url": "https://audiolibri.org/audiolibro/la-ricerca-onirica-del-misterioso-kadath-EjkQT3sqFyY/",
+        "author": "H.P. Lovecraft",
+        "author_url": "https://audiolibri.org/autore/h-p-lovecraft/",
+        "duration": 284
+      },
+      {
+        "title": "I Racconti del Mistero",
+        "slug": "i-racconti-del-mistero-Le7Z6xdT5ls",
+        "url": "https://audiolibri.org/audiolibro/i-racconti-del-mistero-Le7Z6xdT5ls/",
+        "author": "Edgar Allan Poe",
+        "author_url": "https://audiolibri.org/autore/edgar-allan-poe/",
+        "duration": 85
+      },
+      {
+        "title": "Il mortale immortale",
+        "slug": "il-mortale-immortale-SMOmHEd_HTA",
+        "url": "https://audiolibri.org/audiolibro/il-mortale-immortale-SMOmHEd_HTA/",
+        "author": "Mary Shelley",
+        "author_url": "https://audiolibri.org/autore/mary-shelley/",
+        "duration": 39
+      }
+    ],
+    "ext": [
+      [
+        "Bram Stoker Estate",
+        "https://bramstokerestate.com/"
+      ],
+      [
+        "Liber Liber Terrore",
+        "https://www.liberliber.it/"
+      ]
+    ]
+  },
+  {
+    "week": 44,
+    "mese": "Novembre",
+    "data_range": "1-7 Novembre",
+    "dominio": "Poesia Elegiaca & Memoria dei Defunti",
+    "tema": "Ognissanti e Rimembranza: I Sepolcri di Foscolo e il Culto della Memoria",
+    "scopo": "Rispondere alla sensibilità del ponte del 1-2 Novembre con meditazioni poetiche sul ricordo eterno.",
+    "kw": "dei sepolcri foscolo audiolibro, poesia cimiteriale leopardi rimembranza",
+    "authors": [
+      {
+        "name": "Dante Alighieri",
+        "slug": "dante-alighieri",
+        "url": "https://audiolibri.org/autore/dante-alighieri/"
+      },
+      {
+        "name": "Giacomo Leopardi",
+        "slug": "giacomo-leopardi",
+        "url": "https://audiolibri.org/autore/giacomo-leopardi/"
+      },
+      {
+        "name": "Ugo Foscolo",
+        "slug": "ugo-foscolo",
+        "url": "https://audiolibri.org/autore/ugo-foscolo/"
+      }
+    ],
+    "books": [
+      {
+        "title": "I Malavoglia",
+        "slug": "i-malavoglia-2-_w_y_vvQ4",
+        "url": "https://audiolibri.org/audiolibro/i-malavoglia-2-_w_y_vvQ4/",
+        "author": "Giacomo Leopardi",
+        "author_url": "https://audiolibri.org/autore/giacomo-leopardi/",
+        "duration": 496
+      },
+      {
+        "title": "Ultime Lettere di Jacopo Ortis",
+        "slug": "ultime-lettere-di-jacopo-ortis-6RQZ1qwhQjM",
+        "url": "https://audiolibri.org/audiolibro/ultime-lettere-di-jacopo-ortis-6RQZ1qwhQjM/",
+        "author": "Ugo Foscolo",
+        "author_url": "https://audiolibri.org/autore/ugo-foscolo/",
+        "duration": 304
+      },
+      {
+        "title": "Divina Commedia - L'Inferno",
+        "slug": "divina-commedia-l-inferno-",
+        "url": "https://audiolibri.org/audiolibro/divina-commedia-l-inferno-/",
+        "author": "Dante Alighieri",
+        "author_url": "https://audiolibri.org/autore/dante-alighieri/",
+        "duration": 305
+      }
+    ],
+    "ext": [
+      [
+        "Treccani Foscolo",
+        "https://www.treccani.it/"
+      ],
+      [
+        "Liber Liber Foscolo",
+        "https://www.liberliber.it/"
+      ]
+    ]
+  },
+  {
+    "week": 45,
+    "mese": "Novembre",
+    "data_range": "8-14 Novembre",
+    "dominio": "Romanzo Giudiziario & Filosofia del Diritto",
+    "tema": "Tribunali, Colpa e Ingiustizia: Il Processo e i Suoi Labirinti",
+    "scopo": "Approfondire i grandi dilemmi etico-giuridici della letteratura mitteleuropea.",
+    "kw": "il processo kafka audiolibro gratis, romanzi tribunale giustizia colpa",
+    "authors": [
+      {
+        "name": "Franz Kafka",
+        "slug": "franz-kafka",
+        "url": "https://audiolibri.org/autore/franz-kafka/"
+      },
+      {
+        "name": "Fëdor Dostoevskij",
+        "slug": "fedor-dostoevskij",
+        "url": "https://audiolibri.org/autore/fedor-dostoevskij/"
+      },
+      {
+        "name": "Guy de Maupassant",
+        "slug": "guy-de-maupassant",
+        "url": "https://audiolibri.org/autore/guy-de-maupassant/"
+      },
+      {
+        "name": "Luigi Pirandello",
+        "slug": "luigi-pirandello",
+        "url": "https://audiolibri.org/autore/luigi-pirandello/"
+      }
+    ],
+    "books": [
+      {
+        "title": "LE CAREZZE",
+        "slug": "le-carezze-XxkhWlWvICw",
+        "url": "https://audiolibri.org/audiolibro/le-carezze-XxkhWlWvICw/",
+        "author": "Guy de Maupassant",
+        "author_url": "https://audiolibri.org/autore/guy-de-maupassant/",
+        "duration": 10
+      },
+      {
+        "title": "Il processo",
+        "slug": "il-processo-34ciPyImyB4",
+        "url": "https://audiolibri.org/audiolibro/il-processo-34ciPyImyB4/",
+        "author": "Franz Kafka",
+        "author_url": "https://audiolibri.org/autore/franz-kafka/",
+        "duration": 488
+      },
+      {
+        "title": "I DEMONI",
+        "slug": "i-demoni-SKhh3sP_K-Y",
+        "url": "https://audiolibri.org/audiolibro/i-demoni-SKhh3sP_K-Y/",
+        "author": "Fëdor Dostoevskij",
+        "author_url": "https://audiolibri.org/autore/fedor-dostoevskij/",
+        "duration": 1734
+      },
+      {
+        "title": "IL SIGNOR ZUCCARELLO (DISTINTO MELODISTA)",
+        "slug": "il-signor-zuccarello-distinto-melodista-lZRO7N8wFps",
+        "url": "https://audiolibri.org/audiolibro/il-signor-zuccarello-distinto-melodista-lZRO7N8wFps/",
+        "author": "Luigi Pirandello",
+        "author_url": "https://audiolibri.org/autore/luigi-pirandello/",
+        "duration": 19
+      }
+    ],
+    "ext": [
+      [
+        "The Kafka Society",
+        "https://www.franzkafka.de/"
+      ],
+      [
+        "Consiglio Nazionale Forense",
+        "https://www.consiglionazionaleforense.it/"
+      ]
+    ]
+  },
+  {
+    "week": 46,
+    "mese": "Novembre",
+    "data_range": "15-21 Novembre",
+    "dominio": "Distopia, Politica & Sorveglianza",
+    "tema": "Ombre sul Domani: La Distopia, la Censura e la Libertà Umana",
+    "scopo": "Intercettare il costante interesse sui temi del controllo sociale e dell'avvenire.",
+    "kw": "audiolibri distopia 1984 orwell gratis, brave new world controllo sociale",
+    "authors": [
+      {
+        "name": "Aldous Huxley",
+        "slug": "aldous-huxley",
+        "url": "https://audiolibri.org/autore/aldous-huxley/"
+      },
+      {
+        "name": "Fëdor Dostoevskij",
+        "slug": "fedor-dostoevskij",
+        "url": "https://audiolibri.org/autore/fedor-dostoevskij/"
+      },
+      {
+        "name": "George Orwell",
+        "slug": "george-orwell",
+        "url": "https://audiolibri.org/autore/george-orwell/"
+      },
+      {
+        "name": "H.G. Wells",
+        "slug": "h-g-wells",
+        "url": "https://audiolibri.org/autore/h-g-wells/"
+      }
+    ],
+    "books": [
+      {
+        "title": "POVERA GENTE",
+        "slug": "povera-gente-HtBv5OW7NxA",
+        "url": "https://audiolibri.org/audiolibro/povera-gente-HtBv5OW7NxA/",
+        "author": "Fëdor Dostoevskij",
+        "author_url": "https://audiolibri.org/autore/fedor-dostoevskij/",
+        "duration": 319
+      },
+      {
+        "title": "Il Mondo Nuovo",
+        "slug": "il-mondo-nuovo-2NorjcwVQNU",
+        "url": "https://audiolibri.org/audiolibro/il-mondo-nuovo-2NorjcwVQNU/",
+        "author": "Aldous Huxley",
+        "author_url": "https://audiolibri.org/autore/aldous-huxley/",
+        "duration": 437
+      },
+      {
+        "title": "La Fattoria degli Animali",
+        "slug": "la-fattoria-degli-animali-BInAElMNUBc",
+        "url": "https://audiolibri.org/audiolibro/la-fattoria-degli-animali-BInAElMNUBc/",
+        "author": "George Orwell",
+        "author_url": "https://audiolibri.org/autore/george-orwell/",
+        "duration": 184
+      },
+      {
+        "title": "IL PAESE DEI CIECHI",
+        "slug": "il-paese-dei-ciechi-vQO5ljoz-GM",
+        "url": "https://audiolibri.org/audiolibro/il-paese-dei-ciechi-vQO5ljoz-GM/",
+        "author": "H.G. Wells",
+        "author_url": "https://audiolibri.org/autore/h-g-wells/",
+        "duration": 69
+      }
+    ],
+    "ext": [
+      [
+        "The Orwell Foundation",
+        "https://www.orwellfoundation.com/"
+      ],
+      [
+        "Electronic Frontier Foundation",
+        "https://www.eff.org/"
+      ]
+    ]
+  },
+  {
+    "week": 47,
+    "mese": "Novembre",
+    "data_range": "22-28 Novembre",
+    "dominio": "Umorismo, Burle & Beffe Letterarie",
+    "tema": "L'Arte della Risata: Beffe, Scherzi e Novelle Umoristiche",
+    "scopo": "Offrire sollievo e spensieratezza prima dei ritmi serrati del Natale.",
+    "kw": "audiolibri comici gratis divertenti, novelle umoristiche boccaccio twain",
+    "authors": [
+      {
+        "name": "Giovanni Boccaccio",
+        "slug": "giovanni-boccaccio",
+        "url": "https://audiolibri.org/autore/giovanni-boccaccio/"
+      },
+      {
+        "name": "Luigi Pirandello",
+        "slug": "luigi-pirandello",
+        "url": "https://audiolibri.org/autore/luigi-pirandello/"
+      },
+      {
+        "name": "Mark Twain",
+        "slug": "mark-twain",
+        "url": "https://audiolibri.org/autore/mark-twain/"
+      },
+      {
+        "name": "Oscar Wilde",
+        "slug": "oscar-wilde",
+        "url": "https://audiolibri.org/autore/oscar-wilde/"
+      }
+    ],
+    "books": [
+      {
+        "title": "IL COMPLEANNO DELL' INFANTA",
+        "slug": "il-compleanno-dell-infanta-hubOECv4EoU",
+        "url": "https://audiolibri.org/audiolibro/il-compleanno-dell-infanta-hubOECv4EoU/",
+        "author": "Oscar Wilde",
+        "author_url": "https://audiolibri.org/autore/oscar-wilde/",
+        "duration": 50
+      },
+      {
+        "title": "Decameron, Giornata prima, Novella 2",
+        "slug": "decameron-giornata-prima-novella-2-H-sy0P0C7-U",
+        "url": "https://audiolibri.org/audiolibro/decameron-giornata-prima-novella-2-H-sy0P0C7-U/",
+        "author": "Giovanni Boccaccio",
+        "author_url": "https://audiolibri.org/autore/giovanni-boccaccio/",
+        "duration": 13
+      },
+      {
+        "title": "La Patente",
+        "slug": "la-patente-23fZzD6fTS0",
+        "url": "https://audiolibri.org/audiolibro/la-patente-23fZzD6fTS0/",
+        "author": "Luigi Pirandello",
+        "author_url": "https://audiolibri.org/autore/luigi-pirandello/",
+        "duration": 19
+      },
+      {
+        "title": "Economia politica",
+        "slug": "economia-politica-dD3dNcx0EHM",
+        "url": "https://audiolibri.org/audiolibro/economia-politica-dD3dNcx0EHM/",
+        "author": "Mark Twain",
+        "author_url": "https://audiolibri.org/autore/mark-twain/",
+        "duration": 15
+      }
+    ],
+    "ext": [
+      [
+        "Mark Twain Project",
+        "https://www.marktwainproject.org/"
+      ],
+      [
+        "Wikisource Commedie",
+        "https://it.wikisource.org/"
+      ]
+    ]
+  },
+  {
+    "week": 48,
+    "mese": "Dicembre",
+    "data_range": "29 Nov - 5 Dic",
+    "dominio": "Atmosfere d'Inverno & Racconti di Montagna",
+    "tema": "Storie da Camino: Neve, Silenzi e Fredde Notti di Dicembre",
+    "scopo": "Accogliere l'avvento e il Ponte dell'Immacolata con calde atmosfere narrative d'inverno.",
+    "kw": "audiolibri camino inverno neve, racconti freddo montagna tolstoj",
+    "authors": [
+      {
+        "name": "Fëdor Dostoevskij",
+        "slug": "fedor-dostoevskij",
+        "url": "https://audiolibri.org/autore/fedor-dostoevskij/"
+      },
+      {
+        "name": "Guy de Maupassant",
+        "slug": "guy-de-maupassant",
+        "url": "https://audiolibri.org/autore/guy-de-maupassant/"
+      },
+      {
+        "name": "Lev Tolstoj",
+        "slug": "lev-tolstoj",
+        "url": "https://audiolibri.org/autore/lev-tolstoj/"
+      }
+    ],
+    "books": [
+      {
+        "title": "Una vedova",
+        "slug": "una-vedova-Yuy5MYU52A0",
+        "url": "https://audiolibri.org/audiolibro/una-vedova-Yuy5MYU52A0/",
+        "author": "Guy de Maupassant",
+        "author_url": "https://audiolibri.org/autore/guy-de-maupassant/",
+        "duration": 13
+      },
+      {
+        "title": "IL SOSIA",
+        "slug": "il-sosia-TyibzUugVI4",
+        "url": "https://audiolibri.org/audiolibro/il-sosia-TyibzUugVI4/",
+        "author": "Fëdor Dostoevskij",
+        "author_url": "https://audiolibri.org/autore/fedor-dostoevskij/",
+        "duration": 424
+      },
+      {
+        "title": "Albert",
+        "slug": "albert-Sic41mQtnaM",
+        "url": "https://audiolibri.org/audiolibro/albert-Sic41mQtnaM/",
+        "author": "Lev Tolstoj",
+        "author_url": "https://audiolibri.org/autore/lev-tolstoj/",
+        "duration": 71
+      }
+    ],
+    "ext": [
+      [
+        "Club Alpino Italiano",
+        "https://www.cai.it/"
+      ],
+      [
+        "Liber Liber Inverno",
+        "https://www.liberliber.it/"
+      ]
+    ]
+  },
+  {
+    "week": 49,
+    "mese": "Dicembre",
+    "data_range": "6-12 Dicembre",
+    "dominio": "Classici Natalizi & Redenzione",
+    "tema": "Il Cuore della Festa: Charles Dickens e il Canto di Natale",
+    "scopo": "Cavalcare l'esplosione dicembrina delle ricerche su Scrooge, Dickens e i fantasmi del Natale.",
+    "kw": "canto di natale dickens audiolibro gratis completo, scrooge audiolibri",
+    "authors": [
+      {
+        "name": "Charles Dickens",
+        "slug": "charles-dickens",
+        "url": "https://audiolibri.org/autore/charles-dickens/"
+      },
+      {
+        "name": "Hans Christian Andersen",
+        "slug": "hans-christian-andersen",
+        "url": "https://audiolibri.org/autore/hans-christian-andersen/"
+      },
+      {
+        "name": "Lev Tolstoj",
+        "slug": "lev-tolstoj",
+        "url": "https://audiolibri.org/autore/lev-tolstoj/"
+      },
+      {
+        "name": "Washington Irving",
+        "slug": "washington-irving",
+        "url": "https://audiolibri.org/autore/washington-irving/"
+      }
+    ],
+    "books": [
+      {
+        "title": "Canto di Natale",
+        "slug": "canto-di-natale-Jxuv9KquAUs",
+        "url": "https://audiolibri.org/audiolibro/canto-di-natale-Jxuv9KquAUs/",
+        "author": "Charles Dickens",
+        "author_url": "https://audiolibri.org/autore/charles-dickens/",
+        "duration": 238
+      },
+      {
+        "title": "Il Mistero di Sleepy Hollow",
+        "slug": "il-mistero-di-sleepy-hollow-D8KMqq0-UGE",
+        "url": "https://audiolibri.org/audiolibro/il-mistero-di-sleepy-hollow-D8KMqq0-UGE/",
+        "author": "Washington Irving",
+        "author_url": "https://audiolibri.org/autore/washington-irving/",
+        "duration": 78
+      },
+      {
+        "title": "Hansel e Gretel",
+        "slug": "hansel-e-gretel-vNGIgLH-fAw",
+        "url": "https://audiolibri.org/audiolibro/hansel-e-gretel-vNGIgLH-fAw/",
+        "author": "Hans Christian Andersen",
+        "author_url": "https://audiolibri.org/autore/hans-christian-andersen/",
+        "duration": 11
+      },
+      {
+        "title": "La tempesta di neve",
+        "slug": "la-tempesta-di-neve-G4voTZlERHQ",
+        "url": "https://audiolibri.org/audiolibro/la-tempesta-di-neve-G4voTZlERHQ/",
+        "author": "Lev Tolstoj",
+        "author_url": "https://audiolibri.org/autore/lev-tolstoj/",
+        "duration": 77
+      }
+    ],
+    "ext": [
+      [
+        "Charles Dickens Museum",
+        "https://dickensmuseum.com/"
+      ],
+      [
+        "Liber Liber Dickens",
+        "https://www.liberliber.it/"
+      ]
+    ]
+  },
+  {
+    "week": 50,
+    "mese": "Dicembre",
+    "data_range": "13-19 Dicembre",
+    "dominio": "Fiabe per Famiglie & Tradizione",
+    "tema": "Il Bosco delle Meraviglie: Fiabe della Buonanotte per le Feste",
+    "scopo": "Coinvolgere famiglie e bambini nella settimana prima delle feste con fiabe storiche.",
+    "kw": "fiabe della buonanotte audiolibri bambini gratis, favole natale andersen",
+    "authors": [
+      {
+        "name": "Carlo Collodi",
+        "slug": "carlo-collodi",
+        "url": "https://audiolibri.org/autore/carlo-collodi/"
+      },
+      {
+        "name": "Carlo Collodi (alias Carlo Lorenzini)",
+        "slug": "carlo-collodi-alias-carlo-lorenzini",
+        "url": "https://audiolibri.org/autore/carlo-collodi-alias-carlo-lorenzini/"
+      },
+      {
+        "name": "Fratelli Grimm",
+        "slug": "fratelli-grimm",
+        "url": "https://audiolibri.org/autore/fratelli-grimm/"
+      },
+      {
+        "name": "Hans Christian Andersen",
+        "slug": "hans-christian-andersen",
+        "url": "https://audiolibri.org/autore/hans-christian-andersen/"
+      }
+    ],
+    "books": [
+      {
+        "title": "Il pentolino magico",
+        "slug": "il-pentolino-magico-KRBcKsY5m1A",
+        "url": "https://audiolibri.org/audiolibro/il-pentolino-magico-KRBcKsY5m1A/",
+        "author": "Fratelli Grimm",
+        "author_url": "https://audiolibri.org/autore/fratelli-grimm/",
+        "duration": 15
+      },
+      {
+        "title": "Gobbolino, il gatto della strega",
+        "slug": "gobbolino-il-gatto-della-strega-ITP96z8s470",
+        "url": "https://audiolibri.org/audiolibro/gobbolino-il-gatto-della-strega-ITP96z8s470/",
+        "author": "Carlo Collodi",
+        "author_url": "https://audiolibri.org/autore/carlo-collodi/",
+        "duration": 13
+      },
+      {
+        "title": "I ragazzi grandi",
+        "slug": "i-ragazzi-grandi-",
+        "url": "https://audiolibri.org/audiolibro/i-ragazzi-grandi-/",
+        "author": "Carlo Collodi (alias Carlo Lorenzini)",
+        "author_url": "https://audiolibri.org/autore/carlo-collodi-alias-carlo-lorenzini/",
+        "duration": 184
+      },
+      {
+        "title": "La sirenetta",
+        "slug": "la-sirenetta-Fsk8lMlLxvk",
+        "url": "https://audiolibri.org/audiolibro/la-sirenetta-Fsk8lMlLxvk/",
+        "author": "Hans Christian Andersen",
+        "author_url": "https://audiolibri.org/autore/hans-christian-andersen/",
+        "duration": 55
+      }
+    ],
+    "ext": [
+      [
+        "Hans Christian Andersen Center",
+        "https://andersen.sdu.dk/"
+      ],
+      [
+        "Fondazione Collodi",
+        "https://www.pinocchio.it/"
+      ]
+    ]
+  },
+  {
+    "week": 51,
+    "mese": "Dicembre",
+    "data_range": "20-26 Dicembre",
+    "dominio": "Spiritualità del Natale & Dono",
+    "tema": "La Notte Santa: Racconti di Pace, Solidarietà e Miracolo",
+    "scopo": "Celebrare il Natale (25 Dicembre) con narrazioni sul valore dell'amore e della generosità.",
+    "kw": "racconti di natale famosi audiolibro, storie di natale gratis ascoltare",
+    "authors": [
+      {
+        "name": "Carlo Carretto",
+        "slug": "carlo-carretto",
+        "url": "https://audiolibri.org/autore/carlo-carretto/"
+      },
+      {
+        "name": "Charles Dickens",
+        "slug": "charles-dickens",
+        "url": "https://audiolibri.org/autore/charles-dickens/"
+      },
+      {
+        "name": "O. Henry",
+        "slug": "o-henry",
+        "url": "https://audiolibri.org/autore/o-henry/"
+      }
+    ],
+    "books": [
+      {
+        "title": "Esperienza di Dio",
+        "slug": "esperienza-di-dio-8W65FlvPOXs",
+        "url": "https://audiolibri.org/audiolibro/esperienza-di-dio-8W65FlvPOXs/",
+        "author": "Carlo Carretto",
+        "author_url": "https://audiolibri.org/autore/carlo-carretto/",
+        "duration": 21
+      },
+      {
+        "title": "Le avventure di Nicola Nickleby",
+        "slug": "le-avventure-di-nicola-nickleby-",
+        "url": "https://audiolibri.org/audiolibro/le-avventure-di-nicola-nickleby-/",
+        "author": "Charles Dickens",
+        "author_url": "https://audiolibri.org/autore/charles-dickens/",
+        "duration": 2117
+      },
+      {
+        "title": "I segugi del destino",
+        "slug": "i-segugi-del-destino-kQUsqEDZQuk",
+        "url": "https://audiolibri.org/audiolibro/i-segugi-del-destino-kQUsqEDZQuk/",
+        "author": "O. Henry",
+        "author_url": "https://audiolibri.org/autore/o-henry/",
+        "duration": 18
+      }
+    ],
+    "ext": [
+      [
+        "Rai Teche Speciale Natale",
+        "https://www.teche.rai.it/"
+      ],
+      [
+        "Vatican News Cultura",
+        "https://www.vaticannews.va/"
+      ]
+    ]
+  },
+  {
+    "week": 52,
+    "mese": "Dicembre",
+    "data_range": "27-31 Dicembre",
+    "dominio": "Filosofia del Tempo & Bilanci",
+    "tema": "Il Senso del Tempo: Meditazioni Filosofiche per il Nuovo Anno",
+    "scopo": "Chiudere l'anno con saggi profondi sul trascorrere delle ore, la memoria e le speranze future.",
+    "kw": "audiolibri senso della vita fine anno, meditazioni tempo filosofia ascoltare",
+    "authors": [
+      {
+        "name": "Carlo Carretto",
+        "slug": "carlo-carretto",
+        "url": "https://audiolibri.org/autore/carlo-carretto/"
+      },
+      {
+        "name": "Fëdor Dostoevskij",
+        "slug": "fedor-dostoevskij",
+        "url": "https://audiolibri.org/autore/fedor-dostoevskij/"
+      },
+      {
+        "name": "Lucio Anneo Seneca",
+        "slug": "lucio-anneo-seneca",
+        "url": "https://audiolibri.org/autore/lucio-anneo-seneca/"
+      },
+      {
+        "name": "Virginia Woolf",
+        "slug": "virginia-woolf",
+        "url": "https://audiolibri.org/autore/virginia-woolf/"
+      }
+    ],
+    "books": [
+      {
+        "title": "DELITTO E CASTIGO",
+        "slug": "delitto-e-castigo-_g4aI8GZpVw",
+        "url": "https://audiolibri.org/audiolibro/delitto-e-castigo-_g4aI8GZpVw/",
+        "author": "Fëdor Dostoevskij",
+        "author_url": "https://audiolibri.org/autore/fedor-dostoevskij/",
+        "duration": 1469
+      },
+      {
+        "title": "Lettere a Lucilio",
+        "slug": "lettere-a-lucilio-ORbaOlJzFNs",
+        "url": "https://audiolibri.org/audiolibro/lettere-a-lucilio-ORbaOlJzFNs/",
+        "author": "Lucio Anneo Seneca",
+        "author_url": "https://audiolibri.org/autore/lucio-anneo-seneca/",
+        "duration": 4
+      },
+      {
+        "title": "Lettere dal deserto",
+        "slug": "lettere-dal-deserto-f6U14UgkV1s",
+        "url": "https://audiolibri.org/audiolibro/lettere-dal-deserto-f6U14UgkV1s/",
+        "author": "Carlo Carretto",
+        "author_url": "https://audiolibri.org/autore/carlo-carretto/",
+        "duration": 10
+      },
+      {
+        "title": "Gita al faro",
+        "slug": "gita-al-faro-oNynQ5waEU4",
+        "url": "https://audiolibri.org/audiolibro/gita-al-faro-oNynQ5waEU4/",
+        "author": "Virginia Woolf",
+        "author_url": "https://audiolibri.org/autore/virginia-woolf/",
+        "duration": 29
+      }
+    ],
+    "ext": [
+      [
+        "Istituto Italiano Studi Filosofici",
+        "https://www.iisf.it/"
+      ],
+      [
+        "Treccani Tempo",
+        "https://www.treccani.it/"
+      ]
+    ]
+  }
+]
